@@ -1,21 +1,22 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 // import _debounce from 'lodash/debounce'
 import { useDebouncedCallback } from 'use-debounce'
+import axios from 'axios'
 import AddForm from './components/AddForm'
 
-const data =  [
-  { name: 'Arto Hellas', number: '040-123456', id: 1 },
-  { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-  { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-  { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-]
+const PERSONS_URL = 'http://localhost:3001/persons'
 
 const App = () => {
-  const [persons, setPersons] = useState(data)
+  const [persons, setPersons] = useState([])
   const [query, setQuery] = useState('')
 
   // The Hook lets me debounce the value in the middle of a render method
   const handleDebouncedSearch = useDebouncedCallback((value) => setQuery(value), 400)
+
+  useEffect(() => {
+    axios.get(PERSONS_URL)
+    .then(({data}) => setPersons(data))
+  }, [])
 
   const filteredPersons = useMemo(() =>
     persons.filter(({name}) => name.toLowerCase().includes(query.toLowerCase())),
