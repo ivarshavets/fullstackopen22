@@ -1,10 +1,9 @@
 import { useState, useMemo, useEffect } from 'react'
 // import _debounce from 'lodash/debounce'
 import { useDebouncedCallback } from 'use-debounce'
-import axios from 'axios'
+import personsService from './services/persons'
 import AddForm from './components/AddForm'
-
-const PERSONS_URL = 'http://localhost:3001/persons'
+import Person from './components/Person'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -14,22 +13,34 @@ const App = () => {
   const handleDebouncedSearch = useDebouncedCallback((value) => setQuery(value), 400)
 
   useEffect(() => {
-    axios.get(PERSONS_URL)
-    .then(({data}) => setPersons(data))
+    personsService.getPersons().then(({data}) => setPersons(data))
   }, [])
 
   const filteredPersons = useMemo(() =>
-    persons.filter(({name}) => name.toLowerCase().includes(query.toLowerCase())),
+    (persons || []).filter(({name}) => name.toLowerCase().includes(query.toLowerCase())),
     [query, persons])
 
-  const addPerson = (newName, newNumber) => {
-    let isPersonExists = persons.find(({name}) => name === newName)
+  const addPerson = (person) => {
+    const personToBeAdded = persons.find(({name}) => name === person.name)
+    const isPersonExists = !!personToBeAdded && Object.keys(personToBeAdded).length !== 0
+
     if (isPersonExists) {
-      alert(`${newName} is already added to the phonebook`)
+      if (window.confirm(`${person.name} is already added to the phonebook. Replace the old number with the new one?`)) {
+        personsService.updatePerson(personToBeAdded.id, {number: person.number})
+          .then(({data}) =>  {
+            const updatedList = persons.map(el => el.id === data.id ? {...el, ...data} : el)
+            setPersons(updatedList)
+          })
+          .catch(e => console.log(e))
+      }
     } else {
-      setPersons([...persons, {name: newName.trim(), number: newNumber.trim()}])
+      personsService.addPerson(person)
+        .then(({data: {name, number}}) => setPersons([...persons, {name, number}]))
+        .catch(e => console.log(e))
     }
   }
+
+  const handleDeletePerson = (id) => setPersons(persons.filter(person => person.id !== id))
 
   return (
     <div className="container">
@@ -42,7 +53,9 @@ const App = () => {
       <AddForm addPerson={addPerson} />
       <h2>Numbers</h2>
       <ul>
-        {filteredPersons.map(({name, number}) => <li key={name}>Name: {name}, phone: {number}</li>)}
+        {(filteredPersons || []).map((person) => (
+          <Person key={person.name} item={person} onDelete={handleDeletePerson} />
+        ))}
       </ul>
     </div>
   )

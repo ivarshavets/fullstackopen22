@@ -9,7 +9,7 @@ const AddForm = ({addPerson}) => {
 
   const submitForm = (e) => {
     e.preventDefault()
-    addPerson(newName, newNumber)
+    addPerson({name: newName,  number: newNumber})
     setNewName('')
     setNewNumber('')
   }
