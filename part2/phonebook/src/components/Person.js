@@ -1,14 +1,17 @@
 import personsService from "../services/persons"
+import useFlashNotification from '../hooks/useNotification'
 
-const Person = ({item : {id, name, number}, onDelete}) => {
+const Person = ({item : {id, name, number}, onDelete, showNotification}) => {
+  // const [message, showFlashMessage] = useFlashNotification()
+
   const handleDelete = () => {
     if (window.confirm("Do you really want to delete the person")) {
       personsService.deletePerson(id)
         .then(() => {
           onDelete(id)
-          alert('Deleted successfully!')
+          showNotification('Deleted successfully!')
         })
-        .catch(() => alert('something is wrong :('))
+        .catch(() => showNotification('Something went wrong', 'error'))
     }
   }
 

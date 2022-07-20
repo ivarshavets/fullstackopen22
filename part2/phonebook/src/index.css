@@ -15,3 +15,23 @@ code {
 .container {
   padding: 20px;
 }
+
+.flash-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  background-color: #60a8e5;
+}
+
+.flash-message--success {
+  background-color: #4dbe3a;
+}
+
+.flash-message--error {
+  background-color: #be3a3a;
+}

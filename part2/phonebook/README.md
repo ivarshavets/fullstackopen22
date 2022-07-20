@@ -17,6 +17,10 @@ Version 3 ([exercises 2.15.-2.18](https://fullstackopen.com/en/part2/altering_da
 3. Make it possible for users to delete entries from the phonebook. The deletion can be done through a dedicated button for each person in the phonebook list. You can confirm the action from the user by using the window.confirm method
 4. Change the functionality so that if a number is added to an already existing user, the new number will replace the old number. If the person's information is already in the phonebook, the application can confirm the action from the user
 
+Version 4 ([exercises 2.19.-2.20](https://fullstackopen.com/en/part2/adding_styles_to_react_app#exercises-2-19-2-20))
+1. Show a notification that lasts for a few seconds after a successful operation is executed (a person is added or a number is changed)
+2. Shown a message when the delete operation does not succeed
+
 ## Start the app
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 In the project directory, you can run:
