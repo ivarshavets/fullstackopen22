@@ -59,7 +59,7 @@ const App = () => {
     setTimeout(() => {
       setFlashMessage(null)
     }, 5000)
-  })
+  }, [])
 
 
   return (
