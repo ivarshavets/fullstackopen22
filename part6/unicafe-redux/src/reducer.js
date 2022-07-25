@@ -4,6 +4,9 @@ const initialState = {
   bad: 0
 }
 
+// action creator function
+export const voteAction = (voteType) => ({type: voteType})
+
 const counterReducer = (state = initialState, action) => {
   console.log(action)
   switch (action.type) {
