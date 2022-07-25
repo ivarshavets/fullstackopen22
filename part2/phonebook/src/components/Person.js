@@ -1,5 +1,4 @@
 import personsService from "../services/persons"
-import useFlashNotification from '../hooks/useNotification'
 
 const Person = ({item : {id, name, number}, onDelete, showNotification}) => {
   // const [message, showFlashMessage] = useFlashNotification()
