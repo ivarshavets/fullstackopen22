@@ -1,3 +1,18 @@
+# Project Anecdote v2 with state management
+
+## Tasks
+Version 2 ([exercise 6.3.-6.8](https://fullstackopen.com/en/part6/flux_architecture_and_redux#exercises-6-3-6-8))
+
+1. Implement the functionality for voting anecdotes. The amount of votes must be saved to a Redux-store.
+2. Implement the functionality for adding new anecdotes. The form can be kept as an uncontrolled component.
+3. Make sure that the anecdotes are ordered by the number of votes.
+4. Separate the creation of action-objects to action creator-functions and place them in the src/reducers/anecdoteReducer.js file.
+5. Separate the creation of new anecdotes into its own component called AnecdoteForm. Move all logic for creating a new anecdote into this new component.
+6. Separate the rendering of the anecdote list into its own component called AnecdoteList. Move all logic related to voting for an anecdote to this new component.
+
+
+*  *  *  *  *
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

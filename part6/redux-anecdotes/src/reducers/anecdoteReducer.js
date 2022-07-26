@@ -17,12 +17,37 @@ const asObject = (anecdote) => {
   }
 }
 
+export const voteActionCreator = (id) => ({
+  type: 'VOTE',
+  data: {id}
+})
+
+export const addActionCreator = (text) => ({
+  type: 'ADD',
+  data: {
+    content: text,
+    id: getId(),
+    votes: 0
+  }
+})
+
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
 
+  switch (action.type) {
+    case 'VOTE':
+      return state.map(el => {
+        if (el.id === action.data.id) {
+          return {...el, votes: el.votes + 1}
+        }
+        return el
+      })
+    case 'ADD':
+      return ([...state, action.data])
+  }
   return state
 }
 
