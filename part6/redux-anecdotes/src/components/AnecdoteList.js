@@ -1,24 +1,41 @@
+// import { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { voteActionCreator } from './../reducers/anecdoteReducer'
+import { vote, getFilteredAnecdotes } from './../reducers/anecdoteReducer'
 
 const AnecdoteList = () => {
-  const anecdotes = useSelector(state => state.sort((a, b) => b.votes - a.votes))
+  const visibleAnecdotes = useSelector(state => getFilteredAnecdotes(state))
+
+  // // anecdotes with the use of useMemo
+  // const visibilityFilter = useSelector(({filter}) => filter)
+  // const anecdotes = useSelector(({anecdotes}) => anecdotes || [])
+  // const visibleAnecdotes = useMemo(() => {
+  //   const sortedByVotesList = [...anecdotes.sort((a, b) => b.votes - a.votes)]
+
+  //   if (visibilityFilter === 'ALL') {
+  //     return sortedByVotesList
+  //   }
+
+  //   return visibilityFilter  === 'IMPORTANT'
+  //     ? sortedByVotesList.filter(item => item.important)
+  //     : sortedByVotesList.filter(item => !item.important)
+  //   }, [anecdotes, visibilityFilter])
+
   const dispatch = useDispatch()
 
-  const vote = (id) => {
+  const handleVote = (id) => {
     console.log('vote', id)
-    dispatch(voteActionCreator(id))
+    dispatch(vote(id))
   }
 
   return (
-    (anecdotes || []).map(anecdote =>
+    visibleAnecdotes.map(anecdote =>
       <div key={anecdote.id}>
         <div>
           {anecdote.content}
         </div>
         <div>
           has {anecdote.votes}
-          <button onClick={() => vote(anecdote.id)}>vote</button>
+          <button onClick={() => handleVote(anecdote.id)}>vote</button>
         </div>
       </div>
     ))
