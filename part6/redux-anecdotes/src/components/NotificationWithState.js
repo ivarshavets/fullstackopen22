@@ -13,24 +13,9 @@ const Notification = () => {
     color: type === 'success' ? '#4dbe3a' : '#be3a3a'
   }
 
-  // // Simple version
-
-  // useEffect(() => {
-  //   if (!message) return
-
-  //   const timeoutId = setTimeout(() => {
-  //     dispatch(removeNotification())
-  //   }, 5000)
-
-  //   return () => {
-  //     if (timeoutId !== null) {
-  //       clearTimeout(timeoutId)
-  //     }
-  //   }
-  // }, [message, removeNotification])
-
-
   const timer = useRef(null)
+
+  const [isShown, setIsShown] = useState(false)
 
   const clearTimer = useCallback(() => {
     if (timer.current) {
@@ -40,29 +25,30 @@ const Notification = () => {
   }, [])
 
   useEffect(() => {
-    if (!message) {
-      return () => {}
+    if (message) {
+      setIsShown(true)
     }
+    return () => setIsShown(false)
+  }, [message])
 
+  useEffect(() => {
     timer.current = setTimeout(() => {
       if (timer.current) {
+        setIsShown(false)
         dispatch(removeNotification())
-        // timer.current = null
+        timer.current = null
       }
     }, 5000)
 
     return clearTimer
-  }, [message, clearTimer, dispatch])
-
-  if (!message) {
-    return null
-  }
+  }, [message, clearTimer, removeNotification, dispatch])
 
   return (
-    <div style={style}>
+    isShown &&
+    (<div style={style}>
       {message}
-    </div>
-  )
+    </div>)
+    )
 }
 
 export default Notification

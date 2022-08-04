@@ -1,6 +1,7 @@
 // import { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { vote, getFilteredAnecdotes } from './../reducers/anecdoteReducer'
+import { voteForAnecdote, getFilteredAnecdotes } from './../reducers/anecdoteReducer'
+import { showNotification } from './../reducers/notificationReducer'
 
 const AnecdoteList = () => {
   const visibleAnecdotes = useSelector(state => getFilteredAnecdotes(state))
@@ -22,9 +23,9 @@ const AnecdoteList = () => {
 
   const dispatch = useDispatch()
 
-  const handleVote = (id) => {
-    console.log('vote', id)
-    dispatch(vote(id))
+  const handleVote = ({id, content}) => {
+    dispatch(voteForAnecdote(id))
+    dispatch(showNotification({message: `You voted for "${content}"`, type: 'success'}))
   }
 
   return (
@@ -35,7 +36,7 @@ const AnecdoteList = () => {
         </div>
         <div>
           has {anecdote.votes}
-          <button onClick={() => handleVote(anecdote.id)}>vote</button>
+          <button onClick={() => handleVote(anecdote)}>vote</button>
         </div>
       </div>
     ))

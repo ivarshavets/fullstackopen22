@@ -1,5 +1,3 @@
-import { createSlice, current } from '@reduxjs/toolkit'
-
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -22,36 +20,51 @@ const asObject = (anecdote) => {
   }
 }
 
+// actions
+const VOTE = 'VOTE'
+const ADD_ANECDOTE = 'ADD_ANECDOTE'
+
+// action creators
+export const vote = (id) => ({
+  type: VOTE,
+  payload: {id}
+})
+
+export const addAnecdote = (text) => ({
+  type: ADD_ANECDOTE,
+  payload: {
+    content: text,
+    id: getId(),
+    votes: 0,
+    important: false
+  }
+})
+
 const initialState = anecdotesAtStart.map(asObject)
 
-const anecdoteSlice = createSlice({
-  name: 'anecdotes',
-  initialState,
-  reducers: {
-    createAnecdote(state, action) {
-      state.push(asObject(action.payload))
-    },
-    voteForAnecdote(state, action) {
-      console.log('state', current(state))
+
+const anecdoteReducer = (state = initialState, action) => {
+  console.log('state now: ', state)
+  console.log('action', action)
+
+  switch (action.type) {
+    case VOTE:
       return state.map(el => {
-        if (el.id === action.payload) {
+        if (el.id === action.payload.id) {
           return {...el, votes: el.votes + 1}
         }
         return el
       })
-    }
+    case ADD_ANECDOTE:
+      return ([...state, action.payload])
+    default:
+      return state
   }
-})
-
-export const { createAnecdote, voteForAnecdote } = anecdoteSlice.actions
-export default anecdoteSlice.reducer
+}
 
 // selectors
 // need memoization with reselect
-export const getSortedByVotesAnecdotes = (anecdotes) => {
-  const sortedList = [...anecdotes || []]
-  return sortedList.sort((a, b) => b.votes - a.votes)
-}
+export const getSortedByVotesAnecdotes = (anecdotes) => [...(anecdotes || []).sort((a, b) => b.votes - a.votes)]
 
 export const getFilteredAnecdotes = ({anecdotes, filter}) => {
   const list = getSortedByVotesAnecdotes(anecdotes)
@@ -63,3 +76,5 @@ export const getFilteredAnecdotes = ({anecdotes, filter}) => {
     ? list.filter(item => item.important)
     : list.filter(item => !item.important)
 }
+
+export default anecdoteReducer

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import { addAnecdote } from './../reducers/anecdoteReducer'
+import { createAnecdote } from './../reducers/anecdoteReducer'
+import { showNotification } from './../reducers/notificationReducer'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
@@ -8,7 +9,7 @@ const AnecdoteForm = () => {
   const handleSubmit = (e) => {
 
     e.preventDefault()
-    dispatch(addAnecdote(input.current.value))
+    dispatch(createAnecdote(input.current.value))
     input.current.value = ''
     // e.target.reset()
   }
