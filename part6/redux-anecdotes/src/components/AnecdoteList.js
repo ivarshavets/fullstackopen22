@@ -1,10 +1,10 @@
 // import { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { voteForAnecdote, getFilteredAnecdotes } from './../reducers/anecdoteReducer'
+import { voteForAnecdote, selectFilteredAnecdotes } from './../reducers/anecdoteReducer'
 import { showNotification } from './../reducers/notificationReducer'
 
 const AnecdoteList = () => {
-  const visibleAnecdotes = useSelector(state => getFilteredAnecdotes(state))
+  const visibleAnecdotes = useSelector(selectFilteredAnecdotes)
 
   // // anecdotes with the use of useMemo
   // const visibilityFilter = useSelector(({filter}) => filter)

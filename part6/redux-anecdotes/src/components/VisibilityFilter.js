@@ -15,6 +15,7 @@ const VisibilityFilter = () => {
           type="radio"
           name="filter"
           onChange={() => filterSelected('ALL')}
+          defaultChecked={true}
         />
       </label>
       <label>

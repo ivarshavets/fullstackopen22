@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit'
+import { createSlice, current, createSelector } from '@reduxjs/toolkit'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -47,15 +47,16 @@ export const { createAnecdote, voteForAnecdote } = anecdoteSlice.actions
 export default anecdoteSlice.reducer
 
 // selectors
-// need memoization with reselect
-export const getSortedByVotesAnecdotes = (anecdotes) => {
+const getFilter = ({filter}) => filter
+const getSearchQery = ({search}) => search
+const getAnecdotes = ({anecdotes}) => anecdotes
+
+const getSortedByVotesAnecdotes = (anecdotes) => {
   const sortedList = [...anecdotes || []]
   return sortedList.sort((a, b) => b.votes - a.votes)
 }
 
-export const getFilteredAnecdotes = ({anecdotes, filter}) => {
-  const list = getSortedByVotesAnecdotes(anecdotes)
-
+const getAnecdotesFilteredByImportance = (list, filter) => {
   if (filter === 'ALL') {
     return list
   }
@@ -63,3 +64,28 @@ export const getFilteredAnecdotes = ({anecdotes, filter}) => {
     ? list.filter(item => item.important)
     : list.filter(item => !item.important)
 }
+
+const getAnecdotesFilteredByQuery = (list, query) => {
+  if (!query) {
+    return list
+  }
+
+  return list.filter(({content}) => content.toLowerCase().includes(query.toLowerCase()))
+}
+
+const getFilteredAnecdotes = (anecdotes, filter, search) => {
+  const sortedList = getSortedByVotesAnecdotes(anecdotes)
+
+  const listByImportance = getAnecdotesFilteredByImportance(sortedList, filter)
+
+  const searched = getAnecdotesFilteredByQuery(listByImportance, search)
+
+  return getAnecdotesFilteredByQuery(listByImportance)
+}
+
+export const selectFilteredAnecdotes = createSelector([
+  getAnecdotes,
+  getFilter,
+  getSearchQery
+  ], (anecdotes, filter, query) => getFilteredAnecdotes(anecdotes, filter, query)
+)

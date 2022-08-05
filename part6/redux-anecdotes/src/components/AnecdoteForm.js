@@ -10,6 +10,7 @@ const AnecdoteForm = () => {
 
     e.preventDefault()
     dispatch(createAnecdote(input.current.value))
+    dispatch(showNotification({message: 'Successfully added', type: 'success'}))
     input.current.value = ''
     // e.target.reset()
   }
