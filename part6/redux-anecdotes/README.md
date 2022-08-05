@@ -1,7 +1,7 @@
-# Project Anecdote v2 with state management
+# Project Anecdote v3 with RTK
 
 ## Tasks
-Version 2 ([exercise 6.9.-6.12](https://fullstackopen.com/en/part6/many_reducers#exercises-6-9-6-12))
+Version 3 ([exercise 6.9.-6.12](https://fullstackopen.com/en/part6/many_reducers#exercises-6-9-6-12))
 
 1. Add React Toolkit and use Redux Toolkit's `configureStore` to create the store
 2. Add `notificationReducer` to show a notification on actions.
