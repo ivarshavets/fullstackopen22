@@ -1,13 +1,16 @@
-# Project Anecdote v3 with RTK
+# Project Anecdote
 
-## Tasks
-Version 3 ([exercise 6.9.-6.12](https://fullstackopen.com/en/part6/many_reducers#exercises-6-9-6-12))
+### Version 3 ([exercise 6.9.-6.12](https://fullstackopen.com/en/part6/many_reducers#exercises-6-9-6-12))
 
 1. Add React Toolkit and use Redux Toolkit's `configureStore` to create the store
 2. Add `notificationReducer` to show a notification on actions.
 3. Extend the application so that it uses the Notification component to display a message for five seconds when the user votes for an anecdote or creates a new anecdote.
 4. Implement search by a query for the anecdotes that are displayed to the user.
 
+### Version 4 ([exercise 6.13.-6.14](https://fullstackopen.com/en/part6/communicating_with_server_in_a_redux_application#exercises-6-13-6-14))
+
+1. Fetch the anecdotes from the backend implemented using json-server.
+2. Modify the creation of new anecdotes, so that the anecdotes are stored in the backend.
 
 *  *  *  *  *
 
