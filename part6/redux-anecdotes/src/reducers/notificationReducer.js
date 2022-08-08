@@ -17,3 +17,19 @@ const notificationSlice = createSlice({
 
 export const { showNotification, removeNotification } = notificationSlice.actions
 export default notificationSlice.reducer
+
+// Notification with logic in thunk action creator
+let timeoutId = null
+
+export const createNotificationAsyncThunk = ({message, type = 'success', hideDelay = 5}) => dispatch => {
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+  }
+
+  dispatch(showNotification({message, type}))
+
+  timeoutId = setTimeout(() => {
+    dispatch(removeNotification())
+  }, hideDelay * 1000)
+
+}

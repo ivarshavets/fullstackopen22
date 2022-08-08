@@ -3,6 +3,7 @@ import AnecdoteForm from './components/AnecdoteForm'
 import VisibilityFilter from './components/VisibilityFilter'
 import Search from './components/Search'
 import Notification from './components/Notification'
+// import Notification from './components/NotificationWithThunk'
 // import Notification from './components/NotificationWithState'
 
 const App = () => {

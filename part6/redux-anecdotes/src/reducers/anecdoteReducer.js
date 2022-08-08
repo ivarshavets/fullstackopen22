@@ -4,7 +4,7 @@ import {
   postAnecdoteApiCall,
   updateAnecdoteApiCall
 } from '../services/anecdotes'
-import { showNotification } from './notificationReducer'
+import { showNotification, createNotificationAsyncThunk } from './notificationReducer'
 
 const anecdoteSlice = createSlice({
   name: 'anecdotes',
@@ -18,12 +18,6 @@ const anecdoteSlice = createSlice({
     },
     voteForAnecdote(state, action) {
       console.log('state', current(state))
-      // return state.map(el => {
-      //   if (el.id === action.payload) {
-      //     return {...el, votes: el.votes + 1}
-      //   }
-      //   return el
-      // })
       return state.map(el => {
         if (el.id === action.payload.id) {
           return action.payload
@@ -68,9 +62,11 @@ export const createAnecdote = payload => async dispatch => {
   try {
     const response = await postAnecdoteApiCall(data)
     dispatch(addAnecdote(response.data))
-    dispatch(showNotification({message: 'Successfully added', type: 'success'}))
+    // dispatch(showNotification({message: 'Successfully added', type: 'success'}))
+    dispatch(createNotificationAsyncThunk({message: 'Successfully added'}))
   } catch (error) {
-    dispatch(showNotification({message: 'Failed to add', type: 'error'}))
+    // dispatch(showNotification({message: 'Failed to add', type: 'error'}))
+    dispatch(createNotificationAsyncThunk({message: 'Failed to add', type: 'error'}))
     console.log(error)
   }
 }
