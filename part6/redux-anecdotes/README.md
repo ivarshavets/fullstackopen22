@@ -12,6 +12,17 @@
 1. Fetch the anecdotes from the backend implemented using json-server.
 2. Modify the creation of new anecdotes, so that the anecdotes are stored in the backend.
 
+### Version 5 ([exercise 6.15.-6.18](https://fullstackopen.com/en/part6/communicating_with_server_in_a_redux_application#exercises-6-15-6-18))
+
+1. Modify the initialization of Redux store to happen using asynchronous action creators with the Redux Thunk library.
+2. Modify the creation of a new anecdote to happen using asynchronous action creators
+3. Save Voting to the backend, using the Redux Thunk library.
+4. Improve notification by make an action creator, which enables one to provide the notification as follows:
+```
+dispatch(setNotification(`you voted '${anecdote.content}'`, 10))
+```
+The first parameter is the text to be rendered and the second parameter is the time to display the notification given in seconds.
+
 *  *  *  *  *
 
 # Getting Started with Create React App

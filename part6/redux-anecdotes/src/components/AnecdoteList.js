@@ -1,11 +1,10 @@
-import { useMemo, useEffect } from 'react'
+import { useEffect } from 'react'
+// import { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchAnecdotes, voteForAnecdote, selectFilteredAnecdotes } from './../reducers/anecdoteReducer'
-import { showNotification } from './../reducers/notificationReducer'
-import { getAnacdotesApiCall } from '../services/anecdotes'
+import { fetchAnecdotes, updateAnecdote, selectVisibleAnecdotes } from './../reducers/anecdoteReducer'
 
 const AnecdoteList = () => {
-  const visibleAnecdotes = useSelector(selectFilteredAnecdotes)
+  const visibleAnecdotes = useSelector(selectVisibleAnecdotes)
 
   // // anecdotes with the use of useMemo
   // const visibilityFilter = useSelector(({filter}) => filter)
@@ -25,14 +24,14 @@ const AnecdoteList = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    getAnacdotesApiCall().then(({data}) =>
-      dispatch(fetchAnecdotes(data))
-    )
+    dispatch(fetchAnecdotes())
+    // getAnacdotesApiCall().then(({data}) =>
+    //   dispatch(fetchAnecdotes(data))
+    // )
   }, [])
 
-  const handleVote = ({id, content}) => {
-    dispatch(voteForAnecdote(id))
-    dispatch(showNotification({message: `You voted for "${content}"`, type: 'success'}))
+  const handleVote = (item) => {
+    dispatch(updateAnecdote(item))
   }
 
   return (
