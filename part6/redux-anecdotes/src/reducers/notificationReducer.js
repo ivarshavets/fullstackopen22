@@ -31,5 +31,4 @@ export const createNotificationAsyncThunk = ({message, type = 'success', hideDel
   timeoutId = setTimeout(() => {
     dispatch(removeNotification())
   }, hideDelay * 1000)
-
 }

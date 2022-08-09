@@ -23,6 +23,10 @@ dispatch(setNotification(`you voted '${anecdote.content}'`, 10))
 ```
 The first parameter is the text to be rendered and the second parameter is the time to display the notification given in seconds.
 
+### Version 6 ([exercise 6.19.-6.21](https://fullstackopen.com/en/part6/connect#exercises-6-19-6-21))
+1. Modify the Notification component so that it uses the connect function instead of the hooks.
+2. Modify Filter and AnecdoteForm components to use the connect function.
+
 *  *  *  *  *
 
 # Getting Started with Create React App

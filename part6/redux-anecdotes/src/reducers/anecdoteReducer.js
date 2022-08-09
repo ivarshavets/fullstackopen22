@@ -5,6 +5,7 @@ import {
   updateAnecdoteApiCall
 } from '../services/anecdotes'
 import { showNotification, createNotificationAsyncThunk } from './notificationReducer'
+// import { createNotificationAsyncThunk } from './notificationReducer'
 
 const anecdoteSlice = createSlice({
   name: 'anecdotes',
@@ -52,6 +53,7 @@ export const updateAnecdote = (payload) => async dispatch => {
     console.log('response data', data)
     dispatch(voteForAnecdote(data))
     dispatch(showNotification({message: `You voted for "${content}"`, type: 'success'}))
+    // dispatch(createNotificationAsyncThunk({message: `You voted for "${content}"`}))
   } catch (error) {
     dispatch(showNotification({message: `Failed to vote for "${content}"`, type: 'error'}))
   }
@@ -62,11 +64,11 @@ export const createAnecdote = payload => async dispatch => {
   try {
     const response = await postAnecdoteApiCall(data)
     dispatch(addAnecdote(response.data))
-    // dispatch(showNotification({message: 'Successfully added', type: 'success'}))
-    dispatch(createNotificationAsyncThunk({message: 'Successfully added'}))
+    dispatch(showNotification({message: 'Successfully added', type: 'success'}))
+    // dispatch(createNotificationAsyncThunk({message: 'Successfully added'}))
   } catch (error) {
-    // dispatch(showNotification({message: 'Failed to add', type: 'error'}))
-    dispatch(createNotificationAsyncThunk({message: 'Failed to add', type: 'error'}))
+    dispatch(showNotification({message: 'Failed to add', type: 'error'}))
+    // dispatch(createNotificationAsyncThunk({message: 'Failed to add', type: 'error'}))
     console.log(error)
   }
 }
