@@ -1,46 +1,98 @@
-import { createSlice, current, createSelector } from '@reduxjs/toolkit'
+import { createSlice, current, createSelector, createAction, createAsyncThunk } from '@reduxjs/toolkit'
 import {
   getAnacdotesApiCall,
   postAnecdoteApiCall,
   updateAnecdoteApiCall
 } from '../services/anecdotes'
-import { showNotification, createNotificationAsyncThunk } from './notificationReducer'
+import { showNotification } from './notificationReducer'
 // import { createNotificationAsyncThunk } from './notificationReducer'
+
+export const fetchAnecdotesAction = createAction('fetch')
+
+// Async Thunk action creator implemented with createAsyncThunk
+export const fetchAnecdotesAsyncThunk = createAsyncThunk(fetchAnecdotesAction, async () => {
+    try {
+      const response = await getAnacdotesApiCall()
+      return response.data
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+)
 
 const anecdoteSlice = createSlice({
   name: 'anecdotes',
-  initialState: [],
+  initialState: {list: [], isLoading: false, isError: false},
   reducers: {
-    getAnecdotes(_state, action) {
-      return action.payload
-    },
+    // used only in case of using fetchAnecdotes thunk
+    // getAnecdotes(_state, action) {
+    //   return action.payload
+    // },
     addAnecdote(state, action) {
-      state.push(action.payload)
+      state.list.push(action.payload)
     },
     voteForAnecdote(state, action) {
       console.log('state', current(state))
-      return state.map(el => {
+      return {
+        ...state,
+        list: state.list.map(el => {
         if (el.id === action.payload.id) {
           return action.payload
         }
         return el
-      })
+      })}
     }
+  },
+  // // "map object" notation
+  // extraReducers: {
+  //     [fetchAnecdotesAsyncThunk.pending]: (state) => {
+  //       state.isLoading = true
+  //     },
+  //     [fetchAnecdotesAsyncThunk.fulfilled]: (state, action) => {
+  //       state.isLoading = false
+  //       state.isError = false
+  //       state.list.push(...action.payload)
+  //     },
+  //     [fetchAnecdotesAsyncThunk.rejected]: (state) => {
+  //       state.isError = true
+  //     }
+  //   },
+
+  // "builder callback" notation
+  extraReducers: (builder) => {
+      // Add reducers for additional action types here, and handle loading state as needed
+    builder
+      .addCase(fetchAnecdotesAsyncThunk.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(fetchAnecdotesAsyncThunk.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isError = false
+        state.list.push(...action.payload)
+      })
+      .addCase(fetchAnecdotesAsyncThunk.rejected, (state) => {
+        state.isError = true
+      })
   }
 })
 
 export const { getAnecdotes, addAnecdote, voteForAnecdote } = anecdoteSlice.actions
 export default anecdoteSlice.reducer
 
-// Async Thunk action creators
-export const fetchAnecdotes = () => async dispatch => {
-  try {
-    const response = await getAnacdotesApiCall()
-    dispatch(getAnecdotes(response.data))
-  } catch (error) {
-    console.log(error)
-  }
-}
+//Async Thunk action creators
+
+// // Thunk fetchAnecdotes in case not using createAsyncThunk.
+// // It will be dispatch on render of a component
+
+// export const fetchAnecdotes = () => async dispatch => {
+//   try {
+//     const response = await getAnacdotesApiCall()
+//     dispatch(getAnecdotes(response.data))
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
 
 export const updateAnecdote = (payload) => async dispatch => {
   const {id, content, votes} = payload
@@ -50,7 +102,6 @@ export const updateAnecdote = (payload) => async dispatch => {
 }
   try {
     const {data} = await updateAnecdoteApiCall(id, updatedObj)
-    console.log('response data', data)
     dispatch(voteForAnecdote(data))
     dispatch(showNotification({message: `You voted for "${content}"`, type: 'success'}))
     // dispatch(createNotificationAsyncThunk({message: `You voted for "${content}"`}))
@@ -86,10 +137,11 @@ export const createAnecdote = payload => async dispatch => {
 //     })
 // }
 
+
 // selectors
 const selectFilter = ({filter}) => filter
 const selectSearchQery = ({search}) => search
-const selectAnecdotes = ({anecdotes}) => anecdotes || []
+const selectAnecdotes = ({anecdotes: {list}}) => list || []
 
 const selectSortedByVotesAnecdotes = (anecdotes) => {
   const sortedList = [...anecdotes]

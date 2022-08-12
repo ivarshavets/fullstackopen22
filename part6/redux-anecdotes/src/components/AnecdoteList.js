@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
 // import { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchAnecdotes, updateAnecdote, selectVisibleAnecdotes } from './../reducers/anecdoteReducer'
+import { fetchAnecdotesAsyncThunk, updateAnecdote, selectVisibleAnecdotes } from './../reducers/anecdoteReducer'
+// import { fetchAnecdotes } from './../reducers/anecdoteReducer'
 
 const AnecdoteList = () => {
   const visibleAnecdotes = useSelector(selectVisibleAnecdotes)
+  const {isError, isLoading} = useSelector(({anecdotes}) => anecdotes)
 
   // // anecdotes with the use of useMemo
   // const visibilityFilter = useSelector(({filter}) => filter)
@@ -24,14 +26,23 @@ const AnecdoteList = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(fetchAnecdotes())
+    dispatch(fetchAnecdotesAsyncThunk())
+    // dispatch(fetchAnecdotes())
     // getAnacdotesApiCall().then(({data}) =>
     //   dispatch(fetchAnecdotes(data))
     // )
-  }, [])
+  }, [dispatch])
 
   const handleVote = (item) => {
     dispatch(updateAnecdote(item))
+  }
+
+  if (isLoading && !visibleAnecdotes.length) {
+    return <div>Loading...</div>
+  }
+
+  if (isError) {
+    return <div>Something went wrong</div>
   }
 
   return (
