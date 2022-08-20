@@ -8,7 +8,7 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
-  const handleGood = () => setGood(good + 1)
+  const handleGood = () => setGood(good + 1) //setGood(good => good + 1)
   const handleNeutral = () => setNeutral(neutral + 1)
   const handleBad = () => setBad(bad + 1)
 
@@ -29,7 +29,7 @@ const App = () => {
   //     setBad(bad + 1)
   //   }
   // }
-  
+
   return (
     <div className="App">
       <h1>Give feedback</h1>
