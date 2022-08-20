@@ -1,6 +1,6 @@
 # Project Anecdote with react router
 
-### [exercise 7.1-7.3](https://fullstackopen.com/en/part7/react_router#exercises-7-1-7-3)
+### [Exercise 7.1-7.3](https://fullstackopen.com/en/part7/react_router#exercises-7-1-7-3)
 
 1. Add React Router to the application:
 - By clicking links in the Menu component the view should be changed.
@@ -12,14 +12,11 @@
 
 3. Improve the functionality of an anecdote creation such that after creating a new anecdote the application transitions automatically to showing the view for all anecdotes and the user is shown a notification informing them of this successful creation for the next five seconds:
 
-### ([exercise 7.4-7.7](https://fullstackopen.com/en/part7/custom_hooks#exercises-7-4-7-8))
+### [Exercise 7.4-7.7](https://fullstackopen.com/en/part7/custom_hooks#exercises-7-4-7-8)
 
 1. Simplify the anecdote creation form of your application with the `useField` custom hook we defined earlier.
 2. Add a button to the form that you can use to clear all the input fields. Expand the functionality of the useField hook so that it offers a new reset operation for clearing the field.
 
-
-
-Simplify the anecdote creation form of your application with the useField custom hook we defined earlier.
 *  *  *  *  *
 
 # Getting Started with Create React App
