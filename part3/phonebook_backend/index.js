@@ -22,11 +22,13 @@ let people = [
 ]
 
 const express = require('express')
-const app = express() // create an express app
+const app = express()
+const morgan = require('morgan') // HTTP request logger middleware for node.js
+morgan.token('body',  (req) => JSON.stringify(req.body))
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.use(express.json()) // funcion parses incoming requests with JSON payloads
-
-
 
 app.get('/', (request, response) => {
   response.send('<h1>Phonebook. Visit /api/persons to see people.</h1>')
