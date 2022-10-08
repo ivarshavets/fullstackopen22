@@ -41,8 +41,11 @@ app.get('/info', (request, response) => {
     ? `Phonebook has info for ${people.length}`
     : 'Phonebook is empty'
 
-  const text = `<p>${infoText}</p><p>${Date()}</p>`
-  response.send(text)
+  const body = `
+    <p>${infoText}</p>
+    <p>${Date()}</p>
+  `
+  response.send(body)
 })
 
 app.get('/api/persons/:id', (request, response) => {
