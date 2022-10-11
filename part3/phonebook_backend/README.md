@@ -13,7 +13,9 @@ Exercise [3.7-3.8](https://fullstackopen.com/en/part3/node_js_and_express#exerci
 7. Add the morgan middleware to the application for logging.
 8. Configure morgan so that it also shows the data sent in HTTP POST requests.
 
-9.
+Exercise [3.9-3.11](https://fullstackopen.com/en/part3/deploying_app_to_internet#exercises-3-9-3-11).
+9. Make the backend work with the phonebook frontend from the exercises of the previous part.
+10. Deploy the backend to the internet (Fly.io/Heroku).
 
 ## App initiating
 1. Create a new template for an application with `npm init` command.
@@ -34,8 +36,6 @@ node_modules/.bin/nodemon index.js
 }
 ```
 
-Exercise [3.9-3.11](https://fullstackopen.com/en/part3/deploying_app_to_internet#exercises-3-9-3-11).
-
 ## Start the app
 ### `npm run dev`
 Start the server in the development mode
@@ -43,3 +43,22 @@ Start the server in the development mode
 ### `npm start` from part2/phonebook
 Runs the frontend app in the development mode.
 The react app from the _part2/phonebook_ running in the browser in localhost:3000 fetches the data from _node/express-server_ that runs in localhost:3001.
+
+## Deployment
+### Fly.io
+1. Authorisation
+```
+fly auth login
+```
+2. Initializing an app by running the following command in the root directory of the app
+```
+fly launch
+```
+3. Open the app
+```
+fly open
+```
+4. Deploy to prod
+```
+fly deploy
+```
