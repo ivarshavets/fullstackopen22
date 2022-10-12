@@ -31,6 +31,7 @@ morgan.token('body',  (req) => JSON.stringify(req.body))
 app.use(express.json()) // funcion parses incoming requests with JSON payloads
 app.use(cors())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+app.use(express.static('build')) // make express show static content
 
 app.get('/', (request, response) => {
   response.send('<h1>Phonebook. Visit /api/persons to see people.</h1>')

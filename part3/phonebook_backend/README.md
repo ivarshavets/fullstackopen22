@@ -1,7 +1,11 @@
 # Phonebook backend
 
+**App deployed to Heroku: https://phonebook-fe22.herokuapp.com/**
+
+**App deployed to Fly: https://phonebook-fullstackopen22.fly.dev/**
+
 ## Tasks
-Exercise [3.1-3.6](https://fullstackopen.com/en/part3/node_js_and_express#exercises-3-1-3-6).
+Exercise [3.1-3.6](https://fullstackopen.com/en/part3/node_js_and_express#exercises-3-1-3-6)
 1. Implement a Node application that returns a hardcoded list of phonebook at the address _http://localhost:3001api/persons_.
 2. Implement an info page at the address _http://localhost:3001/info_, which shows the time that the request was received and how many entries are in the phonebook at the time of processing the request.
 3. Implement the functionality for displaying the information for a single phonebook entry.
@@ -9,13 +13,16 @@ Exercise [3.1-3.6](https://fullstackopen.com/en/part3/node_js_and_express#exerci
 5. Expand the backend so that new phonebook entries can be added.
 6. Implement error handling for creating new entrie.
 
-Exercise [3.7-3.8](https://fullstackopen.com/en/part3/node_js_and_express#exercises-3-7-3-8).
+Exercise [3.7-3.8](https://fullstackopen.com/en/part3/node_js_and_express#exercises-3-7-3-8)
+
 7. Add the morgan middleware to the application for logging.
 8. Configure morgan so that it also shows the data sent in HTTP POST requests.
 
-Exercise [3.9-3.11](https://fullstackopen.com/en/part3/deploying_app_to_internet#exercises-3-9-3-11).
+Exercise [3.9-3.11](https://fullstackopen.com/en/part3/deploying_app_to_internet#exercises-3-9-3-11)
+
 9. Make the backend work with the phonebook frontend from the exercises of the previous part.
 10. Deploy the backend to the internet (Fly.io/Heroku).
+11. Generate a production build of your frontend, and add it to the internet application.
 
 ## App initiating
 1. Create a new template for an application with `npm init` command.
@@ -25,7 +32,7 @@ Exercise [3.9-3.11](https://fullstackopen.com/en/part3/deploying_app_to_internet
 ```
 npm install --save-dev nodemon
 ```
-The application can be started with nodemon like this:
+- The application can be started with nodemon like this:
 ```
 node_modules/.bin/nodemon index.js
 ```
@@ -40,11 +47,20 @@ node_modules/.bin/nodemon index.js
 ### `npm run dev`
 Start the server in the development mode
 
-### `npm start` from part2/phonebook
-Runs the frontend app in the development mode.
+### `npm start`
+Runs the frontend app in the development mode from **part2/phonebook**.
 The react app from the _part2/phonebook_ running in the browser in localhost:3000 fetches the data from _node/express-server_ that runs in localhost:3001.
 
-## Deployment
+### `run build:ui`
+Builds the frontend and copies the production version under the backend repository
+
+### `npm run deploy`
+Releases the current backend to Heroku
+
+### `npm run deploy:full`
+Combines these two and contains the necessary git commands to update the backend repository
+
+## Deployment process
 ### Fly.io
 1. Authorisation
 ```
@@ -62,3 +78,45 @@ fly open
 ```
 fly deploy
 ```
+
+### Heroku
+1. Add Procfile to the root to tell Heroku how to start the application.
+```
+web: node index.js
+```
+2. Create git repository if not initiated before.
+3. Create a Heroku application
+```
+heroku create -a example-app
+```
+4. Commit your code to the repository (main or master branch) and move it to Heroku with the command:
+```
+git push heroku main
+```
+
+## Creating production build
+1. Create frontend production build from the root of the frontend project in part2 folder
+```
+npm run build
+```
+2. Serve generated static files from the backend by copying the production build (the build directory) to the root of the backend repository.
+```
+rm -rf build && cd ../../part2/phonebook/ && npm run build && cp -r build ../../part3/phonebook_backend
+```
+And configure the backend to show the frontend's main page (the file build/index.html) as its main page: Express middleware static is used for showing static content in the backend `app.use(express.static('build'))`
+
+3. Streamline deploying of the frontend by adding npm-scripts to the package.json of the backend repository to build and deploy
+
+- to Heroku
+```
+"deploy": "git push heroku main",
+"deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy"
+```
+- to Fly
+```
+"deploy": "fly deploy",
+"deploy:full": "npm run build:ui && npm run deploy"
+```
+4. Add *Proxy* in order to  make the connection to backend work at _localhost:3001_ after changing the backend address to a relative URL.
+In development mode the frontend is at the address _localhost:3000_ but the requests to the backend should go to _localhost:3001/api/persons_.
+If the React code does an HTTP request to a server address at _http://localhost:3000_ not managed by the React application itself (i.e. when requests are not about fetching the CSS or JavaScript of the application), the request will be redirected to the server at _http://localhost:3001_.
