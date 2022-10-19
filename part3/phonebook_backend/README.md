@@ -124,3 +124,11 @@ And configure the backend to show the frontend's main page (the file build/index
 4. Add *Proxy* in order to  make the connection to backend work at _localhost:3001_ after changing the backend address to a relative URL.
 In development mode the frontend is at the address _localhost:3000_ but the requests to the backend should go to _localhost:3001/api/persons_.
 If the React code does an HTTP request to a server address at _http://localhost:3000_ not managed by the React application itself (i.e. when requests are not about fetching the CSS or JavaScript of the application), the request will be redirected to the server at _http://localhost:3001_.
+
+
+## Command-line database
+### `node mongo.js yourpassword`
+Connect to the cloud-based MongoDB database created with MongoDB Atlas and fetching the data.
+
+### `node mongo.js yourpassword <personName> <personNumber>`
+Connect to the cloud-based MongoDB database and save the data with the passed params to the db.
