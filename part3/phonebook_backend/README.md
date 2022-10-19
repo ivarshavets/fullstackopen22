@@ -24,6 +24,10 @@ Exercise [3.9-3.11](https://fullstackopen.com/en/part3/deploying_app_to_internet
 10. Deploy the backend to the internet (Fly.io/Heroku).
 11. Generate a production build of your frontend, and add it to the internet application.
 
+Exercise [3.12](https://fullstackopen.com/en/part3/saving_data_to_mongo_db#exercise-3-12)
+
+12. Create a cloud-based MongoDB database for the phonebook application with MongoDB Atlas.
+
 ## App initiating
 1. Create a new template for an application with `npm init` command.
 2. Define dedicated _npm script_ in _package.json_ to start the app: `npm start` command instead of `start node index.js`.
