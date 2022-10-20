@@ -1,3 +1,4 @@
+// the file is intended for comand-line use of database
 const mongoose = require('mongoose')
 
 if (process.argv.length < 3) {

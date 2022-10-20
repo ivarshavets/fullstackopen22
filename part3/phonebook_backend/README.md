@@ -6,6 +6,7 @@
 
 ## Tasks
 Exercise [3.1-3.6](https://fullstackopen.com/en/part3/node_js_and_express#exercises-3-1-3-6)
+0. Use Express lib to build a backend server. It offers a more easy interface to work with Node's built-in http web server.
 1. Implement a Node application that returns a hardcoded list of phonebook at the address _http://localhost:3001api/persons_.
 2. Implement an info page at the address _http://localhost:3001/info_, which shows the time that the request was received and how many entries are in the phonebook at the time of processing the request.
 3. Implement the functionality for displaying the information for a single phonebook entry.
@@ -26,7 +27,13 @@ Exercise [3.9-3.11](https://fullstackopen.com/en/part3/deploying_app_to_internet
 
 Exercise [3.12](https://fullstackopen.com/en/part3/saving_data_to_mongo_db#exercise-3-12)
 
-12. Create a cloud-based MongoDB database for the phonebook application with MongoDB Atlas.
+12. Create a cloud-based MongoDB database for the phonebook application with MongoDB Atlas, that can be used for adding entries to the phonebook, and for listing all of the existing entries in the phonebook.
+
+Exercise [3.13-3.14](https://fullstackopen.com/en/part3/saving_data_to_mongo_db#exercises-3-13-3-14)
+
+13. Using Mangoose fetching all phonebook entries from the MongoDB database. Extract all Mongoose-specific code into its own module.
+
+14. Change the backend so that new entries are saved to the database. Use database in the route handlers.
 
 ## App initiating
 1. Create a new template for an application with `npm init` command.
