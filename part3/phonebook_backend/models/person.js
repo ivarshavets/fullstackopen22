@@ -9,8 +9,22 @@ mongoose.connect(url)
 
 // defining the schema for a person and the matching model
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String
+  name: {
+    type: String,
+    minlength: 3,
+    required: true
+  },
+  number: {
+    type: String,
+    minLength: 8,
+    required: true,
+    validate: {
+      validator: num => {
+          return /^\d{2,3}-\d+$/.test(num)
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    },
+  }
 })
 
 // modify the toJSON method of the schema to format the objects returned by Mongoose

@@ -41,6 +41,23 @@ Exercise [3.15-3.18](https://fullstackopen.com/en/part3/saving_data_to_mongo_db#
 17. If the user tries to create a new phonebook entry for a person whose name is already in the phonebook, the frontend will try to update the phone number of the existing entry by making an HTTP PUT request to the entry's unique URL.
 18. Update the handling of the api/persons/:id and info routes
 
+Exercise [3.19-3.21](https://fullstackopen.com/en/part3/validation_and_es_lint#exercises-3-19-3-21)
+
+19. Expand the validation so that the name stored in the database has to be at least three characters long. Expand the frontend so that it displays some form of error message when a validation error occurs
+20. Add validation, that will make sure that phone numbers are of the correct form. A phone number must
+- has length of 8 or more
+- if formed of two parts that are separated by -, the first part has two or three numbers and the second part also consists of numbers
+  - eg. 09-1234556 and 040-22334455 are valid phone numbers
+  - eg. 1234556, 1-22334455 and 10-22-334455 are invalid
+
+  Use a Custom validator to implement the second part of the validation.
+  If an HTTP POST request tries to add a name that is already in the phonebook, the server must respond with an appropriate status code and error message.
+21. Generate a new "full stack" version of the application and deploying to production.
+
+Exercise [3.22](https://fullstackopen.com/en/part3/validation_and_es_lint#exercise-3-22)
+
+22. Add ESlint to the application and fix all the warnings.
+
 ## App initiating
 1. Create a new template for an application with `npm init` command.
 2. Define dedicated _npm script_ in _package.json_ to start the app: `npm start` command instead of `start node index.js`.
@@ -138,6 +155,18 @@ And configure the backend to show the frontend's main page (the file build/index
 In development mode the frontend is at the address _localhost:3000_ but the requests to the backend should go to _localhost:3001/api/persons_.
 If the React code does an HTTP request to a server address at _http://localhost:3000_ not managed by the React application itself (i.e. when requests are not about fetching the CSS or JavaScript of the application), the request will be redirected to the server at _http://localhost:3001_.
 
+## Deploying the database backend to production
+For the production usage we have to set the database URL in the service that is hosing our app.
+
+In Fly.io that is done fly `secrets set`:
+```
+fly secrets set MONGODB_URI='mongodb+srv://fullstack:<password>@cluster0.o1opl.mongodb.net/noteApp?retryWrites=true&w=majority'
+```
+
+For Heroku the same is done with the `heroku config:set` command.
+```
+heroku config:set MONGODB_URI=mongodb+srv://fullstack:secretpasswordhere@cluster0-ostce.mongodb.net/note-app?retryWrites=true
+```
 
 ## Command-line database
 ### `node mongo.js yourpassword`
