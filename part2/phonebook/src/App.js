@@ -35,7 +35,7 @@ const App = () => {
             showFlashMessage('Updated successfully!')
           })
           .catch(e => {
-            showFlashMessage('Something went wrong')
+            showFlashMessage(`Something went wrong. Error: ${e.response.data.error}`)
             console.log(e)
           })
       }
@@ -46,7 +46,7 @@ const App = () => {
           showFlashMessage('Added successfully!')
         })
         .catch(e => {
-          showFlashMessage('Something went wrong')
+          showFlashMessage(`Something went wrong. Error: ${e.response.data.error}`)
           console.log(e)
         })
     }
