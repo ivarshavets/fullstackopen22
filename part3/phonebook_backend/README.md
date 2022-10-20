@@ -32,8 +32,14 @@ Exercise [3.12](https://fullstackopen.com/en/part3/saving_data_to_mongo_db#exerc
 Exercise [3.13-3.14](https://fullstackopen.com/en/part3/saving_data_to_mongo_db#exercises-3-13-3-14)
 
 13. Using Mangoose fetching all phonebook entries from the MongoDB database. Extract all Mongoose-specific code into its own module.
+14. Change the backend so that new entries are saved to the database.
 
-14. Change the backend so that new entries are saved to the database. Use database in the route handlers.
+Exercise [3.15-3.18](https://fullstackopen.com/en/part3/saving_data_to_mongo_db#exercises-3-15-3-18)
+
+15. Change the backend so that deleting phonebook entries is reflected in the database.
+16. Move the error handling of the application to a new error handler middleware.
+17. If the user tries to create a new phonebook entry for a person whose name is already in the phonebook, the frontend will try to update the phone number of the existing entry by making an HTTP PUT request to the entry's unique URL.
+18. Update the handling of the api/persons/:id and info routes
 
 ## App initiating
 1. Create a new template for an application with `npm init` command.

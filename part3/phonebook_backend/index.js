@@ -1,47 +1,45 @@
 require('dotenv').config() // get environment variables defined in the .env file
-const express = require('express') // lib to build a Node backend server
+const express = require('express')
 const app = express()
-const cors = require('cors') // allow requests from other origins by using Node's cors middleware.
 const morgan = require('morgan') // HTTP request logger middleware for node.js
+const cors = require('cors')
+
 const Person = require('./models/person')
 
-morgan.token('body',  (req) => JSON.stringify(req.body))
-
-app.use(express.json()) // function parses incoming requests with JSON payloads
 app.use(cors())
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 app.use(express.static('build')) // make express show static content
+app.use(express.json()) // function parses incoming requests with JSON payloads
 
-const fetchPeople = () => Person.find({})
+morgan.token('body',  (req) => JSON.stringify(req.body))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-// handling requests to the node server, route handlers
 app.get('/', (_request, response) => {
   response.send('<h1>Phonebook. Visit /api/persons to see people.</h1>')
 })
 
-app.get('/api/persons', (_request, response) => {
-  fetchPeople().then(result => {
+app.get('/api/persons', (_request, response, next) => {
+  Person.find({}).then(result => {
     // When the response is sent in the JSON format,
-    // the toJSON method of each object in the array is called automatically by the JSON.stringify method.
+    // the mongoose toJSON method of each object in the array is called automatically by the JSON.stringify method.
     response.json(result) // sends a JSON response
-  })
+  }).catch(error => next(error))
 })
 
-app.get('/info', (_request, response) => {
-  fetchPeople().then(people => {
-    const infoText = people.length
-    ? `Phonebook has info for ${people.length}`
+app.get('/info', async (_request, response) => {
+  const datestamp = new Date
+  const peopleCount = await Person.count()
+  const infoText = peopleCount
+    ? `Phonebook has info for ${peopleCount}`
     : 'Phonebook is empty'
 
     const body = `
       <p>${infoText}</p>
-      <p>${Date()}</p>
+      <p>${datestamp}</p>
     `
     response.send(body)
-  })
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
       if (person) {
@@ -50,19 +48,34 @@ app.get('/api/persons/:id', (request, response) => {
         response.status(404).send("The person is not found")
       }
     })
-    .catch(error => {
-      console.log(error)
-      response.status(500).send({error: 'malformatted id'})
-    })
+    .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
-  Person.findByIdAndRemove(id).then(() => response.status(204).end())
+  Person.findByIdAndRemove(id)
+    .then(() => response.status(204).end())
+    .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
-  const {body: {name, number}} = request
+app.patch('/api/persons/:id', (request, response, next) => {
+  const {name, number} = request.body
+  const id = request.params.id
+
+  Person.findByIdAndUpdate(
+    id,
+    {name, number},
+    {new: true, runValidators: true, context: 'query' }
+  )
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+
+
+app.post('/api/persons', (request, response, next) => {
+  const {name, number} = request.body
   if (!name || !number) {
     //400 bad request
     return response.status(400).json({
@@ -70,21 +83,38 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  Person.find({name}).then(result => {
-    if (!!result.length) {
-      return response.status(400).json({
-        error: 'name must be unique'
-      })
-    }
+  const person = new Person({name, number})
 
-    const person = new Person({
-      name,
-      number
-    })
-    person.save().then(result => response.json(result))
-  })
+  person.save()
+    .then(result => response.json(result))
+    .catch(error => next(error))
 })
 
+// handler of requests with unknown endpoint
+// responds to all requests with 404, no routes or middleware will be called after the response has been sent by unknown endpoint middleware, excepr errorHandler.
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
+// handler of requests with result to errors
+const errorHandler = (error, _request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
+
+// the last loaded middleware
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 console.log('process.env', process.env, process.env.PORT)
