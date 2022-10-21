@@ -25,7 +25,7 @@ const saveOrFetchData = () => {
   if (!personName || !personNumber) {
     Person.find({}).then(result => {
       console.log('phonebook:')
-      result.forEach(({name, number}) => {
+      result.forEach(({ name, number }) => {
         console.log(name, number)
       })
     })
@@ -41,7 +41,7 @@ const saveOrFetchData = () => {
 
 mongoose
   .connect(url)
-  .then((result) => {
+  .then(() => {
     console.log('connected')
     saveOrFetchData()
   })

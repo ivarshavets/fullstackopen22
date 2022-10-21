@@ -32,11 +32,11 @@ app.get('/info', async (_request, response) => {
     ? `Phonebook has info for ${peopleCount}`
     : 'Phonebook is empty'
 
-    const body = `
+  const body = `
       <p>${infoText}</p>
       <p>${datestamp}</p>
     `
-    response.send(body)
+  response.send(body)
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -45,7 +45,7 @@ app.get('/api/persons/:id', (request, response, next) => {
       if (person) {
         response.json(person)
       } else {
-        response.status(404).send("The person is not found")
+        response.status(404).send('The person is not found')
       }
     })
     .catch(error => next(error))
@@ -59,13 +59,13 @@ app.delete('/api/persons/:id', (request, response, next) => {
 })
 
 app.patch('/api/persons/:id', (request, response, next) => {
-  const {name, number} = request.body
+  const { name, number } = request.body
   const id = request.params.id
 
   Person.findByIdAndUpdate(
     id,
-    {name, number},
-    {new: true, runValidators: true, context: 'query' }
+    { name, number },
+    { new: true, runValidators: true, context: 'query' }
   )
     .then(updatedPerson => {
       response.json(updatedPerson)
@@ -75,8 +75,8 @@ app.patch('/api/persons/:id', (request, response, next) => {
 
 
 app.post('/api/persons', (request, response, next) => {
-  const {name, number} = request.body
-  const person = new Person({name, number})
+  const { name, number } = request.body
+  const person = new Person({ name, number })
 
   person.save()
     .then(result => response.json(result))
@@ -110,7 +110,6 @@ app.use(errorHandler)
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
-console.log('process.env', process.env, process.env.PORT)
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

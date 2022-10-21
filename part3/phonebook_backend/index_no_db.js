@@ -1,23 +1,23 @@
 let people = [
   {
-    "id": 1,
-    "name": "Arto Hellas!",
-    "number": "040-123456"
+    'id': 1,
+    'name': 'Arto Hellas!',
+    'number': '040-123456'
   },
   {
-    "id": 2,
-    "name": "Ada Lovelace",
-    "number": "39-44-5323523"
+    'id': 2,
+    'name': 'Ada Lovelace',
+    'number': '39-44-5323523'
   },
   {
-    "id": 3,
-    "name": "Dan Abramov",
-    "number": "12-43-234345"
+    'id': 3,
+    'name': 'Dan Abramov',
+    'number': '12-43-234345'
   },
   {
-    "id": 4,
-    "name": "Mary Poppendieck",
-    "number": "39-23-6423122"
+    'id': 4,
+    'name': 'Mary Poppendieck',
+    'number': '39-23-6423122'
   }
 ]
 
@@ -61,7 +61,7 @@ app.get('/api/persons/:id', (request, response) => {
   if (person) {
     response.json(person)
   } else {
-    response.status(404).send("The person is not found")
+    response.status(404).send('The person is not found')
   }
 })
 
@@ -75,7 +75,7 @@ app.delete('/api/persons/:id', (request, response) => {
 const getRandomInt = (max) => Math.floor(Math.random() * max)
 
 app.post('/api/persons', (request, response) => {
-  const {body: {name, number}} = request
+  const { body: { name, number } } = request
   if (!name || !number) {
     //400 bad request
     return response.status(400).json({
@@ -102,7 +102,6 @@ app.post('/api/persons', (request, response) => {
 
 
 const PORT = process.env.PORT || 3001
-console.log('process.env', process.env, process.env.PORT)
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
