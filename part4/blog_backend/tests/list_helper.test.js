@@ -14,26 +14,26 @@ test('dummy', () => {
 
 const blogs = [
   {
-    _id: "5a422aa71b54a676234d17f8",
-    title: "Go To Statement Considered Harmful",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    _id: '5a422aa71b54a676234d17f8',
+    title: 'Go To Statement Considered Harmful',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
     likes: 5,
     __v: 0
   },
   {
-    _id: "5a422a851b54a676234d17f7",
-    title: "React patterns",
-    author: "Michael Chan",
-    url: "https://reactpatterns.com/",
+    _id: '5a422a851b54a676234d17f7',
+    title: 'React patterns',
+    author: 'Michael Chan',
+    url: 'https://reactpatterns.com/',
     likes: 7,
     __v: 0
   },
   {
-    _id: "5a422b3a1b54a676234d17f9",
-    title: "Canonical string reduction",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+    _id: '5a422b3a1b54a676234d17f9',
+    title: 'Canonical string reduction',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
     likes: 6,
     __v: 0
   },
@@ -74,11 +74,11 @@ describe ('favorite blog', () => {
 
 describe('most blogs', () => {
   test('when list has only one blog, return the its author', () => {
-    expect(mostBlogs(listWithOneBlog)).toEqual({author: 'Edsger W. Dijkstra', blogsCount: 1})
+    expect(mostBlogs(listWithOneBlog)).toEqual({ author: 'Edsger W. Dijkstra', blogsCount: 1 })
   })
 
   test('when list has few blogs, return the author with most blogs', () => {
-    expect(mostBlogs(blogs)).toEqual({author: 'Edsger W. Dijkstra', blogsCount: 2})
+    expect(mostBlogs(blogs)).toEqual({ author: 'Edsger W. Dijkstra', blogsCount: 2 })
   })
 
   test('when list is empty, return undefined', () => {
@@ -88,11 +88,11 @@ describe('most blogs', () => {
 
 describe('most likes', () => {
   test('when list has only one blog, return its author', () => {
-    expect(mostLikes(listWithOneBlog)).toEqual({author: 'Edsger W. Dijkstra', likesCount: 5})
+    expect(mostLikes(listWithOneBlog)).toEqual({ author: 'Edsger W. Dijkstra', likesCount: 5 })
   })
 
   test('when list has few blogs, return the author with most likes', () => {
-    expect(mostLikes(blogs)).toEqual({author: 'Edsger W. Dijkstra', likesCount: 11})
+    expect(mostLikes(blogs)).toEqual({ author: 'Edsger W. Dijkstra', likesCount: 11 })
   })
 
   test('when list is empty, return undefined', () => {
