@@ -9,6 +9,9 @@ Exercise [4.1-4.2](https://fullstackopen.com/en/part4/structure_of_backend_appli
 1. Having a draft of a project, turn it into a functioning npm project.
 2. Refactor the application into separate modules and structure the project.
 
+Exercise [4.3-4.7](https://fullstackopen.com/en/part4/structure_of_backend_application_introduction_to_testing#exercises-4-3-4-7)
+3. Create a collection of helper functions and unit tests for the blog list.
+
 ## App initiating
 1. Create a new template for an application with `npm init` command.
 2. Define dedicated _npm script_ in _package.json_ to start the app: `npm start` command instead of `start node index.js`.
@@ -61,6 +64,13 @@ Releases the current backend to Heroku
 
 ### `npm run deploy:full`
 Combines these two and contains the necessary git commands to update the backend repository
+
+### `npm test`
+Run tests
+
+### `npm test -- -t 'when list has only one blog, equals the likes of that'`
+Run a single test, providing its name
+
 
 ## Deployment process
 ### Fly.io
