@@ -82,7 +82,7 @@ describe('most blogs', () => {
   })
 
   test('when list is empty, return undefined', () => {
-    expect(mostBlogs([])).toBe(undefined)
+    expect(mostBlogs([])).toBeUndefined()
   })
 })
 
@@ -96,6 +96,6 @@ describe('most likes', () => {
   })
 
   test('when list is empty, return undefined', () => {
-    expect(mostLikes([])).toBe(undefined)
+    expect(mostLikes([])).toBeUndefined()
   })
 })
