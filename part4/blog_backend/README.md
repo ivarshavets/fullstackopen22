@@ -10,7 +10,11 @@ Exercise [4.1-4.2](https://fullstackopen.com/en/part4/structure_of_backend_appli
 2. Refactor the application into separate modules and structure the project.
 
 Exercise [4.3-4.7](https://fullstackopen.com/en/part4/structure_of_backend_application_introduction_to_testing#exercises-4-3-4-7)
-3. Create a collection of helper functions and unit tests for the blog list.
+Create a collection of helper functions and unit tests for the blog list.
+
+Exercise [4.3-4.7](https://fullstackopen.com/en/part4/testing_the_backend#exercises-4-8-4-12)
+1. Use the supertest package for writing a test and cover route handlers with unit tests.
+2. Refactor the route handler to use the async/await syntax instead of promises.
 
 ## App initiating
 1. Create a new template for an application with `npm init` command.
@@ -48,6 +52,21 @@ npm install mongoose
 npm install cors
 ```
 
+## Setting App for testing
+1. Define test env
+- set `NODE_ENV` in the npm scripts
+- add `cross-env` to achieve cross-platform compatibility (support env mode on Windows), add it as a prod dependacy to avoid errors on web server on Heroku
+```
+npm install cross-env
+```
+2. Set Database for testing.
+- It could be achieved  by running [Mongo in-memory](https://docs.mongodb.com/manual/core/inmemory/) or by using [Docker](https://www.docker.com/) containers.
+- for this project the MongoDB Atlas test database can be used. Define configs for a test db.
+3. Add `supertest` package to help us write our tests for testing the API.
+```
+npm install --save-dev supertest
+```
+
 ## Start the app
 ### `npm run dev`
 Start the server in the development mode
@@ -71,6 +90,8 @@ Run tests
 ### `npm test -- -t 'when list has only one blog, equals the likes of that'`
 Run a single test, providing its name
 
+### `npm test -- tests/blog_api.test.js`
+Run a single test, providing the file name
 
 ## Deployment process
 ### Fly.io

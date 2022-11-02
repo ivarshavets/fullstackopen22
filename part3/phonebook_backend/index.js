@@ -92,6 +92,7 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 // handler of requests with result to errors
+// Default Express error handler - middleware, accepts next function as a param and passes an error to it. 
 const errorHandler = (error, _request, response, next) => {
   console.error(error.message)
 

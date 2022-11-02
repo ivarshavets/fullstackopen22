@@ -1,21 +1,28 @@
 const router = require('express').Router()
-
 const Blog = require('../models/blog')
 
-router.get('/', (_request, response) => {
-  Blog
-    .find({})
-    .then(blogs => response.json(blogs))
+router.get('/', async (_request, response) => {
+  const blogs = await Blog.find({})
+  response.json(blogs)
 })
 
-router.post('/', (request, response) => {
-  const blog = new Blog(request.body)
+router.post('/', async (request, response) => {
+  const normilizedBlog = request.body.likes ? request.body : {...request.body, likes: 0}
+  const blog = new Blog(normilizedBlog)
 
-  blog.save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-    .catch(error => console.log(error.message))
+  const savedBlog = await blog.save()
+  response.status(201).json(savedBlog)
 })
+
+// // error handling using next func without express-async-errors lib
+// router.post('/', async (request, response, next) => {
+//   const blog = new Blog(request.body)
+//   try {
+//     const result = await blog.save()
+//     response.status(201).json(result)
+//   } catch (error) {
+//     next(error.message)
+//   }
+// })
 
 module.exports = router
