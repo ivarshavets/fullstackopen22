@@ -21,8 +21,57 @@ router.post('/', async (request, response) => {
 //     const result = await blog.save()
 //     response.status(201).json(result)
 //   } catch (error) {
-//     next(error.message)
+//     next(error)
 //   }
 // })
+
+router.get('/:id', async (request, response, next) => {
+  const {id} = request.params
+  try {
+    const returnedBlog = await Blog.findById(id)
+    if (returnedBlog) {
+      response.json(returnedBlog)
+    } else {
+      response.status(404).end()
+    }
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.put('/:id', async (request, response, next) => {
+  const {id} = request.params
+  const {body} = request
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      id,
+      {...body},
+      { new: true, runValidators: true, context: 'query' }
+    )
+
+    if (updatedBlog === null) {
+      response.status(404).end()
+    } else {
+      response.json(updatedBlog)
+    }
+  } catch (e) {
+    next(e)
+  }
+})
+
+
+router.delete('/:id', async (request, response, next) => {
+  const {id} = request.params
+  try {
+    const returnedData = await Blog.findByIdAndRemove(id)
+    if (returnedData === null) {
+      response.status(404).end()
+    } else {
+      response.status(204).end()
+    }
+  } catch (e) {
+    next(e)
+  }
+})
 
 module.exports = router

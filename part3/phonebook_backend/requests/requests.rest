@@ -1,6 +1,10 @@
 GET http://localhost:3001/api/persons
 ###
-DELETE  http://localhost:3001/api/persons/635113d12ce130468f2cf909
+
+GET http://localhost:3001/api/persons/6362904ec989e7d23f64aef3
+###
+
+DELETE  http://localhost:3001/api/persons/6362904ec989e7d23f64aef3
 
 ###
 POST http://localhost:3001/api/persons/ HTTP/1.1
@@ -8,5 +12,14 @@ content-type: application/json
 
 {
     "name": "Irina",
-    "number": "12245-113-12"
+    "number": "040-22334455"
+}
+
+###
+PUT http://localhost:3001/api/persons/ HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Irina-updated",
+    "number": "040-22334456"
 }

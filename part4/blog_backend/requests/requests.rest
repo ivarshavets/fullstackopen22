@@ -1,4 +1,14 @@
 GET http://localhost:3003/api/blogs
+
+###
+GET  http://localhost:3003/api/blogs/63615445d98dd4ab8bca9a3e
+
+###
+GET  http://localhost:3003/api/blogs/1
+
+###
+DELETE  http://localhost:3003/api/blogs/63628693a84f1535b6fd3a9a
+
 ###
 DELETE  http://localhost:3003/api/blogs/1
 
@@ -11,4 +21,28 @@ content-type: application/json
   "author": "Samantha Jackson",
   "url": "/",
   "likes": 0
+}
+
+###
+PATCH  http://localhost:3003/api/blogs/63628693a84f1535b6fd3a9a HTTP/1.1
+content-type: application/json
+
+{
+  "likes": 3
+}
+
+###
+PUT  http://localhost:3003/api/blogs/63642fdaf0c4646a49fd0b6f HTTP/1.1
+content-type: application/json
+
+{
+  "likes": 5
+}
+
+###
+PUT  http://localhost:3003/api/blogs/1 HTTP/1.1
+content-type: application/json
+
+{
+  "likes": 5
 }

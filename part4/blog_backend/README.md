@@ -12,7 +12,7 @@ Exercise [4.1-4.2](https://fullstackopen.com/en/part4/structure_of_backend_appli
 Exercise [4.3-4.7](https://fullstackopen.com/en/part4/structure_of_backend_application_introduction_to_testing#exercises-4-3-4-7)
 Create a collection of helper functions and unit tests for the blog list.
 
-Exercise [4.3-4.7](https://fullstackopen.com/en/part4/testing_the_backend#exercises-4-8-4-12)
+Exercise [4.8-4.12](https://fullstackopen.com/en/part4/testing_the_backend#exercises-4-8-4-12)
 1. Use the supertest package for writing a test and cover route handlers with unit tests.
 2. Refactor the route handler to use the async/await syntax instead of promises.
 

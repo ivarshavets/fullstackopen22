@@ -58,7 +58,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.patch('/api/persons/:id', (request, response, next) => {
+app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
   const id = request.params.id
 
@@ -92,7 +92,7 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 // handler of requests with result to errors
-// Default Express error handler - middleware, accepts next function as a param and passes an error to it. 
+// Default Express error handler - middleware, accepts next function as a param and passes an error to it.
 const errorHandler = (error, _request, response, next) => {
   console.error(error.message)
 
@@ -104,8 +104,6 @@ const errorHandler = (error, _request, response, next) => {
 
   next(error)
 }
-
-app.use(errorHandler)
 
 // the last loaded middleware
 app.use(errorHandler)
