@@ -16,6 +16,12 @@ Exercise [4.8-4.12](https://fullstackopen.com/en/part4/testing_the_backend#exerc
 1. Use the supertest package for writing a test and cover route handlers with unit tests.
 2. Refactor the route handler to use the async/await syntax instead of promises.
 
+Exercise [4.15-4.23](https://fullstackopen.com/en/part4/token_authentication#exercises-4-15-4-23)
+1. Implement user administration
+- create new users by doing a HTTP POST with _bcrypt_ lib to encrypt the password
+- add validation. Username restrictions can be done with Mongoose validations. Password validation should be validated in controler because the password received by the backend and the password hash saved to the database are not the same thing.
+2. Implement token authentication
+
 ## App initiating
 1. Create a new template for an application with `npm init` command.
 2. Define dedicated _npm script_ in _package.json_ to start the app: `npm start` command instead of `start node index.js`.
