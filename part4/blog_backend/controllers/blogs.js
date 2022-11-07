@@ -8,11 +8,24 @@ router.get('/', async (_request, response) => {
 })
 
 router.post('/', async (request, response) => {
-  const normilizedBlog = request.body.likes ? request.body : {...request.body, likes: 0}
-  const blog = new Blog(normilizedBlog)
+  const {body} = request
+
+  // const user = await User.findById(body.userId)
+  const user = await User.findOne()
+
+  const blog = new Blog({
+    ...body,
+    likes: body.likes ? body.likes : 0,
+    user: user._id
+  })
 
   const savedBlog = await blog.save()
+
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
+
   response.status(201).json(savedBlog)
+
 })
 
 // // error handling using next func without express-async-errors lib
