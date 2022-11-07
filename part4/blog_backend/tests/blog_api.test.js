@@ -6,7 +6,7 @@ const {
   initialBlogs,
   blogsInDb,
   nonExistingId
-} = require('./test_helper')
+} = require('./blog_test_helper')
 
 const api = supertest(app)
 
