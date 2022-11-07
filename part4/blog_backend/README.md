@@ -20,6 +20,8 @@ Exercise [4.15-4.23](https://fullstackopen.com/en/part4/token_authentication#exe
 1. Implement user administration
 - create new users by doing a HTTP POST with _bcrypt_ lib to encrypt the password
 - add validation. Username restrictions can be done with Mongoose validations. Password validation should be validated in controler because the password received by the backend and the password hash saved to the database are not the same thing.
+- when an HTTP GET request is made to the /api/users route, the user objects would also contain the contents of the user's blogs, and not just their id. In a relational database, this functionality would be implemented with a join query. Document databases do not properly support join queries between collections.
+The Mongoose join is done with the [populate method](http://mongoosejs.com/docs/populate.html)
 2. Implement token authentication
 
 ## App initiating

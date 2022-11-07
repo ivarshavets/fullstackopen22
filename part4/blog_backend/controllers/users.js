@@ -11,6 +11,7 @@ userRouter.post('/', async (request, response) => {
     })
   }
 
+  // Mongoose does not have a built-in validator for checking the uniqueness of a field. mongoose-unique-validator npm package is a ready-made solution for this.
   const existingUser = await User.findOne({ username })
 
   if (existingUser) {
@@ -33,8 +34,13 @@ userRouter.post('/', async (request, response) => {
   response.status(201).json(savedUser)
 })
 
+// populate (join function in Mongoose) allows to add user obj
+// (or specified fields in user obj) instead of user ids
 userRouter.get('/', async (_request, response) => {
-  const users = await User.find({})
+  const users = await User
+    .find({})
+    .populate('blogs', { url: 1, title: 1, author: 1 })
+
   response.json(users)
 })
 
