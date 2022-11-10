@@ -1,7 +1,9 @@
 const supertest = require('supertest')
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const {
   initialBlogs,
   blogsInDb,
@@ -9,6 +11,28 @@ const {
 } = require('./blog_test_helper')
 
 const api = supertest(app)
+
+let token
+
+beforeAll(async () => {
+  await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash('rootPassword', 10)
+
+  const user = new User({
+    username: 'root',
+    name: 'Michael Chan',
+    passwordHash
+  })
+
+  await user.save()
+
+  const response = await api
+    .post('/api/login')
+    .send({ username: 'root', password: 'rootPassword' })
+
+  token = response.body.token
+})
 
 beforeEach(async () => {
   await Blog.deleteMany()
@@ -88,6 +112,7 @@ describe('POST request', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -108,6 +133,7 @@ describe('POST request', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -122,10 +148,20 @@ describe('POST request', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
 
     const resultBlogs = await blogsInDb()
     expect(resultBlogs).toHaveLength(initialBlogs.length)
+  })
+
+  test('fails with status code 401 if bad user credentials', async () => {
+    const newBlog = {}
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
   })
 })
 
@@ -136,6 +172,7 @@ describe('DELETE request', () => {
 
     await api
       .delete(`/api/blogs/${id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     const resultBlogsInDb = await blogsInDb()
@@ -151,6 +188,7 @@ describe('DELETE request', () => {
 
     await api
       .delete(`/api/blogs/${id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(404)
 
     const resultBlogsInDb = await blogsInDb()
@@ -161,6 +199,7 @@ describe('DELETE request', () => {
     const invalidId = '1'
     await api
       .delete(`/api/blogs/${invalidId}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
 
     const resultBlogsInDb = await blogsInDb()
@@ -176,6 +215,7 @@ describe('PUT request', () => {
     await api
       .put(`/api/blogs/${id}`)
       .send(newProp)
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .expect('Content-Type', /application\/json/)
       .expect(res => {
@@ -189,14 +229,19 @@ describe('PUT request', () => {
   test('fails with status code 400 in case of invalid id', async () => {
     const invalidId = '1'
 
-    await api.put(`/api/blogs/${invalidId}`).send({likes: 5})
+    await api
+      .put(`/api/blogs/${invalidId}`)
+      .send({likes: 5})
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
   })
 
   test('fails with 404 error in case non-existing id', async () => {
     const id = await nonExistingId()
 
-    await api.put(`/api/blogs/${id}`).send({likes: 5})
+    await api.put(`/api/blogs/${id}`)
+      .send({likes: 5})
+      .set('Authorization', `Bearer ${token}`)
       .expect(404)
   })
 })
