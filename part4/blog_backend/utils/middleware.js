@@ -1,5 +1,20 @@
 const logger = require('./logger')
 
+// a normal middleware is a function with three parameters,
+// that at the end calls the last parameter next
+// in order to move the control to next middleware
+
+// get JWT, sent in the Authorization header using the Bearer schema
+const tokenExtractor = (request, response, next) => {
+  const authorization = request.get('authorization')
+  request.token = authorization?.toLowerCase().startsWith('bearer ')
+    ? authorization.substring(7)
+    : null
+
+  next()
+}
+
+
 // handler of requests with unknown endpoint
 // responds to all requests with 404, no routes or middleware will be called after the response has been sent by unknown endpoint middleware, excepr errorHandler.
 const unknownEndpoint = (_request, response) => {
