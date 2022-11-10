@@ -14,12 +14,21 @@ const errorHandler = (error, _request, response, next) => {
     return response.status(400).send({ error: 'id format is incorrect' })
   } else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
+  } else if (error.name === 'JsonWebTokenError') {
+    return response.status(401).json({
+      error: ' invalid token or jwt must be provided'
+    })
+  } else if (error.name === 'TokenExpiredError') {
+    return response.status(401).json({
+      error: 'token expired'
+    })
   }
 
   next(error)
 }
 
 module.exports = {
+  tokenExtractor,
   unknownEndpoint,
   errorHandler
 }

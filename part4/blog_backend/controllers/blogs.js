@@ -1,19 +1,43 @@
-const router = require('express').Router()
+const blogRouter = require('express').Router()
+const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
-router.get('/', async (_request, response) => {
+// get JWT, sent in the Authorization header using the Bearer schema
+const getToken = request => {
+  console.log('request', request)
+  const authorization = request.get('authorization')
+  console.log('authorization', authorization)
+  if (authorization?.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
+
+blogRouter.get('/', async (_request, response) => {
   const blogs = await Blog
     .find({})
     .populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
-router.post('/', async (request, response) => {
+blogRouter.post('/', async (request, response) => {
   const {body} = request
 
-  // const user = await User.findById(body.userId)
-  const user = await User.findOne()
+  const token = getToken(request)
+
+  // checking of the validity of the token
+  // decoding the token and returning the Object which the token was based on
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  const {id: userId} = decodedToken
+  if (!userId) {
+    return response.status(401).json({
+      error: 'token missing or invalid'
+    })
+  }
+
+  const user = await User.findById(userId)
+  console.log('user', user)
 
   const blog = new Blog({
     ...body,
@@ -31,7 +55,7 @@ router.post('/', async (request, response) => {
 })
 
 // // error handling using next func without express-async-errors lib
-// router.post('/', async (request, response, next) => {
+// blogRouter.post('/', async (request, response, next) => {
 //   const blog = new Blog(request.body)
 //   try {
 //     const result = await blog.save()
@@ -41,7 +65,7 @@ router.post('/', async (request, response) => {
 //   }
 // })
 
-router.get('/:id', async (request, response, next) => {
+blogRouter.get('/:id', async (request, response, next) => {
   const {id} = request.params
   try {
     const returnedBlog = await Blog.findById(id)
@@ -55,7 +79,7 @@ router.get('/:id', async (request, response, next) => {
   }
 })
 
-router.put('/:id', async (request, response, next) => {
+blogRouter.put('/:id', async (request, response, next) => {
   const {id} = request.params
   const {body} = request
   try {
@@ -76,7 +100,7 @@ router.put('/:id', async (request, response, next) => {
 })
 
 
-router.delete('/:id', async (request, response, next) => {
+blogRouter.delete('/:id', async (request, response, next) => {
   const {id} = request.params
   try {
     const returnedData = await Blog.findByIdAndRemove(id)
@@ -90,4 +114,4 @@ router.delete('/:id', async (request, response, next) => {
   }
 })
 
-module.exports = router
+module.exports = blogRouter
