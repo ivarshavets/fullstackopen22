@@ -22,7 +22,22 @@ Exercise [4.15-4.23](https://fullstackopen.com/en/part4/token_authentication#exe
 - add validation. Username restrictions can be done with Mongoose validations. Password validation should be validated in controler because the password received by the backend and the password hash saved to the database are not the same thing.
 - when an HTTP GET request is made to the /api/users route, the user objects would also contain the contents of the user's blogs, and not just their id. In a relational database, this functionality would be implemented with a join query. Document databases do not properly support join queries between collections.
 The Mongoose join is done with the [populate method](http://mongoosejs.com/docs/populate.html)
-2. Implement token authentication
+2. Implement token authentication:
+- Install the [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) library, which allows to generate [JSON web tokens](https://jwt.io/).
+```
+npm install jsonwebtoken
+```
+
+### Token based authentication process
+- User starts by logging in. This causes the React code to send the username and the password to the server address _/api/login_ as a HTTP POST request.
+- If the username and the password are correct, the server generates a token which somehow identifies the logged in user.
+  - The token is signed digitally, making it impossible to falsify (with cryptographic means)
+- The backend responds with a status code indicating the operation was successful, and returns the token with the response.
+- The browser saves the token, for example to the state of a React application.
+- When the user creates a new note (or does some other operation requiring identification), the React code sends the token to the server with the request.
+- The server uses the token to identify the user
+- There are several ways of sending the token from the browser to the server. We use the [Authorization](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) header. The header also tells which [authentication scheme](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#Authentication_schemes) is used. Identifying the scheme tells the server how the attached credentials should be interpreted.
+  - The _Bearer_ scheme is suitable to our needs.
 
 ## App initiating
 1. Create a new template for an application with `npm init` command.
