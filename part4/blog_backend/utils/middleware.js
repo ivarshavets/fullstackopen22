@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken')
+const User = require('../models/user')
 const logger = require('./logger')
 
 // a normal middleware is a function with three parameters,
@@ -14,6 +16,29 @@ const tokenExtractor = (request, response, next) => {
   next()
 }
 
+const userExtractor = async (request, response, next) => {
+  const {token} = request
+
+  // checking of the validity of the token
+  // decoding the token and returning the Object which the token was based on
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  const {id} = decodedToken
+
+  if (!id) {
+    return response.status(401).json({
+      error: 'token missing or invalid'
+    })
+  }
+
+  const user = await User.findById(id)
+
+  if (!user) {
+    return response.status(400).json({ error: "user with the given id cannot be found" })
+  }
+
+  request.user = user
+  next()
+}
 
 // handler of requests with unknown endpoint
 // responds to all requests with 404, no routes or middleware will be called after the response has been sent by unknown endpoint middleware, excepr errorHandler.
@@ -44,6 +69,7 @@ const errorHandler = (error, _request, response, next) => {
 
 module.exports = {
   tokenExtractor,
+  userExtractor,
   unknownEndpoint,
   errorHandler
 }

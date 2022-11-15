@@ -1,13 +1,16 @@
 GET http://localhost:3003/api/blogs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlyYSIsImlkIjoiNjM2ZTk5ZDVkMGZiZmMyMWQ0OGYyZDFhIiwiaWF0IjoxNjY4NTA2MDA2LCJleHAiOjE2Njg1MDk2MDZ9.c7A4RapQoYYfdk8h0tQKLoJyUYXTyNoHR4LFxgE3ceM
 
 ###
-GET  http://localhost:3003/api/blogs/63615445d98dd4ab8bca9a3e
+GET  http://localhost:3003/api/blogs/636eaa4fc98d54a115f41ce3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlyYSIsImlkIjoiNjM2ZTk5ZDVkMGZiZmMyMWQ0OGYyZDFhIiwiaWF0IjoxNjY4NTA2MDA2LCJleHAiOjE2Njg1MDk2MDZ9.c7A4RapQoYYfdk8h0tQKLoJyUYXTyNoHR4LFxgE3ceM
 
 ###
 GET  http://localhost:3003/api/blogs/1
 
 ###
-DELETE  http://localhost:3003/api/blogs/63628693a84f1535b6fd3a9a
+DELETE  http://localhost:3003/api/blogs/636ea6de4e04bcd00fcc2a55
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlyYSIsImlkIjoiNjM2ZTk5ZDVkMGZiZmMyMWQ0OGYyZDFhIiwiaWF0IjoxNjY4NTA2MDA2LCJleHAiOjE2Njg1MDk2MDZ9.c7A4RapQoYYfdk8h0tQKLoJyUYXTyNoHR4LFxgE3ceM
 
 ###
 DELETE  http://localhost:3003/api/blogs/1
@@ -15,10 +18,10 @@ DELETE  http://localhost:3003/api/blogs/1
 ###
 POST http://localhost:3003/api/blogs/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYzNmFiZWE1MjUwNWQzOGQ0NGI3OGViOCIsImlhdCI6MTY2ODAwNjgwN30.H1Tmzg6oGp5urN8ZpZ41gHSjiDBL0V6avLFwqWzKFWU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlyYSIsImlkIjoiNjM2ZTk5ZDVkMGZiZmMyMWQ0OGYyZDFhIiwiaWF0IjoxNjY4NTA2MDA2LCJleHAiOjE2Njg1MDk2MDZ9.c7A4RapQoYYfdk8h0tQKLoJyUYXTyNoHR4LFxgE3ceM
 
 {
-  "title": "New blog",
+  "title": "Blog Test",
   "author": "Ira",
   "url": "/",
   "likes": 0
@@ -33,11 +36,12 @@ content-type: application/json
 }
 
 ###
-PUT  http://localhost:3003/api/blogs/63642fdaf0c4646a49fd0b6f HTTP/1.1
+PUT  http://localhost:3003/api/blogs/636eaa0bbd64c9788f7fb4ed HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlyYSIsImlkIjoiNjM2ZTk5ZDVkMGZiZmMyMWQ0OGYyZDFhIiwiaWF0IjoxNjY4NTA2MDA2LCJleHAiOjE2Njg1MDk2MDZ9.c7A4RapQoYYfdk8h0tQKLoJyUYXTyNoHR4LFxgE3ceM
 
 {
-  "likes": 5
+  "likes": 6
 }
 
 ###
@@ -58,9 +62,9 @@ POST http://localhost:3003/api/users/ HTTP/1.1
 content-type: application/json
 
 {
-  "username": "root",
-  "name": "Ira",
-  "password": "password"
+  "username": "ira",
+  "name": "Ira User",
+  "password": "iraPassword"
 }
 
 
@@ -73,4 +77,13 @@ content-type: application/json
 {
   "username": "root",
   "password": "password"
+}
+
+###
+POST http://localhost:3003/api/login/ HTTP/1.1
+content-type: application/json
+
+{
+  "username": "ira",
+  "password": "iraPassword"
 }
