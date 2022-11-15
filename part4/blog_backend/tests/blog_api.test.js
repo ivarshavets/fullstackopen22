@@ -35,12 +35,15 @@ beforeAll(async () => {
 })
 
 beforeEach(async () => {
-  await Blog.deleteMany()
-  await Blog.insertMany(initialBlogs)
+  await Blog.deleteMany({})
+  const user = (await User.find({}))[0]
+  await Blog.insertMany(
+    initialBlogs.map((blog) => ({ ...blog, user: user.id }))
+  )
 
   // // Adding items in specific execution order
   // for (blog of initialBlogs) {
-  //   let blogObject = new Blog(blog)
+  //   let blogObject = new Blog({...blog, user: user.id})
   //   await blogObject.save()
   // }
 
@@ -58,6 +61,7 @@ describe('GET request', () => {
   test('blogposts are returned as json', async () => {
     const response = await api
       .get('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
@@ -65,7 +69,9 @@ describe('GET request', () => {
    })
 
    test('a specific blog is within the returned notes and identified by field id', async () => {
-    const response = await api.get('/api/blogs')
+    const response = await api
+      .get('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
 
     const titlesList = response.body.map(r => r.title)
     expect(titlesList).toContain(initialBlogs[0].title)
@@ -73,30 +79,49 @@ describe('GET request', () => {
     expect(response.body[0].id).toBeDefined()
     expect(response.body[0]._id).toBeUndefined()
    })
+
+   test('fails with status code 401 if not authorized', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(401)
+  })
 })
 
 describe('GET single post', () => {
   test('succeeds with status code 200 and content is shown', async () => {
-    const initialBlogsInDb = (await blogsInDb())[0]
-    const resultBlog = await api.get(`/api/blogs/${initialBlogsInDb.id}`)
+    const initialBlogInDb = (await blogsInDb())[0]
+    const resultBlog = await api
+      .get(`/api/blogs/${initialBlogInDb.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-      expect(resultBlog.body).toEqual(initialBlogsInDb)
+      expect(resultBlog.body.id).toEqual(initialBlogInDb.id)
   })
 
   test('fails with status code 404 in case of non-existing id', async () => {
     const id = await nonExistingId()
-    await api.get(`/api/blogs/${id}`)
+    await api
+      .get(`/api/blogs/${id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(404)
   })
 
   test('fails with status code 400 in case of invalid id', async () => {
     const id = '1'
-    const response = await api.get(`/api/blogs/${id}`)
+    await api
+      .get(`/api/blogs/${id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
       .expect('Content-Type', /application\/json/)
       .expect(({body: {error}}) => error === 'id format is incorrect')
+  })
+
+  test('fails with status code 401 if not authorized', async () => {
+    const initialBlogInDb = (await blogsInDb())[0]
+    await api
+      .get(`/api/blogs/${initialBlogInDb.id}`)
+      .expect(401)
   })
 })
 
@@ -208,7 +233,7 @@ describe('DELETE request', () => {
 })
 
 describe('PUT request', () => {
-  test('likes property is updated', async () => {
+  test('updates likes props successfully', async () => {
     const {id} = (await blogsInDb())[0]
     const newProp = {likes: 5}
 
