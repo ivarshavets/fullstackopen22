@@ -66,9 +66,9 @@ describe('GET request', () => {
       .expect('Content-Type', /application\/json/)
 
     expect(response.body).toHaveLength(initialBlogs.length)
-   })
+  })
 
-   test('a specific blog is within the returned notes and identified by field id', async () => {
+  test('a specific blog is within the returned notes and identified by field id', async () => {
     const response = await api
       .get('/api/blogs')
       .set('Authorization', `Bearer ${token}`)
@@ -78,9 +78,9 @@ describe('GET request', () => {
 
     expect(response.body[0].id).toBeDefined()
     expect(response.body[0]._id).toBeUndefined()
-   })
+  })
 
-   test('fails with status code 401 if not authorized', async () => {
+  test('fails with status code 401 if not authorized', async () => {
     await api
       .get('/api/blogs')
       .expect(401)
@@ -96,7 +96,7 @@ describe('GET single post', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-      expect(resultBlog.body.id).toEqual(initialBlogInDb.id)
+    expect(resultBlog.body.id).toEqual(initialBlogInDb.id)
   })
 
   test('fails with status code 404 in case of non-existing id', async () => {
@@ -114,7 +114,7 @@ describe('GET single post', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(400)
       .expect('Content-Type', /application\/json/)
-      .expect(({body: {error}}) => error === 'id format is incorrect')
+      .expect(({ body: { error } }) => error === 'id format is incorrect')
   })
 
   test('fails with status code 401 if not authorized', async () => {
@@ -128,9 +128,9 @@ describe('GET single post', () => {
 describe('POST request', () => {
   test('succeeds with status code 201 in case of a valid blog', async () => {
     const newBlog = {
-      title: "A new Blogpost",
-      author: "Robert C. Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+      title: 'A new Blogpost',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
       likes: 1
     }
 
@@ -150,9 +150,9 @@ describe('POST request', () => {
 
   test('likes default value is 0 if property is missing', async () => {
     const newBlog = {
-      title: "A new Blogpost",
-      author: "Robert C. Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html"
+      title: 'A new Blogpost',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html'
     }
 
     await api
@@ -193,7 +193,7 @@ describe('POST request', () => {
 describe('DELETE request', () => {
   test('succeeds with status code 204 if id is valid', async () => {
     const initialBlogsInDb = await blogsInDb()
-    const {id} = initialBlogsInDb[0]
+    const { id } = initialBlogsInDb[0]
 
     await api
       .delete(`/api/blogs/${id}`)
@@ -229,13 +229,13 @@ describe('DELETE request', () => {
 
     const resultBlogsInDb = await blogsInDb()
     expect(resultBlogsInDb).toHaveLength(initialBlogs.length)
-})
+  })
 })
 
 describe('PUT request', () => {
   test('updates likes props successfully', async () => {
-    const {id} = (await blogsInDb())[0]
-    const newProp = {likes: 5}
+    const { id } = (await blogsInDb())[0]
+    const newProp = { likes: 5 }
 
     await api
       .put(`/api/blogs/${id}`)
@@ -256,7 +256,7 @@ describe('PUT request', () => {
 
     await api
       .put(`/api/blogs/${invalidId}`)
-      .send({likes: 5})
+      .send({ likes: 5 })
       .set('Authorization', `Bearer ${token}`)
       .expect(400)
   })
@@ -265,7 +265,7 @@ describe('PUT request', () => {
     const id = await nonExistingId()
 
     await api.put(`/api/blogs/${id}`)
-      .send({likes: 5})
+      .send({ likes: 5 })
       .set('Authorization', `Bearer ${token}`)
       .expect(404)
   })

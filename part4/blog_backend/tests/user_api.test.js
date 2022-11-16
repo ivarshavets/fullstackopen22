@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const app = require('../app')
 const User = require('../models/user')
-const {usersInDb} = require('./user_test_helper')
+const { usersInDb } = require('./user_test_helper')
 
 const api = supertest(app)
 
@@ -25,7 +25,7 @@ describe('GET request', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-      expect(response.body).toHaveLength(1)
+    expect(response.body).toHaveLength(1)
   })
 
   test('a specific user is within the returned users and it is identified by field id', async () => {
@@ -36,9 +36,9 @@ describe('GET request', () => {
 
     expect(response.body[0].id).toBeDefined()
     expect(response.body[0]._id).toBeUndefined()
-   })
+  })
 
-   test('user password is not displayed', async () => {
+  test('user password is not displayed', async () => {
     const response = await api.get('/api/users')
     for (const user of response.body) {
       expect(user.passwordHash).toBeUndefined
@@ -82,11 +82,11 @@ describe('POST request', () => {
     const initialUsersInDb = await usersInDb()
     const user = initialUsersInDb[0]
 
-      await api.post('/api/users').send(user)
-        .expect(400)
+    await api.post('/api/users').send(user)
+      .expect(400)
 
-      const resultedUsers = await usersInDb()
-      expect(resultedUsers).toHaveLength(initialUsersInDb.length)
+    const resultedUsers = await usersInDb()
+    expect(resultedUsers).toHaveLength(initialUsersInDb.length)
   })
 
   test('failes with status code 400 if username less than 3 chars', async () => {
@@ -109,7 +109,7 @@ describe('POST request', () => {
     const newUser = {
       'username': 'userName',
       'name': 'user name',
-      'password': "p"
+      'password': 'p'
     }
 
     await api.post('/api/users').send(newUser)

@@ -9,7 +9,7 @@ blogRouter.get('/', async (_request, response) => {
 })
 
 blogRouter.post('/', async (request, response) => {
-  const {body, user} = request
+  const { body, user } = request
 
   if (!user) {
     return response.status(401).json({
@@ -33,7 +33,7 @@ blogRouter.post('/', async (request, response) => {
 
 // error handling using next func without express-async-errors lib
 blogRouter.get('/:id', async (request, response, next) => {
-  const {params: {id}, user} = request
+  const { params: { id }, user } = request
   if (!user) {
     return response.status(401).json({
       error: 'token missing or invalid'
@@ -53,8 +53,8 @@ blogRouter.get('/:id', async (request, response, next) => {
 })
 
 blogRouter.put('/:id', async (request, response, next) => {
-  const {id} = request.params
-  const {body, user} = request
+  const { id } = request.params
+  const { body, user } = request
   if (!user) {
     return response.status(401).json({
       error: 'token missing or invalid'
@@ -76,7 +76,7 @@ blogRouter.put('/:id', async (request, response, next) => {
 
     const updatedBlog = await Blog.findByIdAndUpdate(
       id,
-      {...body},
+      { ...body },
       { new: true, runValidators: true, context: 'query' }
     )
 
@@ -92,7 +92,7 @@ blogRouter.put('/:id', async (request, response, next) => {
 })
 
 blogRouter.delete('/:id', async (request, response, next) => {
-  const {params: {id}, user} = request
+  const { params: { id }, user } = request
   if (!user) {
     return response.status(401).json({
       error: 'token missing or invalid'

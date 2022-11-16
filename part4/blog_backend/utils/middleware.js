@@ -17,12 +17,12 @@ const tokenExtractor = (request, response, next) => {
 }
 
 const userExtractor = async (request, response, next) => {
-  const {token} = request
+  const { token } = request
 
   // checking of the validity of the token
   // decoding the token and returning the Object which the token was based on
   const decodedToken = jwt.verify(token, process.env.SECRET)
-  const {id} = decodedToken
+  const { id } = decodedToken
 
   if (!id) {
     return response.status(401).json({
@@ -33,7 +33,7 @@ const userExtractor = async (request, response, next) => {
   const user = await User.findById(id)
 
   if (!user) {
-    return response.status(400).json({ error: "user with the given id cannot be found" })
+    return response.status(400).json({ error: 'user with the given id cannot be found' })
   }
 
   request.user = user

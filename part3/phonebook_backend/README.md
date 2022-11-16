@@ -57,6 +57,10 @@ Exercise [3.19-3.21](https://fullstackopen.com/en/part3/validation_and_es_lint#e
 Exercise [3.22](https://fullstackopen.com/en/part3/validation_and_es_lint#exercise-3-22)
 
 22. Add ESlint to the application and fix all the warnings.
+Inspecting and validating a file like index.js can be done with the following command:
+```
+npx eslint index.js
+```
 
 ## App initiating
 1. Create a new template for an application with `npm init` command.

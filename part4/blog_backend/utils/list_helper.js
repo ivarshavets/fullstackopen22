@@ -1,6 +1,7 @@
 const _groupBy = require('lodash/groupBy')
 
-const dummy = (_blogs) => 1
+// disabling linter because this func is a part of the assignment
+const dummy = (_blogs) => 1 // eslint-disable-line no-unused-vars
 
 const totalLikes = (blogsList) => {
   return blogsList.length === 0
@@ -52,7 +53,7 @@ const mostLikes = (blogList) => {
 }
 
 const mostBlogs2 = (blogList) => {
-  if (blogs.length === 0) {
+  if (blogList.length === 0) {
     return undefined
   }
 
@@ -66,7 +67,7 @@ const mostBlogs2 = (blogList) => {
     }
   })
 
-  let mostBlogs = {author: '', blogsCount: 0}
+  let mostBlogs = { author: '', blogsCount: 0 }
   for (const author in dictionary) {
     const blogsNum = dictionary[author].length
     if (blogsNum > mostBlogs.blogsCount) {
@@ -79,7 +80,7 @@ const mostBlogs2 = (blogList) => {
 
 const mostBlogs3 = blogs => {
   if (blogs.length === 0) {
-      return undefined
+    return undefined
   }
 
   // dictionary of (author, blogs count) pairs
@@ -93,8 +94,8 @@ const mostBlogs3 = blogs => {
   const mostBlogs = { 'author': '', 'blogs': 0 }
   for (const [key, value] of Object.entries(dictionary)) {
     if (value > mostBlogs.blogs) {
-        mostBlogs.blogs = value
-        mostBlogs.author = key
+      mostBlogs.blogs = value
+      mostBlogs.author = key
     }
   }
 }
