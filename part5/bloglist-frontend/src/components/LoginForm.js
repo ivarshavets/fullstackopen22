@@ -7,10 +7,8 @@ const LoginForm = ({handleLogin}) => {
   const submitForm = (e) => {
     e.preventDefault()
     handleLogin({username, password})
-      .finally(() => {
-        setUsername('')
-        setPassword('')
-      })
+    setUsername('')
+    setPassword('')
   }
 
   return (

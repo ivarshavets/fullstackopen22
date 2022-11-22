@@ -19,7 +19,7 @@ const App = () => {
   }
 
   const handleLogin = (credentials) => {
-    return userService.loginRequest(credentials)
+    userService.loginRequest(credentials)
       .then(({data}) => {
         setUser(data)
         userService.setToken(data.token)
