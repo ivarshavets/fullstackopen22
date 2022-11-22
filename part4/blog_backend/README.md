@@ -1,9 +1,5 @@
 # Blog backend
 
-**App deployed to Heroku:**
-
-**App deployed to Fly:**
-
 ## Tasks
 Exercise [4.1-4.2](https://fullstackopen.com/en/part4/structure_of_backend_application_introduction_to_testing#exercises-4-1-4-2)
 1. Having a draft of a project, turn it into a functioning npm project.
