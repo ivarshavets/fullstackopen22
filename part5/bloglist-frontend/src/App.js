@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import userService from './services/user'
 import LoginForm from './components/LoginForm'
 import FlashMessage from './components/FlashMessage'
+import AddBlogForm from './components/AddBlogForm'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -38,6 +39,20 @@ const App = () => {
     showFlashMessage('Succeessfully logged out!')
   }
 
+  const addBlog = (blog) => {
+    blogService.postBlog(blog)
+      .then((data) => {
+        setBlogs(() => ([
+          ...blogs,
+          data
+        ]))
+        showFlashMessage('Blog is added successfully')
+      })
+      .catch(e => {
+        showFlashMessage(e.response.data.error, 'error')
+      })
+  }
+
   useEffect(() => {
     const authenticatedUser = window.localStorage.getItem('authenticatedUser')
     if (authenticatedUser) {
@@ -67,11 +82,13 @@ const App = () => {
   return (
     <div className="container">
       <FlashMessage message={message} />
-      <h2>Blogs</h2>
       <p>
         Logged in as <strong>{user.name}</strong>&nbsp;
         <button onClick={handleLogout}>Logout</button>
       </p>
+      <h2>Add a new blog</h2>
+      <AddBlogForm addBlog={addBlog} />
+      <h2>Blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}

@@ -7,6 +7,14 @@ const fetchBlogs = () => {
   return request.then(response => response.data)
 }
 
-const blogService = { fetchBlogs }
+const postBlog = (data) => {
+  return axios.post(`${BASE_URL}/blogs`, data, {headers: { Authorization: token }})
+    .then(response => response.data)
+}
+
+const blogService = {
+  fetchBlogs,
+  postBlog
+}
 
 export default blogService
