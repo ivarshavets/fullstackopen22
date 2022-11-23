@@ -1,16 +1,19 @@
 import { useState } from "react"
 
-const AddBlogForm = ({addBlog}) => {
+const AddBlogForm = ({onAddBlog, onFinish}) => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
 
   const submitForm = (e) => {
     e.preventDefault()
-    addBlog({title, url, author})
-    setTitle('')
-    setUrl('')
-    setAuthor('')
+    onAddBlog({title, url, author})
+      .then(() => onFinish())
+      .finally(() => {
+        setTitle('')
+        setUrl('')
+        setAuthor('')
+      })
   }
 
   return (
@@ -41,6 +44,7 @@ const AddBlogForm = ({addBlog}) => {
       </div>
       <div>
         <button type="submit">Add</button>
+        <button onClick={onFinish}>Cancel</button>
       </div>
   </form>
   )
