@@ -19,7 +19,7 @@ const AddBlog = ({addBlog}) => {
       <h2>Add a new blog</h2>
       <AddBlogForm
         onAddBlog={addBlog}
-        onFinish={() => setIsFormVisible(false)}
+        onCancel={() => setIsFormVisible(false)}
       />
     </div>
   )
