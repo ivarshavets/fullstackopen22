@@ -5,6 +5,7 @@ import userService from './services/user'
 import LoginForm from './components/LoginForm'
 import FlashMessage from './components/FlashMessage'
 import AddBlog from './components/AddBlog'
+// import AddBlogWithTogglable from './components/AddBlogWithTogglable'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -86,6 +87,7 @@ const App = () => {
         <button onClick={handleLogout}>Logout</button>
       </p>
       <AddBlog addBlog={addBlog} />
+      {/* <AddBlogWithTogglable addBlog={addBlog} /> */}
       <h2>Blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
