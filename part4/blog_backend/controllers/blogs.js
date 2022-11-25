@@ -52,7 +52,7 @@ blogRouter.get('/:id', async (request, response, next) => {
   }
 })
 
-blogRouter.put('/:id', async (request, response, next) => {
+blogRouter.patch('/:id', async (request, response, next) => {
   const { id } = request.params
   const { body, user } = request
   if (!user) {
@@ -78,7 +78,7 @@ blogRouter.put('/:id', async (request, response, next) => {
       id,
       { ...body },
       { new: true, runValidators: true, context: 'query' }
-    )
+    ).populate('user', { username: 1, name: 1 }) // handling the user reference on update since the quest data has only user id.
 
     if (updatedBlog === null) {
       response.status(404).end()

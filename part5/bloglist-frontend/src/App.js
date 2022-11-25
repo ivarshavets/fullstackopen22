@@ -53,6 +53,26 @@ const App = () => {
       })
   }
 
+  const updateBlog = (payload, id) => {
+    blogService.patchBlog(payload, id)
+      .then((data) => {
+        const updatedBlogList = blogs.map(blog => {
+          if (blog.id === id) {
+            return {
+              ...blog,
+              ...data
+            }
+          }
+          return blog
+        })
+        setBlogs(updatedBlogList)
+        showFlashMessage('You liked the blog successfully')
+      })
+      .catch(e => {
+        showFlashMessage(e.response.data.error, 'error')
+      })
+  }
+
   useEffect(() => {
     const authenticatedUser = window.localStorage.getItem('authenticatedUser')
     if (authenticatedUser) {
@@ -90,7 +110,7 @@ const App = () => {
       {/* <AddBlogWithTogglable addBlog={addBlog} /> */}
       <h2>Blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
       )}
     </div>
   )

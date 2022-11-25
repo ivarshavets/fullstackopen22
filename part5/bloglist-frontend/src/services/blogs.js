@@ -12,9 +12,15 @@ const postBlog = (data) => {
     .then(response => response.data)
 }
 
+const patchBlog = (data, id) => {
+  return axios.patch(`${BASE_URL}/blogs/${id}`, data, {headers: { Authorization: token }})
+    .then(response => response.data)
+}
+
 const blogService = {
   fetchBlogs,
-  postBlog
+  postBlog,
+  patchBlog
 }
 
 export default blogService
