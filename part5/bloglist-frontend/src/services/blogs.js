@@ -17,10 +17,19 @@ const patchBlog = (data, id) => {
     .then(response => response.data)
 }
 
+const deleteBlog = (id) => {
+  return axios.delete(`${BASE_URL}/blogs/${id}`, {headers: { Authorization: token }})
+    .then(response => {
+      // response.data is empty string
+      return response.data
+    })
+}
+
 const blogService = {
   fetchBlogs,
   postBlog,
-  patchBlog
+  patchBlog,
+  deleteBlog
 }
 
 export default blogService

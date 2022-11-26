@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import userService from './services/user'
@@ -40,7 +40,7 @@ const App = () => {
   }
 
   const getSortedBlogs = useCallback((blogs) =>
-  blogs.sort((a, b) => a.likes - b.likes)
+  blogs.sort((a, b) => b.likes - a.likes)
 , [blogs])
 
   const addBlog = (blog) => {
@@ -60,7 +60,7 @@ const App = () => {
   const updateBlog = (payload, id) => {
     blogService.patchBlog(payload, id)
       .then(data => {
-        const updatedBlogList = blogs.map(blog => {
+        const updatedBlogsList = blogs.map(blog => {
           if (blog.id === id) {
             return {
               ...blog,
@@ -69,12 +69,26 @@ const App = () => {
           }
           return blog
         })
-        setBlogs(getSortedBlogs(updatedBlogList))
+        setBlogs(getSortedBlogs(updatedBlogsList))
         showFlashMessage('You liked the blog successfully')
       })
       .catch(e => {
         showFlashMessage(e.response.data.error, 'error')
       })
+  }
+
+  const deleteBlog = (id) => {
+    if (window.confirm('Are you sure you want to delete the blog?')) {
+      blogService.deleteBlog(id)
+      .then(() => {
+        const updatedBlogsList = blogs.filter(blog => blog.id !== id)
+        setBlogs(updatedBlogsList)
+        showFlashMessage('The blog is deleted successfully')
+      })
+      .catch(e => {
+        showFlashMessage(e.response.data.error, 'error')
+      })
+    }
   }
 
   useEffect(() => {
@@ -115,7 +129,7 @@ const App = () => {
       {/* <AddBlogWithTogglable addBlog={addBlog} /> */}
       <h2>Blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} />
       )}
     </div>
   )
