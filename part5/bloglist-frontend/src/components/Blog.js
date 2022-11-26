@@ -1,6 +1,10 @@
 import { useToggle } from '../hooks/useToggle'
 
-const Blog = ({blog: {id, title, url, author, likes}, updateBlog}) => {
+const Blog = ({
+  blog: {id, title, url, author, likes},
+  updateBlog,
+  removeBlog
+}) => {
   const [isShown, toggleShown] = useToggle()
 
   const buttonText = isShown ? 'Hide more' : 'More'
@@ -11,7 +15,7 @@ const Blog = ({blog: {id, title, url, author, likes}, updateBlog}) => {
     <div className="blog-item">
       <div>
         {title}
-        <div>{likes} <button onClick={updateLikes}>Like</button></div>
+        <div>Likes: {likes} <button onClick={updateLikes}>Like</button></div>
         <div><button onClick={toggleShown}>{buttonText}</button></div>
       </div>
       {isShown && (

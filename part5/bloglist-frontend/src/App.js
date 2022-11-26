@@ -39,6 +39,10 @@ const App = () => {
     showFlashMessage('Succeessfully logged out!')
   }
 
+  const getSortedBlogs = useCallback((blogs) =>
+  blogs.sort((a, b) => a.likes - b.likes)
+, [blogs])
+
   const addBlog = (blog) => {
     return blogService.postBlog(blog)
       .then((data) => {
@@ -55,7 +59,7 @@ const App = () => {
 
   const updateBlog = (payload, id) => {
     blogService.patchBlog(payload, id)
-      .then((data) => {
+      .then(data => {
         const updatedBlogList = blogs.map(blog => {
           if (blog.id === id) {
             return {
@@ -65,7 +69,7 @@ const App = () => {
           }
           return blog
         })
-        setBlogs(updatedBlogList)
+        setBlogs(getSortedBlogs(updatedBlogList))
         showFlashMessage('You liked the blog successfully')
       })
       .catch(e => {
@@ -84,8 +88,9 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      blogService.fetchBlogs().then(blogs =>
-        setBlogs(blogs)
+      blogService.fetchBlogs().then(blogs => {
+        setBlogs(getSortedBlogs(blogs))
+      }
       )
     }
   }, [user])
