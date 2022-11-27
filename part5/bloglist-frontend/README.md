@@ -26,6 +26,7 @@ Exercise [5.11-5.12](https://fullstackopen.com/en/part5/props_children_and_propt
 npm install --save-dev eslint-plugin-jest
 ```
 - create npm script to run the lint: `{"eslint": "eslint ."}`
+- run the sceript: `npx eslint .`
 
 # Getting Started with Create React App
 

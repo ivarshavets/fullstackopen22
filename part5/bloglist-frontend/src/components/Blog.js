@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { useToggle } from '../hooks/useToggle'
 
 const Blog = ({
@@ -28,6 +29,18 @@ const Blog = ({
       <div><button onClick={handleDelete}>Remove</button></div>
     </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    likes: PropTypes.number.isRequired
+  }),
+  updateBlog: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired
 }
 
 export default Blog

@@ -26,4 +26,8 @@ const AddBlog = ({ addBlog }) => {
   )
 }
 
+AddBlog.propTypes = {
+  addBlog: PropTypes.func.isRequired
+}
+
 export default AddBlog

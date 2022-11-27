@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { useRef } from 'react'
 import AddBlogForm from './AddBlogForm'
 import Togglable from './Togglable'
@@ -16,6 +17,10 @@ const AddBlog = ({ addBlog }) => {
       </Togglable>
     </div>
   )
+}
+
+AddBlogForm.propTypes = {
+  onAddBlog: PropTypes.func.isRequired
 }
 
 export default AddBlog
