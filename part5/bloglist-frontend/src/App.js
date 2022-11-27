@@ -13,7 +13,7 @@ const App = () => {
   const [message, setFlashMessage] = useState(null)
 
   const showFlashMessage = (text, type='success') => {
-    setFlashMessage({text, type})
+    setFlashMessage({ text, type })
     setTimeout(() => {
       setFlashMessage(null)
     }, 5000)
@@ -21,7 +21,7 @@ const App = () => {
 
   const handleLogin = (credentials) => {
     userService.loginRequest(credentials)
-      .then(({data}) => {
+      .then(({ data }) => {
         setUser(data)
         userService.setToken(data.token)
         window.localStorage.setItem('authenticatedUser', JSON.stringify(data))
@@ -40,8 +40,8 @@ const App = () => {
   }
 
   const getSortedBlogs = useCallback((blogs) =>
-  blogs.sort((a, b) => b.likes - a.likes)
-, [blogs])
+    blogs.sort((a, b) => b.likes - a.likes)
+  , [blogs])
 
   const addBlog = (blog) => {
     return blogService.postBlog(blog)
@@ -80,14 +80,14 @@ const App = () => {
   const deleteBlog = (id) => {
     if (window.confirm('Are you sure you want to delete the blog?')) {
       blogService.deleteBlog(id)
-      .then(() => {
-        const updatedBlogsList = blogs.filter(blog => blog.id !== id)
-        setBlogs(updatedBlogsList)
-        showFlashMessage('The blog is deleted successfully')
-      })
-      .catch(e => {
-        showFlashMessage(e.response.data.error, 'error')
-      })
+        .then(() => {
+          const updatedBlogsList = blogs.filter(blog => blog.id !== id)
+          setBlogs(updatedBlogsList)
+          showFlashMessage('The blog is deleted successfully')
+        })
+        .catch(e => {
+          showFlashMessage(e.response.data.error, 'error')
+        })
     }
   }
 

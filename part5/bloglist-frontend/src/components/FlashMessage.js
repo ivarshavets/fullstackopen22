@@ -1,4 +1,4 @@
-const FlashMessage = ({message}) => {
+const FlashMessage = ({ message }) => {
   if (!message?.text) {
     return null
   }

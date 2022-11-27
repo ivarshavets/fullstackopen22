@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types'
 import AddBlogForm from './AddBlogForm'
-import {useToggle} from '../hooks/useToggle'
+import { useToggle } from '../hooks/useToggle'
 
-const AddBlog = ({addBlog}) => {
+const AddBlog = ({ addBlog }) => {
   const [isFormVisible, setIsFormVisible] = useToggle()
 
   if (!isFormVisible) {

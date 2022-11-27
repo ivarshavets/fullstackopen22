@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import AddBlogForm from './AddBlogForm'
 import Togglable from './Togglable'
 
-const AddBlog = ({addBlog}) => {
+const AddBlog = ({ addBlog }) => {
   const toggleRef = useRef()
 
   return (

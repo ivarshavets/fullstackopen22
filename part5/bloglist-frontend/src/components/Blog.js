@@ -1,7 +1,7 @@
 import { useToggle } from '../hooks/useToggle'
 
 const Blog = ({
-  blog: {id, title, url, author, likes},
+  blog: { id, title, url, author, likes },
   updateBlog,
   deleteBlog
 }) => {
@@ -9,7 +9,7 @@ const Blog = ({
 
   const buttonText = isShown ? 'Hide more' : 'More'
 
-  const handleUpdateLikes = () => updateBlog({likes: likes + 1}, id)
+  const handleUpdateLikes = () => updateBlog({ likes: likes + 1 }, id)
 
   const handleDelete = () => deleteBlog(id)
 
