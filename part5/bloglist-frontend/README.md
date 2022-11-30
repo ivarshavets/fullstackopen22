@@ -28,6 +28,21 @@ npm install --save-dev eslint-plugin-jest
 - create npm script to run the lint: `{"eslint": "eslint ."}`
 - run the sceript: `npx eslint .`
 
+Exercise [5.13-5.16](https://fullstackopen.com/en/part5/testing_react_apps#exercises-5-13-5-16)
+Add tests
+- Jest is configured by default to applications created with create-react-app.
+- install _react-testing-library_ that will help us render components for testing purposes, _jest-dom_ that provides some nice Jest-related helper methods and _user-event_ that makes simulating user input a bit easier:
+```
+npm install --save-dev @testing-library/react @testing-library/jest-dom @testing-library/user-event
+```
+- _Create-react-app_ configures tests to be run in watch mode by default, which means that the npm test command will not exit once the tests have finished, and will instead wait for changes to be made to the code. Once new changes to the code are saved, the tests are executed automatically after which Jest goes back to waiting for new changes to be made. If you want to run tests "normally", you can do so with the command:
+```
+CI=true npm test
+```
+Install [Watchman](https://facebook.github.io/watchman/) to avoid a warnings in the console
+- organising tests [conventions](https://medium.com/@jeff_long/organizing-tests-in-jest-17fc431ff850)
+- check test coverage with `CI=true npm test -- --coverage`
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

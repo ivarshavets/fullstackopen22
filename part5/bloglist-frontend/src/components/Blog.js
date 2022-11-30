@@ -17,14 +17,14 @@ const Blog = ({
   return (
     <div className="blog-item">
       <div>
-        {title}
-        <div>Likes: {likes} <button onClick={handleUpdateLikes}>Like</button></div>
+        <div className='blog_title'>{title}</div>
+        <div className='blog_author'>{author}</div>
         <div><button onClick={toggleShown}>{buttonText}</button></div>
       </div>
       {isShown && (
-        <div>
+        <div className='blog_details'>
           <div>{url}</div>
-          <div>{author}</div>
+          <div>Likes: {likes} <button onClick={handleUpdateLikes}>Like</button></div>
         </div>)}
       <div><button onClick={handleDelete}>Remove</button></div>
     </div>
