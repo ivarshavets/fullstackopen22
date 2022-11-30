@@ -11,7 +11,7 @@ const FlashMessage = ({ message }) => {
 }
 
 FlashMessage.propTypes = {
-  message: PropTypes.objectOf({
+  message: PropTypes.shape({
     text: PropTypes.string.isRequired,
     type: PropTypes.string
   })
