@@ -9,12 +9,10 @@ const AddBlogForm = ({ onAddBlog, onCancel }) => {
   const submitForm = (e) => {
     e.preventDefault()
     onAddBlog({ title, url, author })
-      .then(() => onCancel())
-      .finally(() => {
-        setTitle('')
-        setUrl('')
-        setAuthor('')
-      })
+    onCancel()
+    setTitle('')
+    setUrl('')
+    setAuthor('')
   }
 
   return (
@@ -22,7 +20,9 @@ const AddBlogForm = ({ onAddBlog, onCancel }) => {
       <div>
         <label>Title:</label>
         <input
+          className='blog_title_input'
           type="text"
+          placeholder="Enter a title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
@@ -30,7 +30,9 @@ const AddBlogForm = ({ onAddBlog, onCancel }) => {
       <div>
         <label>Url:</label>
         <input
+          className="blog_url_input"
           type="url"
+          placeholder="Enter a url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
@@ -38,7 +40,9 @@ const AddBlogForm = ({ onAddBlog, onCancel }) => {
       <div>
         <label>Author:</label>
         <input
+          className='blog_author_input'
           type="text"
+          placeholder="Enter an author"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
         />

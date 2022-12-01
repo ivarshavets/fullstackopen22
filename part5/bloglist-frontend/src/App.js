@@ -44,7 +44,7 @@ const App = () => {
   , [blogs])
 
   const addBlog = (blog) => {
-    return blogService.postBlog(blog)
+    blogService.postBlog(blog)
       .then((data) => {
         setBlogs(() => ([
           ...blogs,
