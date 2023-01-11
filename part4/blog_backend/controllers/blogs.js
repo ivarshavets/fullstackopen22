@@ -68,9 +68,9 @@ blogRouter.patch('/:id', async (request, response, next) => {
       return response.status(404).end()
     }
 
-    if (blogToUpdate.user?.toString() !== user.id) {
+    if (blogToUpdate.user?.toString() !== user.id && !body.likes) {
       return response.status(401).json({
-        error: 'only the creator can delete a blog'
+        error: 'only the creator can update a blog'
       })
     }
 
