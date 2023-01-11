@@ -42,6 +42,28 @@ CI=true npm test
 Install [Watchman](https://facebook.github.io/watchman/) to avoid a warnings in the console
 - organising tests [conventions](https://medium.com/@jeff_long/organizing-tests-in-jest-17fc431ff850)
 - check test coverage with `CI=true npm test -- --coverage`
+- mockn the event handler with Jest
+- mock objects and functions: they are commonly used stub components in testing that are used for replacing dependencies of the components being tested
+- start a user session to interact with the page with the help of user-event: `const user = userEvent.setup()`
+
+Exercise [5.17-5.22](https://fullstackopen.com/en/part5/end_to_end_testing#exercises-5-17-5-22)
+Add E2E tests using Cypress
+- install Cypress: `npm install --save-dev cypress`
+- add an npm-script to run Cypress:: `"cypress:open": "cypress open"`
+- add an npm script to the backend which starts it in test mode: `"start:test": "cross-env NODE_ENV=test node index.js"`
+- When both the backend and frontend are running, start Cypress:
+`npm run cypress:open`
+- script for runing Cypress from the CL `"test:e2e": "cypress run"`
+- install plugin to get rid of lint errors `npm install eslint-plugin-cypress --save-dev` and update configuration in `.eslintrc.js` to
+```
+  "env": {
+      "cypress/globals": true
+  },
+  "plugins": [
+      "react", "jest", "cypress"
+  ],
+}
+```
 
 # Getting Started with Create React App
 
