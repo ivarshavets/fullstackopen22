@@ -90,6 +90,9 @@ npm install --save-dev supertest
 ### `npm run dev`
 Start the server in the development mode
 
+### `npm run start:test`
+Run backend in the test mode
+
 ### `npm start`
 Runs the frontend app in the development mode from **part2/phonebook**.
 The react app from the _part2/phonebook_ running in the browser in localhost:3000 fetches the data from _node/express-server_ that runs in localhost:3001.
