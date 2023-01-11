@@ -48,7 +48,7 @@ const AddBlogForm = ({ onAddBlog, onCancel }) => {
         />
       </div>
       <div>
-        <button type="submit">Add</button>
+        <button className="add_blog_btn" type="submit">Add</button>
         <button type="button" onClick={onCancel}>Cancel</button>
       </div>
     </form>

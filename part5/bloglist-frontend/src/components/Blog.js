@@ -15,16 +15,16 @@ const Blog = ({
   const handleDelete = () => deleteBlog(id)
 
   return (
-    <div className="blog-item">
+    <div className="blog-item blog_item">
       <div>
         <div className='blog_title'>{title}</div>
         <div className='blog_author'>{author}</div>
-        <div><button onClick={toggleShown}>{buttonText}</button></div>
+        <div><button className="view_more_btn" onClick={toggleShown}>{buttonText}</button></div>
       </div>
       {isShown && (
         <div className='blog_details'>
           <div>{url}</div>
-          <div>Likes: {likes} <button onClick={handleUpdateLikes}>Like</button></div>
+          <div>Likes: {likes} <button className="like_btn" onClick={handleUpdateLikes}>Like</button></div>
         </div>)}
       <div><button onClick={handleDelete}>Remove</button></div>
     </div>

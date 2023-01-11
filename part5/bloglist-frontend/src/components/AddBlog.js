@@ -8,7 +8,7 @@ const AddBlog = ({ addBlog }) => {
   if (!isFormVisible) {
     return (
       <div>
-        <button onClick={() => setIsFormVisible(true)}>
+        <button className="add_blog_form_btn" onClick={() => setIsFormVisible(true)}>
           Add new blog
         </button>
       </div>

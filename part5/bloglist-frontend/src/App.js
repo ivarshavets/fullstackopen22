@@ -25,7 +25,7 @@ const App = () => {
         setUser(data)
         userService.setToken(data.token)
         window.localStorage.setItem('authenticatedUser', JSON.stringify(data))
-        showFlashMessage('Succeessfully login!')
+        showFlashMessage('Succeessfully logged in!')
       })
       .catch(e => {
         showFlashMessage(e.response.data.error, 'error')
