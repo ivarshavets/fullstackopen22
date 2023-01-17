@@ -1,9 +1,5 @@
 # Blog frontend
 
-**App deployed to Heroku:**
-
-**App deployed to Fly:**
-
 ## Tasks
 Exercise [5.1-5.4](https://fullstackopen.com/en/part5/login_in_frontend#exercises-5-1-5-4)
 1. Implement login functionality to the frontend. The token returned with a successful login is saved to the application's state user.
