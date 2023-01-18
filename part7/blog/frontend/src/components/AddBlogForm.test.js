@@ -10,14 +10,14 @@ describe('AddBlogForm', () => {
   const blogPayload = {
     title: 'Test blog',
     author: 'Ira',
-    url: 'http://www.blog.com',
+    url: 'http://www.blog.com'
   }
 
   const onAddBlog = jest.fn()
   const onCancel = jest.fn()
 
   beforeEach(() => {
-    container = render(<AddBlogForm onAddBlog={onAddBlog} onCancel={onCancel}/>).container
+    container = render(<AddBlogForm onAddBlog={onAddBlog} onCancel={onCancel} />).container
   })
 
   test('submits the form with correct data', async () => {

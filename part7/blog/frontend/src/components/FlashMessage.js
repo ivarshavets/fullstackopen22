@@ -6,9 +6,7 @@ const FlashMessage = ({ message }) => {
   }
 
   return (
-    <div
-      className={`flash_message flash-message flash-message--${message.type}`}
-    >
+    <div className={`flash_message flash-message flash-message--${message.type}`}>
       {message.text}
     </div>
   )

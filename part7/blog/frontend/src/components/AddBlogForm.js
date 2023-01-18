@@ -20,7 +20,7 @@ const AddBlogForm = ({ onAddBlog, onCancel }) => {
       <div>
         <label>Title:</label>
         <input
-          className='blog_title_input'
+          className="blog_title_input"
           type="text"
           placeholder="Enter a title"
           value={title}
@@ -40,7 +40,7 @@ const AddBlogForm = ({ onAddBlog, onCancel }) => {
       <div>
         <label>Author:</label>
         <input
-          className='blog_author_input'
+          className="blog_author_input"
           type="text"
           placeholder="Enter an author"
           value={author}
@@ -48,8 +48,12 @@ const AddBlogForm = ({ onAddBlog, onCancel }) => {
         />
       </div>
       <div>
-        <button className="add_blog_btn" type="submit">Add</button>
-        <button type="button" onClick={onCancel}>Cancel</button>
+        <button className="add_blog_btn" type="submit">
+          Add
+        </button>
+        <button type="button" onClick={onCancel}>
+          Cancel
+        </button>
       </div>
     </form>
   )

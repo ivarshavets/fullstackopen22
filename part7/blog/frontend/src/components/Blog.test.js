@@ -18,7 +18,7 @@ describe('Blog', () => {
   const updateBlog = jest.fn()
 
   beforeEach(() => {
-    container = render(<Blog blog={blog} updateBlog={updateBlog} deleteBlog={() => {}}/>).container
+    container = render(<Blog blog={blog} updateBlog={updateBlog} deleteBlog={() => {}} />).container
   })
 
   test('renders title and author, but does not render its url and likes by default', () => {
@@ -42,7 +42,6 @@ describe('Blog', () => {
 
     const likes = screen.queryByText(`Likes: ${blog.likes}`)
     expect(likes).toBeNull()
-
   })
 
   test('renders url if More button is clicked', async () => {
@@ -69,6 +68,5 @@ describe('Blog', () => {
     await user.click(likeButton)
 
     expect(updateBlog.mock.calls).toHaveLength(2)
-
   })
 })

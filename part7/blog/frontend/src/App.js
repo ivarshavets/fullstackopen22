@@ -12,7 +12,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [message, setFlashMessage] = useState(null)
 
-  const showFlashMessage = (text, type='success') => {
+  const showFlashMessage = (text, type = 'success') => {
     setFlashMessage({ text, type })
     setTimeout(() => {
       setFlashMessage(null)
@@ -20,14 +20,15 @@ const App = () => {
   }
 
   const handleLogin = (credentials) => {
-    userService.loginRequest(credentials)
+    userService
+      .loginRequest(credentials)
       .then(({ data }) => {
         setUser(data)
         userService.setToken(data.token)
         window.localStorage.setItem('authenticatedUser', JSON.stringify(data))
         showFlashMessage('Succeessfully logged in!')
       })
-      .catch(e => {
+      .catch((e) => {
         showFlashMessage(e.response.data.error, 'error')
       })
   }
@@ -39,28 +40,25 @@ const App = () => {
     showFlashMessage('Succeessfully logged out!')
   }
 
-  const getSortedBlogs = useCallback((blogs) =>
-    blogs.sort((a, b) => b.likes - a.likes)
-  , [blogs])
+  const getSortedBlogs = useCallback((blogs) => blogs.sort((a, b) => b.likes - a.likes), [blogs])
 
   const addBlog = (blog) => {
-    blogService.postBlog(blog)
+    blogService
+      .postBlog(blog)
       .then((data) => {
-        setBlogs(() => ([
-          ...blogs,
-          data
-        ]))
+        setBlogs(() => [...blogs, data])
         showFlashMessage('Blog is added successfully')
       })
-      .catch(e => {
+      .catch((e) => {
         showFlashMessage(e.response.data.error, 'error')
       })
   }
 
   const updateBlog = (payload, id) => {
-    blogService.patchBlog(payload, id)
-      .then(data => {
-        const updatedBlogsList = blogs.map(blog => {
+    blogService
+      .patchBlog(payload, id)
+      .then((data) => {
+        const updatedBlogsList = blogs.map((blog) => {
           if (blog.id === id) {
             return {
               ...blog,
@@ -72,20 +70,21 @@ const App = () => {
         setBlogs(getSortedBlogs(updatedBlogsList))
         showFlashMessage('You liked the blog successfully')
       })
-      .catch(e => {
+      .catch((e) => {
         showFlashMessage(e.response.data.error, 'error')
       })
   }
 
   const deleteBlog = (id) => {
     if (window.confirm('Are you sure you want to delete the blog?')) {
-      blogService.deleteBlog(id)
+      blogService
+        .deleteBlog(id)
         .then(() => {
-          const updatedBlogsList = blogs.filter(blog => blog.id !== id)
+          const updatedBlogsList = blogs.filter((blog) => blog.id !== id)
           setBlogs(updatedBlogsList)
           showFlashMessage('The blog is deleted successfully')
         })
-        .catch(e => {
+        .catch((e) => {
           showFlashMessage(e.response.data.error, 'error')
         })
     }
@@ -102,10 +101,9 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      blogService.fetchBlogs().then(blogs => {
+      blogService.fetchBlogs().then((blogs) => {
         setBlogs(getSortedBlogs(blogs))
-      }
-      )
+      })
     }
   }, [user])
 
@@ -128,9 +126,9 @@ const App = () => {
       <AddBlog addBlog={addBlog} />
       {/* <AddBlogWithTogglable addBlog={addBlog} /> */}
       <h2>Blogs</h2>
-      {blogs.map(blog =>
+      {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} />
-      )}
+      ))}
     </div>
   )
 }

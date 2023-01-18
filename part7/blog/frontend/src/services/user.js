@@ -3,7 +3,7 @@ import { BASE_URL } from '../config'
 
 export let token = null
 
-const setToken = newToken => {
+const setToken = (newToken) => {
   token = `bearer ${newToken}`
 }
 

@@ -10,10 +10,7 @@ const AddBlog = ({ addBlog }) => {
     <div>
       <Togglable buttonText="Show add blog form" ref={toggleRef}>
         <h2>Add a new blog</h2>
-        <AddBlogForm
-          onAddBlog={addBlog}
-          onCancel={() => toggleRef.current.toggleVisibility()}
-        />
+        <AddBlogForm onAddBlog={addBlog} onCancel={() => toggleRef.current.toggleVisibility()} />
       </Togglable>
     </div>
   )
