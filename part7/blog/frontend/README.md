@@ -9,6 +9,21 @@
 Fullstackopen exercises [7.9-7.21](https://fullstackopen.com/en/part7/exercises_extending_the_bloglist#exercises-7-9-7-21)
 
 1. Prettier as utomatic code formatting.
+- Install Prettier: `npm install --save-dev --save-exact prettier`
+- Create `.prettierrc.json` with rules to let editors and other tools know you are using Prettier
+- Create `.prettierignore`
+- Install packages which are in charge of combining Prettier and ESLint: `npm install --save-dev eslint-config-prettier eslint-plugin-prettier`
+- Set the Prettier rules in the ESLint configuration:
+```
+{
+  "extends": ["plugin:prettier/recommended"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": ["error"]
+  },
+}
+```
+
 2. Introduce Redux instead of internal React component state.
 3. Store the information about blog posts in the Redux store.
 4. Expand your solution so that it is again possible to like and delete a blog.
