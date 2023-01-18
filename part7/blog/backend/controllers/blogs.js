@@ -2,9 +2,7 @@ const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 
 blogRouter.get('/', async (_request, response) => {
-  const blogs = await Blog
-    .find({})
-    .populate('user', { username: 1, name: 1 })
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
@@ -28,12 +26,14 @@ blogRouter.post('/', async (request, response) => {
   await user.save()
 
   response.status(201).json(savedBlog)
-
 })
 
 // error handling using next func without express-async-errors lib
 blogRouter.get('/:id', async (request, response, next) => {
-  const { params: { id }, user } = request
+  const {
+    params: { id },
+    user
+  } = request
   if (!user) {
     return response.status(401).json({
       error: 'token missing or invalid'
@@ -85,14 +85,16 @@ blogRouter.patch('/:id', async (request, response, next) => {
     } else {
       response.json(updatedBlog)
     }
-
   } catch (e) {
     next(e)
   }
 })
 
 blogRouter.delete('/:id', async (request, response, next) => {
-  const { params: { id }, user } = request
+  const {
+    params: { id },
+    user
+  } = request
   if (!user) {
     return response.status(401).json({
       error: 'token missing or invalid'
@@ -122,7 +124,7 @@ blogRouter.delete('/:id', async (request, response, next) => {
     }
 
     // blog id is a Mongoose Object not a String and needs to be convert to string
-    user.blogs = user.blogs.filter(blogId => blogId.toString() !== result._id.toString())
+    user.blogs = user.blogs.filter((blogId) => blogId.toString() !== result._id.toString())
 
     await user.save()
   } catch (e) {

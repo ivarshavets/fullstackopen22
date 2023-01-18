@@ -4,9 +4,7 @@ const _groupBy = require('lodash/groupBy')
 const dummy = (_blogs) => 1 // eslint-disable-line no-unused-vars
 
 const totalLikes = (blogsList) => {
-  return blogsList.length === 0
-    ? 0
-    : blogsList.reduce((sum, { likes }) => sum + likes, 0)
+  return blogsList.length === 0 ? 0 : blogsList.reduce((sum, { likes }) => sum + likes, 0)
 }
 
 const favoriteBlogs = (blogsList) => {
@@ -33,7 +31,7 @@ const favoriteBlogs = (blogsList) => {
 const mostBlogs = (blogList) => {
   const blogsByAuthor = _groupBy(blogList, (blog) => blog.author)
 
-  const blogsCounts = Object.keys(blogsByAuthor).map(author => ({
+  const blogsCounts = Object.keys(blogsByAuthor).map((author) => ({
     author,
     blogsCount: blogsByAuthor[author].length
   }))
@@ -44,7 +42,7 @@ const mostBlogs = (blogList) => {
 const mostLikes = (blogList) => {
   const blogsByAuthor = _groupBy(blogList, (blog) => blog.author)
 
-  const likesCounts = Object.keys(blogsByAuthor).map(author => ({
+  const likesCounts = Object.keys(blogsByAuthor).map((author) => ({
     author,
     likesCount: blogsByAuthor[author].reduce((total, { likes }) => total + likes, 0)
   }))
@@ -59,7 +57,7 @@ const mostBlogs2 = (blogList) => {
 
   // dictionary of (author, blogs) pairs
   let dictionary = {}
-  blogList.forEach(blog => {
+  blogList.forEach((blog) => {
     if (dictionary[blog.author]) {
       dictionary[blog.author].push(blog)
     } else {
@@ -78,7 +76,7 @@ const mostBlogs2 = (blogList) => {
   return mostBlogs
 }
 
-const mostBlogs3 = blogs => {
+const mostBlogs3 = (blogs) => {
   if (blogs.length === 0) {
     return undefined
   }
@@ -88,10 +86,10 @@ const mostBlogs3 = blogs => {
 
   for (let i = 0; i < blogs.length; i++) {
     const author = blogs[i].author
-    author in dictionary ? dictionary[author] += 1 : dictionary[author] = 1
+    author in dictionary ? (dictionary[author] += 1) : (dictionary[author] = 1)
   }
 
-  const mostBlogs = { 'author': '', 'blogs': 0 }
+  const mostBlogs = { author: '', blogs: 0 }
   for (const [key, value] of Object.entries(dictionary)) {
     if (value > mostBlogs.blogs) {
       mostBlogs.blogs = value

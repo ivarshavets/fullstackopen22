@@ -9,11 +9,13 @@
 Fullstackopen exercises [7.9-7.21](https://fullstackopen.com/en/part7/exercises_extending_the_bloglist#exercises-7-9-7-21)
 
 1. Prettier as utomatic code formatting.
+
 - Install Prettier: `npm install --save-dev --save-exact prettier`
 - Create `.prettierrc.json` with rules to let editors and other tools know you are using Prettier
 - Create `.prettierignore`
 - Install packages which are in charge of combining Prettier and ESLint: `npm install --save-dev eslint-config-prettier eslint-plugin-prettier`
 - Set the Prettier rules in the ESLint configuration:
+
 ```
 {
   "extends": ["plugin:prettier/recommended"],
@@ -50,7 +52,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npx eslint . --fix`
+### `npm run eslint -- --fix`
 
 Inspecting and validating all files and apply authomatic fixes.
 

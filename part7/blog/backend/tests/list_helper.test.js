@@ -1,10 +1,4 @@
-const {
-  dummy,
-  totalLikes,
-  favoriteBlogs,
-  mostBlogs,
-  mostLikes
-} = require('../utils/list_helper')
+const { dummy, totalLikes, favoriteBlogs, mostBlogs, mostLikes } = require('../utils/list_helper')
 
 test('dummy', () => {
   const blog = [1, 2]
@@ -36,7 +30,7 @@ const blogs = [
     url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
     likes: 6,
     __v: 0
-  },
+  }
 ]
 
 const listWithOneBlog = blogs.slice(0, 1)
@@ -52,13 +46,12 @@ describe('total likes', () => {
     expect(result).toBe(18)
   })
 
-
   test('when the list is empty, the likes equals 0', () => {
     expect(totalLikes([])).toBe(0)
   })
 })
 
-describe ('favorite blog', () => {
+describe('favorite blog', () => {
   test('when list has only one blog, it is the favorite one', () => {
     expect(favoriteBlogs(listWithOneBlog)).toEqual(listWithOneBlog[0])
   })

@@ -31,7 +31,7 @@ describe('GET request', () => {
   test('a specific user is within the returned users and it is identified by field id', async () => {
     const response = await api.get('/api/users')
 
-    const usernameList = response.body.map(r => r.username)
+    const usernameList = response.body.map((r) => r.username)
     expect(usernameList).toContain('root')
 
     expect(response.body[0].id).toBeDefined()
@@ -51,12 +51,14 @@ describe('POST request', () => {
     const initialUsersInDb = await usersInDb()
 
     const newUser = {
-      'username': 'newUser',
-      'name': 'newUserName',
-      'password': 'newUserPassword'
+      username: 'newUser',
+      name: 'newUserName',
+      password: 'newUserPassword'
     }
 
-    await api.post('/api/users').send(newUser)
+    await api
+      .post('/api/users')
+      .send(newUser)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -68,11 +70,10 @@ describe('POST request', () => {
     const initialUsersInDb = await usersInDb()
 
     const newUser = {
-      'username': 'userWithoutPassword'
+      username: 'userWithoutPassword'
     }
 
-    await api.post('/api/users').send(newUser)
-      .expect(400)
+    await api.post('/api/users').send(newUser).expect(400)
 
     const resultedUsers = await usersInDb()
     expect(resultedUsers).toHaveLength(initialUsersInDb.length)
@@ -82,8 +83,7 @@ describe('POST request', () => {
     const initialUsersInDb = await usersInDb()
     const user = initialUsersInDb[0]
 
-    await api.post('/api/users').send(user)
-      .expect(400)
+    await api.post('/api/users').send(user).expect(400)
 
     const resultedUsers = await usersInDb()
     expect(resultedUsers).toHaveLength(initialUsersInDb.length)
@@ -92,13 +92,12 @@ describe('POST request', () => {
   test('failes with status code 400 if username less than 3 chars', async () => {
     const initialUsersInDb = await usersInDb()
     const newUser = {
-      'username': 'a',
-      'name': 'test name',
-      'password': 'userPassword'
+      username: 'a',
+      name: 'test name',
+      password: 'userPassword'
     }
 
-    await api.post('/api/users').send(newUser)
-      .expect(400)
+    await api.post('/api/users').send(newUser).expect(400)
 
     const resultedUsers = await usersInDb()
     expect(resultedUsers).toHaveLength(initialUsersInDb.length)
@@ -107,13 +106,12 @@ describe('POST request', () => {
   test('failes with 400 if password is less than 3 chars', async () => {
     const initialUsersInDb = await usersInDb()
     const newUser = {
-      'username': 'userName',
-      'name': 'user name',
-      'password': 'p'
+      username: 'userName',
+      name: 'user name',
+      password: 'p'
     }
 
-    await api.post('/api/users').send(newUser)
-      .expect(400)
+    await api.post('/api/users').send(newUser).expect(400)
 
     const resultedUsers = await usersInDb()
     expect(resultedUsers).toHaveLength(initialUsersInDb.length)

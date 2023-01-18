@@ -1,43 +1,26 @@
 module.exports = {
-  'env': {
-    'node': true,
-    'commonjs': true,
-    'browser': true,
-    'es2021': true,
-    'jest': true,
+  env: {
+    node: true,
+    commonjs: true,
+    browser: true,
+    es2021: true,
+    jest: true
   },
-  'extends': ['eslint:recommended', 'plugin:prettier/recommended'],
-  'overrides': [
-  ],
-  'parserOptions': {
-    'ecmaVersion': 'latest'
+  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
+  overrides: [],
+  parserOptions: {
+    ecmaVersion: 'latest'
   },
   plugins: ['prettier'],
-  'rules': {
-    'indent': [
-      'error',
-      2
-    ],
-    'linebreak-style': [
-      'error',
-      'unix'
-    ],
-    'quotes': [
-      'error',
-      'single'
-    ],
-    'semi': [
-      'error',
-      'never'
-    ],
-    'eqeqeq': 'error',
+  rules: {
+    indent: ['error', 2],
+    'linebreak-style': ['error', 'unix'],
+    quotes: ['error', 'single'],
+    semi: ['error', 'never'],
+    eqeqeq: 'error',
     'no-trailing-spaces': 'error',
-    'object-curly-spacing': [
-      'error', 'always'
-    ],
-    'arrow-spacing': [
-      'error', { 'before': true, 'after': true }
-    ],
+    'object-curly-spacing': ['error', 'always'],
+    'arrow-spacing': ['error', { before: true, after: true }],
     'no-console': 0
   }
 }

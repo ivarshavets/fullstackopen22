@@ -8,7 +8,7 @@
     "dev": "NODE_ENV=development nodemon index.js",
     "eslint": "eslint .",
     "eslint:fix": "eslint --fix",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc.json",
     "build:ui": "rm -rf build && cd ../../part5/blog/ && npm run build && cp -r build ../../part4/blog",
     "deploy": "flyctl deploy",
     "deploy:full": "npm run build:ui && npm run deployToFly",
