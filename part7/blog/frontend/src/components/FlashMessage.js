@@ -1,7 +1,9 @@
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
-const FlashMessage = ({ message }) => {
-  if (!message?.text) {
+const FlashMessage = () => {
+  const message = useSelector(({ flashMessage }) => flashMessage)
+
+  if (!message) {
     return null
   }
 
@@ -10,13 +12,6 @@ const FlashMessage = ({ message }) => {
       {message.text}
     </div>
   )
-}
-
-FlashMessage.propTypes = {
-  message: PropTypes.shape({
-    text: PropTypes.string.isRequired,
-    type: PropTypes.string
-  })
 }
 
 export default FlashMessage
