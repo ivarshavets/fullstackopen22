@@ -1,134 +1,97 @@
-import { useState, useEffect, useCallback } from 'react'
-import Blog from './components/Blog'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import blogService from './services/blogs'
 import userService from './services/user'
+import { fetchBlogsThunkAction } from './reducers/blogsSlice'
+import { setUser } from './reducers/userSlice'
+import { showFlashMessage } from './reducers/flashMessageSlice'
 import LoginForm from './components/LoginForm'
 import FlashMessage from './components/FlashMessage'
+import BlogsList from './components/BlogsList'
 import AddBlog from './components/AddBlog'
-// import AddBlogWithTogglable from './components/AddBlogWithTogglable'
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
-  const [message, setFlashMessage] = useState(null)
 
-  const showFlashMessage = (text, type = 'success') => {
-    setFlashMessage({ text, type })
-    setTimeout(() => {
-      setFlashMessage(null)
-    }, 5000)
-  }
+  const dispatch = useDispatch()
+
+  const user = useSelector(({ user }) => user)
+  const { blogs: error } = useSelector(({ blogs }) => blogs)
 
   const handleLogin = (credentials) => {
     userService
       .loginRequest(credentials)
       .then(({ data }) => {
-        setUser(data)
+        dispatch(setUser(data))
         userService.setToken(data.token)
         window.localStorage.setItem('authenticatedUser', JSON.stringify(data))
-        showFlashMessage('Succeessfully logged in!')
+        dispatch(showFlashMessage('Succeessfully logged in!'))
       })
       .catch((e) => {
-        showFlashMessage(e.response.data.error, 'error')
+        dispatch(showFlashMessage(e.response.data.error, 'error'))
       })
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem('authenticatedUser')
-    setUser(null)
+    dispatch(dispatch(setUser(null)))
     userService.setToken(null)
-    showFlashMessage('Succeessfully logged out!')
+    dispatch(showFlashMessage('Succeessfully logged out!'))
   }
-
-  const getSortedBlogs = useCallback((blogs) => blogs.sort((a, b) => b.likes - a.likes), [blogs])
 
   const addBlog = (blog) => {
     blogService
       .postBlog(blog)
       .then((data) => {
         setBlogs(() => [...blogs, data])
-        showFlashMessage('Blog is added successfully')
+        dispatch(showFlashMessage('Blog is added successfully'))
       })
       .catch((e) => {
-        showFlashMessage(e.response.data.error, 'error')
+        dispatch(showFlashMessage(e.response.data.error, 'error'))
       })
-  }
-
-  const updateBlog = (payload, id) => {
-    blogService
-      .patchBlog(payload, id)
-      .then((data) => {
-        const updatedBlogsList = blogs.map((blog) => {
-          if (blog.id === id) {
-            return {
-              ...blog,
-              ...data
-            }
-          }
-          return blog
-        })
-        setBlogs(getSortedBlogs(updatedBlogsList))
-        showFlashMessage('You liked the blog successfully')
-      })
-      .catch((e) => {
-        showFlashMessage(e.response.data.error, 'error')
-      })
-  }
-
-  const deleteBlog = (id) => {
-    if (window.confirm('Are you sure you want to delete the blog?')) {
-      blogService
-        .deleteBlog(id)
-        .then(() => {
-          const updatedBlogsList = blogs.filter((blog) => blog.id !== id)
-          setBlogs(updatedBlogsList)
-          showFlashMessage('The blog is deleted successfully')
-        })
-        .catch((e) => {
-          showFlashMessage(e.response.data.error, 'error')
-        })
-    }
   }
 
   useEffect(() => {
     const authenticatedUser = window.localStorage.getItem('authenticatedUser')
     if (authenticatedUser) {
       const parsedUser = JSON.parse(authenticatedUser)
-      setUser(parsedUser)
+      dispatch(setUser(parsedUser))
       userService.setToken(parsedUser.token)
     }
   }, [])
 
   useEffect(() => {
     if (user) {
-      blogService.fetchBlogs().then((blogs) => {
-        setBlogs(getSortedBlogs(blogs))
-      })
+      dispatch(fetchBlogsThunkAction())
     }
   }, [user])
+
+  useEffect(() => {
+    if (!!error && error === 'Request failed with status code 401') {
+      handleLogout()
+    }
+  }, [error])
 
   if (!user) {
     return (
       <div className="container">
-        <FlashMessage message={message} />
+        <FlashMessage />
         <h2>Login to application</h2>
         <LoginForm handleLogin={handleLogin} />
       </div>
     )
   }
+
   return (
     <div className="container">
-      <FlashMessage message={message} />
+      <FlashMessage />
       <p>
         Logged in as <strong>{user.name}</strong>&nbsp;
         <button onClick={handleLogout}>Logout</button>
       </p>
       <AddBlog addBlog={addBlog} />
-      {/* <AddBlogWithTogglable addBlog={addBlog} /> */}
       <h2>Blogs</h2>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} />
-      ))}
+      <BlogsList />
     </div>
   )
 }
