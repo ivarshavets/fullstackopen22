@@ -1,9 +1,7 @@
-import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAction, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import blogService from './../services/blogs'
 
 export const fetchPostsAction = createAction('fetchPosts')
-export const loginAction = createAction('login')
-export const setUser = createAction('setUser')
 
 export const fetchBlogsThunkAction = createAsyncThunk(fetchPostsAction, async () => {
   const response = await blogService.fetchBlogs()
@@ -22,9 +20,6 @@ const blogSlice = createSlice({
   name: 'blogs',
   initialState: { list: [], status: 'idle', error: null }, //status: 'idle' | 'loading' | 'succeeded' | 'failed'
   reducers: {
-    // setUser() {
-    //   state
-    // },
     addBlog(state, action) {
       state.push(action.payload)
     }
@@ -46,10 +41,11 @@ const blogSlice = createSlice({
   }
 })
 
-// const selectAllBlogs = ({ blogs }) => blogs.list || []
-// const sortBlogsByLikes = (list) => list.sort((a, b) => b.likes - a.likes)
+const selectAllBlogs = ({ blogs }) => blogs.list
 
-// export const selectSortedBlogs = createSelector(selectAllBlogs, (blogs) => sortBlogsByLikes(blogs))
+const sortBlogsByLikes = (list) => [...list].sort((a, b) => b.likes - a.likes)
+
+export const selectSortedBlogs = createSelector(selectAllBlogs, (blogs) => sortBlogsByLikes(blogs))
 
 export const { addBlog } = blogSlice.actions
 export default blogSlice.reducer
