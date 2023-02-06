@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types'
 import AddBlogForm from './AddBlogForm'
 import { useToggle } from '../hooks/useToggle'
 
-const AddBlog = ({ addBlog }) => {
+const AddBlog = () => {
   const [isFormVisible, setIsFormVisible] = useToggle()
 
   if (!isFormVisible) {
@@ -18,13 +17,9 @@ const AddBlog = ({ addBlog }) => {
   return (
     <div>
       <h2>Add a new blog</h2>
-      <AddBlogForm onAddBlog={addBlog} onCancel={() => setIsFormVisible(false)} />
+      <AddBlogForm onCancel={() => setIsFormVisible(false)} />
     </div>
   )
-}
-
-AddBlog.propTypes = {
-  addBlog: PropTypes.func.isRequired
 }
 
 export default AddBlog

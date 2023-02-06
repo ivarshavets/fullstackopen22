@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import blogService from './services/blogs'
 import userService from './services/user'
 import { fetchBlogsThunkAction } from './reducers/blogsSlice'
 import { setUser } from './reducers/userSlice'
@@ -11,8 +10,6 @@ import BlogsList from './components/BlogsList'
 import AddBlog from './components/AddBlog'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-
   const dispatch = useDispatch()
 
   const user = useSelector(({ user }) => user)
@@ -37,18 +34,6 @@ const App = () => {
     dispatch(dispatch(setUser(null)))
     userService.setToken(null)
     dispatch(showFlashMessage('Succeessfully logged out!'))
-  }
-
-  const addBlog = (blog) => {
-    blogService
-      .postBlog(blog)
-      .then((data) => {
-        setBlogs(() => [...blogs, data])
-        dispatch(showFlashMessage('Blog is added successfully'))
-      })
-      .catch((e) => {
-        dispatch(showFlashMessage(e.response.data.error, 'error'))
-      })
   }
 
   useEffect(() => {
@@ -89,7 +74,7 @@ const App = () => {
         Logged in as <strong>{user.name}</strong>&nbsp;
         <button onClick={handleLogout}>Logout</button>
       </p>
-      <AddBlog addBlog={addBlog} />
+      <AddBlog />
       <h2>Blogs</h2>
       <BlogsList />
     </div>

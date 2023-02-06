@@ -1,18 +1,27 @@
-import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addBlog } from '../reducers/blogsSlice'
 
-const AddBlogForm = ({ onAddBlog, onCancel }) => {
+const AddBlogForm = ({ onCancel }) => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
 
+  const dispatch = useDispatch()
+
   const submitForm = (e) => {
     e.preventDefault()
-    onAddBlog({ title, url, author })
-    onCancel()
-    setTitle('')
-    setUrl('')
-    setAuthor('')
+    return new Promise((resolve, reject) => {
+      dispatch(addBlog({ title, url, author }, resolve, reject))
+    })
+      .then(() => {
+        onCancel()
+        setTitle('')
+        setUrl('')
+        setAuthor('')
+      })
+      .catch(() => {})
   }
 
   return (
@@ -60,7 +69,6 @@ const AddBlogForm = ({ onAddBlog, onCancel }) => {
 }
 
 AddBlogForm.propTypes = {
-  onAddBlog: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired
 }
 
