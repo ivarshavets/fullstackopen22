@@ -13,7 +13,7 @@ const App = () => {
   const dispatch = useDispatch()
 
   const user = useSelector(({ user }) => user)
-  const { blogs: error } = useSelector(({ blogs }) => blogs)
+  const { error } = useSelector(({ blogs }) => blogs)
 
   const handleLogin = (credentials) => {
     userService

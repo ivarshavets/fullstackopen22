@@ -1,14 +1,18 @@
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 import { useToggle } from '../hooks/useToggle'
+import { updateBlog, deleteBlog } from '../reducers/blogsSlice'
 
-const Blog = ({ blog: { id, title, url, author, likes }, updateBlog, deleteBlog }) => {
+const Blog = ({ blog: { id, title, url, author, likes } }) => {
   const [isShown, toggleShown] = useToggle()
 
   const buttonText = isShown ? 'Hide more' : 'More'
 
-  const handleUpdateLikes = () => updateBlog({ likes: likes + 1 }, id)
+  const dispatch = useDispatch()
 
-  const handleDelete = () => deleteBlog(id)
+  const handleUpdateLikes = () => dispatch(updateBlog({ likes: likes + 1 }, id))
+
+  const handleDelete = () => dispatch(deleteBlog(id))
 
   return (
     <div className="blog-item blog_item">
@@ -46,9 +50,7 @@ Blog.propTypes = {
     url: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
     likes: PropTypes.number.isRequired
-  }),
-  updateBlog: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired
+  })
 }
 
 export default Blog

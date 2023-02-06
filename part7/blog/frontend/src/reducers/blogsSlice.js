@@ -3,10 +3,14 @@ import blogService from './../services/blogs'
 import { showFlashMessage } from './flashMessageSlice'
 
 // Action creators
-export const fetchBlogsAction = createAction('blogs/fetchBlogs')
+const fetchBlogsAction = createAction('blogs/fetchBlogs')
 
-export const addBlogRequested = createAction('blogs/addBlogRequested') // Started
-export const addBlogFailed = createAction('blogs/addBlogFailed')
+// export const addBlogRequested = createAction('blogs/addBlogRequested') // Started
+const addBlogFailed = createAction('blogs/addBlogFailed')
+
+const deleteBlogFailed = createAction('blogs/deleteBlogFailed')
+
+const updateBlogFailed = createAction('blogs/updateBlogFailed')
 
 // Thunk functions
 export const fetchBlogsThunkAction = createAsyncThunk(fetchBlogsAction, async () => {
@@ -22,7 +26,6 @@ export const addBlog = (payload, resolve, reject) => {
       dispatch(showFlashMessage('Blog is added successfully'))
       resolve(response)
     } catch (error) {
-      console.log('error', error)
       dispatch(addBlogFailed(error.response.data.error))
       dispatch(showFlashMessage(error.response.data.error, 'error'))
       reject(error.response.data.error)
@@ -30,13 +33,61 @@ export const addBlog = (payload, resolve, reject) => {
   }
 }
 
+export const updateBlog = (payload, id) => {
+  return async (dispatch) => {
+    try {
+      const response = await blogService.patchBlog(payload, id)
+      dispatch(updateBlogSucceeded(response))
+      dispatch(showFlashMessage('You liked the blog successfully'))
+    } catch (error) {
+      dispatch(updateBlogFailed(error.response.data.error))
+      dispatch(showFlashMessage(error.response.data.error, 'error'))
+    }
+  }
+}
+
+export const deleteBlog = (payload) => {
+  return async (dispatch) => {
+    try {
+      await blogService.deleteBlog(payload)
+      dispatch(deleteBlogSucceeded(payload))
+      dispatch(showFlashMessage('The blog is deleted successfully'))
+    } catch (error) {
+      console.log(error)
+      dispatch(deleteBlogFailed(error.response.data.error))
+      dispatch(showFlashMessage(error.response.data.error, 'error'))
+    }
+  }
+}
+
 const blogSlice = createSlice({
   name: 'blogs',
   initialState: { list: [], status: 'idle', error: null }, //status: 'idle' | 'loading' | 'succeeded' | 'failed'
-  reducers: {
-    addBlogSucceeded(state, { payload }) {
-      state.list.push(payload)
+  _reducers: {
+    addBlogSucceeded({ list }, { payload }) {
+      // return state.list.concat(payload)
+      list.push(payload)
+    },
+    updateBlogSucceeded(state, { payload }) {
+      const newList = state.list.map((item) => {
+        if (item.id === payload.id) {
+          return payload
+        }
+        return item
+      })
+      state.list = newList
+    },
+    deleteBlogSucceeded(state, { payload }) {
+      // return state.list.filter(({ id }) => id !== payload)
+      const newList = state.list.filter(({ id }) => id !== payload)
+      state.list = newList
     }
+  },
+  get reducers() {
+    return this._reducers
+  },
+  set reducers(value) {
+    this._reducers = value
   },
   extraReducers: (builder) => {
     builder
@@ -62,5 +113,5 @@ const sortBlogsByLikes = (list) => [...list].sort((a, b) => b.likes - a.likes)
 
 export const selectSortedBlogs = createSelector(selectAllBlogs, (blogs) => sortBlogsByLikes(blogs))
 
-export const { addBlogSucceeded } = blogSlice.actions
+const { addBlogSucceeded, updateBlogSucceeded, deleteBlogSucceeded } = blogSlice.actions
 export default blogSlice.reducer
