@@ -83,12 +83,6 @@ const blogSlice = createSlice({
       state.list = newList
     }
   },
-  get reducers() {
-    return this._reducers
-  },
-  set reducers(value) {
-    this._reducers = value
-  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchBlogsThunkAction.pending, (state) => {
