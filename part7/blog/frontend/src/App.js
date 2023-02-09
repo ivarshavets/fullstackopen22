@@ -1,18 +1,20 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import userService from './services/user'
+import userService from './services/userSorage'
 import { fetchBlogsThunkAction } from './reducers/blogsSlice'
-import { setUser } from './reducers/userSlice'
+import { fetchAllUsersThunk } from './reducers/usersSlice'
+import { setUser } from './reducers/authSlice'
 import { showFlashMessage } from './reducers/flashMessageSlice'
 import LoginForm from './components/LoginForm'
 import FlashMessage from './components/FlashMessage'
 import BlogsList from './components/BlogsList'
+import UsersList from './components/UsersList'
 import AddBlog from './components/AddBlog'
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const user = useSelector(({ user }) => user)
+  const user = useSelector(({ authUser }) => authUser)
   const { error } = useSelector(({ blogs }) => blogs)
 
   const handleLogout = () => {
@@ -31,6 +33,7 @@ const App = () => {
   useEffect(() => {
     if (user) {
       dispatch(fetchBlogsThunkAction())
+      dispatch(fetchAllUsersThunk())
     }
   }, [user])
 
@@ -60,6 +63,8 @@ const App = () => {
       <AddBlog />
       <h2>Blogs</h2>
       <BlogsList />
+      <h2>Users</h2>
+      <UsersList />
     </div>
   )
 }

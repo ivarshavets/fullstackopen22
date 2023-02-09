@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import flashMessageReducer from './reducers/flashMessageSlice'
-import blogReducer from './reducers/blogsSlice'
-import userReducer from './reducers/userSlice'
+import blogsReducer from './reducers/blogsSlice'
+import usersReducer from './reducers/usersSlice'
+import authReducer from './reducers/authSlice'
 
 const store = configureStore({
   reducer: {
     flashMessage: flashMessageReducer,
-    blogs: blogReducer,
-    user: userReducer
+    blogs: blogsReducer,
+    authUser: authReducer,
+    users: usersReducer
   }
 })
 

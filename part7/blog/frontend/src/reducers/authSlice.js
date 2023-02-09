@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
-import userService from '../services/user'
+import userService from '../services/userSorage'
 import authService from '../services/auth'
-import { showFlashMessage } from '../reducers/flashMessageSlice'
+import { showFlashMessage } from './flashMessageSlice'
 
-const userSlice = createSlice({
-  name: 'user',
+const authSlice = createSlice({
+  name: 'auth',
   initialState: null,
   reducers: {
     setUser(_state, { payload }) {
@@ -26,5 +26,5 @@ export const login = (credentials) => {
   }
 }
 
-export const { setUser } = userSlice.actions
-export default userSlice.reducer
+export const { setUser } = authSlice.actions
+export default authSlice.reducer

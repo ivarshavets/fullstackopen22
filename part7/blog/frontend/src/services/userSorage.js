@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { BASE_URL } from '../config'
 
 const USER_LOCAL_STORAGE_KEY = 'authenticatedBlogAppUser'
 
@@ -32,18 +31,12 @@ const deleteUserFromLocalStorage = () => {
   setToken(null)
 }
 
-const fetchAllUsers = () => axios.get(`${BASE_URL}/users`)
-
-const fetchUser = (id) => axios.get(`${BASE_URL}/users/${id}`)
-
 const userService = {
   getToken,
   setToken,
   getUserFromLocalStorage,
   setUserToLocalStorage,
-  deleteUserFromLocalStorage,
-  fetchUser,
-  fetchAllUsers
+  deleteUserFromLocalStorage
 }
 
 export default userService

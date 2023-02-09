@@ -60,7 +60,7 @@ export const deleteBlog = (payload) => {
   }
 }
 
-const blogSlice = createSlice({
+const blogsSlice = createSlice({
   name: 'blogs',
   initialState: { list: [], status: 'idle', error: null },
   // Use a "state machine" approach for loading state instead of booleans
@@ -109,5 +109,5 @@ const sortBlogsByLikes = (list) => [...list].sort((a, b) => b.likes - a.likes)
 
 export const selectSortedBlogs = createSelector(selectAllBlogs, (blogs) => sortBlogsByLikes(blogs))
 
-const { addBlogSucceeded, updateBlogSucceeded, deleteBlogSucceeded } = blogSlice.actions
-export default blogSlice.reducer
+const { addBlogSucceeded, updateBlogSucceeded, deleteBlogSucceeded } = blogsSlice.actions
+export default blogsSlice.reducer

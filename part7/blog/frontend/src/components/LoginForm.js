@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 // import { setUser } from '../reducers/userSlice'
 // import { showFlashMessage } from '../reducers/flashMessageSlice'
 
-import { login } from '../reducers/userSlice'
+import { login } from '../reducers/authSlice'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
