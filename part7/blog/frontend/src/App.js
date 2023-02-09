@@ -15,33 +15,16 @@ const App = () => {
   const user = useSelector(({ user }) => user)
   const { error } = useSelector(({ blogs }) => blogs)
 
-  const handleLogin = (credentials) => {
-    userService
-      .loginRequest(credentials)
-      .then(({ data }) => {
-        dispatch(setUser(data))
-        userService.setToken(data.token)
-        window.localStorage.setItem('authenticatedUser', JSON.stringify(data))
-        dispatch(showFlashMessage('Succeessfully logged in!'))
-      })
-      .catch((e) => {
-        dispatch(showFlashMessage(e.response.data.error, 'error'))
-      })
-  }
-
   const handleLogout = () => {
-    window.localStorage.removeItem('authenticatedUser')
+    userService.deleteUserFromLocalStorage()
     dispatch(dispatch(setUser(null)))
-    userService.setToken(null)
     dispatch(showFlashMessage('Succeessfully logged out!'))
   }
 
   useEffect(() => {
-    const authenticatedUser = window.localStorage.getItem('authenticatedUser')
+    const authenticatedUser = userService.getUserFromLocalStorage()
     if (authenticatedUser) {
-      const parsedUser = JSON.parse(authenticatedUser)
-      dispatch(setUser(parsedUser))
-      userService.setToken(parsedUser.token)
+      dispatch(setUser(authenticatedUser))
     }
   }, [])
 
@@ -62,7 +45,7 @@ const App = () => {
       <div className="container">
         <FlashMessage />
         <h2>Login to application</h2>
-        <LoginForm handleLogin={handleLogin} />
+        <LoginForm />
       </div>
     )
   }

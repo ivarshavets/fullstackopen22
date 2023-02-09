@@ -62,8 +62,10 @@ export const deleteBlog = (payload) => {
 
 const blogSlice = createSlice({
   name: 'blogs',
-  initialState: { list: [], status: 'idle', error: null }, //status: 'idle' | 'loading' | 'succeeded' | 'failed'
-  _reducers: {
+  initialState: { list: [], status: 'idle', error: null },
+  // Use a "state machine" approach for loading state instead of booleans
+  // Status: 'idle' | 'loading' | 'succeeded' | 'failed'
+  reducers: {
     addBlogSucceeded({ list }, { payload }) {
       // return state.list.concat(payload)
       list.push(payload)
