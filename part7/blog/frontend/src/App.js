@@ -1,14 +1,18 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Routes, Route } from 'react-router-dom'
 import userService from './services/userSorage'
 import { fetchBlogsThunkAction } from './reducers/blogsSlice'
 import { fetchAllUsersThunk } from './reducers/usersSlice'
 import { setUser } from './reducers/authSlice'
 import { showFlashMessage } from './reducers/flashMessageSlice'
-import LoginForm from './components/LoginForm'
+import Menu from './components/Menu'
+import Login from './components/Login'
 import FlashMessage from './components/FlashMessage'
 import BlogsList from './components/BlogsList'
+import Blog from './components/Blog'
 import UsersList from './components/UsersList'
+import User from './components/User'
 import AddBlog from './components/AddBlog'
 
 const App = () => {
@@ -44,27 +48,22 @@ const App = () => {
   }, [error])
 
   if (!user) {
-    return (
-      <div className="container">
-        <FlashMessage />
-        <h2>Login to application</h2>
-        <LoginForm />
-      </div>
-    )
+    return <Login />
   }
 
   return (
-    <div className="container">
+    <div>
       <FlashMessage />
-      <p>
-        Logged in as <strong>{user.name}</strong>&nbsp;
-        <button onClick={handleLogout}>Logout</button>
-      </p>
-      <AddBlog />
-      <h2>Blogs</h2>
-      <BlogsList />
-      <h2>Users</h2>
-      <UsersList />
+      <Menu />
+      <div className="container">
+        <AddBlog />
+        <Routes>
+          <Route index element={<BlogsList />} />
+          <Route path="/blogs/:id" element={<Blog />} />
+          <Route path="/users" element={<UsersList />} />
+          <Route path="/users/:id" element={<User />} />
+        </Routes>
+      </div>
     </div>
   )
 }
