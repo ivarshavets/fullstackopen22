@@ -6,6 +6,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #115293;
+}
+
 .container {
   padding: 20px;
 }
@@ -34,4 +43,26 @@ body {
 
 .flash-message--error {
   background-color: #be3a3a;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #e6f3ff;
+}
+
+.menu-nav--item {
+  margin-right: 15px;
+  color: currentColor;
+  font-weight: 600;
+}
+
+.menu-nav--item:hover {
+  color: #1976d2;
+}
+
+.menu-nav--item.active {
+  color: #115293;
 }
