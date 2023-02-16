@@ -109,5 +109,11 @@ const sortBlogsByLikes = (list) => [...list].sort((a, b) => b.likes - a.likes)
 
 export const selectSortedBlogs = createSelector(selectAllBlogs, (blogs) => sortBlogsByLikes(blogs))
 
+export const selectBlogById = createSelector(
+  selectAllBlogs,
+  (_state, id) => id,
+  (allBlogs, id) => allBlogs.filter((item) => item.id === id)[0]
+)
+
 const { addBlogSucceeded, updateBlogSucceeded, deleteBlogSucceeded } = blogsSlice.actions
 export default blogsSlice.reducer
