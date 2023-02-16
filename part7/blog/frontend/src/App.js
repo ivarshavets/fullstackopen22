@@ -19,7 +19,7 @@ const App = () => {
   const dispatch = useDispatch()
 
   const user = useSelector(({ authUser }) => authUser)
-  const { error } = useSelector(({ blogs }) => blogs)
+  const { list, error } = useSelector(({ blogs }) => blogs)
 
   const handleLogout = () => {
     userService.deleteUserFromLocalStorage()
@@ -35,7 +35,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    if (user) {
+    if (user && !list.length) {
       dispatch(fetchBlogsThunkAction())
       dispatch(fetchAllUsersThunk())
     }

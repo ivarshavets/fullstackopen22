@@ -50,4 +50,26 @@ userRouter.get('/', async (_request, response) => {
 //   response.json(users)
 // })
 
+// error handling using next func without express-async-errors lib
+userRouter.get('/:id', async (request, response, next) => {
+  const {
+    params: { id }
+  } = request
+  try {
+    const users = await User.findById(id).populate('blogs', {
+      title: 1,
+      author: 1,
+      url: 1,
+      likes: 1
+    })
+    if (users) {
+      response.json(users)
+    } else {
+      response.status(404).end()
+    }
+  } catch (e) {
+    next(e)
+  }
+})
+
 module.exports = userRouter
