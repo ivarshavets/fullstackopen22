@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { updateBlog, deleteBlog, selectBlogById } from '../reducers/blogsSlice'
+import AddBlogComments from '../components/AddBlogComments'
 
 const Blog = () => {
   const dispatch = useDispatch()
@@ -22,7 +23,7 @@ const Blog = () => {
     return null
   }
 
-  const { title, url, author, likes } = blog
+  const { title, url, author, likes, comments } = blog
 
   return (
     <div className="blog_item">
@@ -39,6 +40,15 @@ const Blog = () => {
       </div>
       <div>
         <button onClick={handleDelete}>Remove</button>
+      </div>
+      <div>
+        <h4>Comments</h4>
+        <AddBlogComments />
+        <ul>
+          {comments.map(({ id, comment }) => (
+            <li key={id}>{comment}</li>
+          ))}
+        </ul>
       </div>
     </div>
   )
