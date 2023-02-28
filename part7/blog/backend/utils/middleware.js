@@ -47,6 +47,7 @@ const unknownEndpoint = (_request, response) => {
 }
 
 // Default Express error handler: accepts next function as a param and passes an error to it.
+// If next was called without a parameter, then the execution would simply move onto the next route or middleware. If the next function is called with a parameter, then the execution will continue to the error handler middleware.
 const errorHandler = (error, _request, response, next) => {
   logger.error(error.message)
 

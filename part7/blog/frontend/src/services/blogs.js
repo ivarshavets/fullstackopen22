@@ -30,11 +30,16 @@ const deleteBlog = (id) => {
   })
 }
 
+const addBlogComments = (data, id) => {
+  return axios.post(`${BASE_URL}/blogs/${id}/comments`, data).then((response) => response.data)
+}
+
 const blogService = {
   fetchBlogs,
   postBlog,
   patchBlog,
-  deleteBlog
+  deleteBlog,
+  addBlogComments
 }
 
 export default blogService
