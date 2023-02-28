@@ -1,8 +1,13 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const Comment = require('../models/comment')
 
 blogRouter.get('/', async (_request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  // The populate method is chained after the find method making the initial query. The parameter given to the populate method defines that the ids referencing user objects in the user field of the blog document will be replaced by the referenced user documents.
+  // We can use the populate parameter for choosing the fields we want to include from the documents
+  const blogs = await Blog.find({})
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments', { comment: 1 })
   response.json(blogs)
 })
 
@@ -21,10 +26,11 @@ blogRouter.post('/', async (request, response) => {
     user: user.id
   })
 
-  const savedBlog = await blog.save()
+  let savedBlog = await blog.save()
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
 
+  savedBlog = await Blog.findById(savedBlog._id).populate('user', { username: 1, name: 1 })
   response.status(201).json(savedBlog)
 })
 
@@ -42,6 +48,8 @@ blogRouter.get('/:id', async (request, response, next) => {
 
   try {
     const returnedBlog = await Blog.findById(id)
+      .populate('user', { username: 1, name: 1 })
+      .populate('comments', { comment: 1 })
     if (returnedBlog) {
       response.json(returnedBlog)
     } else {
@@ -78,8 +86,9 @@ blogRouter.patch('/:id', async (request, response, next) => {
       id,
       { ...body },
       { new: true, runValidators: true, context: 'query' }
-    ).populate('user', { username: 1, name: 1 }) // handling the user reference on update since the quest data has only user id.
-
+    )
+      .populate('user', { username: 1, name: 1 }) // handling the user reference on update since the request data has only user id.
+      .populate('comments', { comment: 1 })
     if (updatedBlog === null) {
       response.status(404).end()
     } else {
@@ -127,6 +136,56 @@ blogRouter.delete('/:id', async (request, response, next) => {
     user.blogs = user.blogs.filter((blogId) => blogId.toString() !== result._id.toString())
 
     await user.save()
+  } catch (e) {
+    next(e)
+  }
+})
+
+blogRouter.post('/:id/comments', async (request, response, next) => {
+  const {
+    params: { id },
+    body: { comment }
+  } = request
+
+  try {
+    let blog = await Blog.findById(id)
+
+    if (!blog) {
+      return response.status(404).end()
+    }
+
+    const newComment = new Comment({
+      comment,
+      blog: blog._id
+    })
+
+    const savedComment = await newComment.save()
+    blog.comments = blog.comments.concat(savedComment._id)
+    await blog.save()
+
+    blog = await Blog.findById(id).populate('user', { username: 1, name: 1 }).populate('comments')
+
+    response.status(201).json(savedComment)
+  } catch (e) {
+    next(e)
+  }
+})
+
+blogRouter.get('/:id/comments', async (request, response, next) => {
+  const {
+    params: { id }
+  } = request
+
+  try {
+    const blog = await Blog.findById(id)
+      .populate('user', { username: 1, name: 1 })
+      .populate('comments')
+
+    if (!blog) {
+      return response.status(404).end()
+    }
+
+    response.json(blog.comments)
   } catch (e) {
     next(e)
   }
