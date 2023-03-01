@@ -43,12 +43,14 @@ const Blog = () => {
       </div>
       <div>
         <h4>Comments</h4>
-        <AddBlogComments />
-        <ul>
-          {comments.map(({ id, comment }) => (
-            <li key={id}>{comment}</li>
-          ))}
-        </ul>
+        <AddBlogComments id={id} />
+        {comments && (
+          <ul>
+            {comments.map(({ id, comment }) => (
+              <li key={id}>{comment}</li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   )

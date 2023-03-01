@@ -12,6 +12,8 @@ const deleteBlogFailed = createAction('blogs/deleteBlogFailed')
 
 const updateBlogFailed = createAction('blogs/updateBlogFailed')
 
+const addBlogCommentFailed = createAction('blogs/addBlogCommentFailed')
+
 // Thunk functions
 export const fetchBlogsThunkAction = createAsyncThunk(fetchBlogsAction, async () => {
   const response = await blogService.fetchBlogs()
@@ -60,6 +62,21 @@ export const deleteBlog = (payload) => {
   }
 }
 
+export const addComment = (payload, id, resolve, reject) => {
+  return async (dispatch) => {
+    try {
+      const response = await blogService.addBlogComments(payload, id)
+      dispatch(addBlogCommentSucceeded(response))
+      dispatch(showFlashMessage('You added the comment to the blog successfully'))
+      resolve(response)
+    } catch (error) {
+      dispatch(addBlogCommentFailed(error.response.data.error))
+      dispatch(showFlashMessage(error.response.data.error, 'error'))
+      reject(error.response.data.error)
+    }
+  }
+}
+
 const blogsSlice = createSlice({
   name: 'blogs',
   initialState: { list: [], status: 'idle', error: null },
@@ -82,6 +99,15 @@ const blogsSlice = createSlice({
     deleteBlogSucceeded(state, { payload }) {
       // return state.list.filter(({ id }) => id !== payload)
       const newList = state.list.filter(({ id }) => id !== payload)
+      state.list = newList
+    },
+    addBlogCommentSucceeded(state, { payload: { blog, id, comment } }) {
+      const newList = state.list.map((item) => {
+        if (item.id === blog) {
+          return { ...item, comments: [...item.comments, { id, comment }] }
+        }
+        return item
+      })
       state.list = newList
     }
   },
@@ -115,5 +141,6 @@ export const selectBlogById = createSelector(
   (allBlogs, id) => allBlogs.filter((item) => item.id === id)[0]
 )
 
-const { addBlogSucceeded, updateBlogSucceeded, deleteBlogSucceeded } = blogsSlice.actions
+const { addBlogSucceeded, updateBlogSucceeded, deleteBlogSucceeded, addBlogCommentSucceeded } =
+  blogsSlice.actions
 export default blogsSlice.reducer

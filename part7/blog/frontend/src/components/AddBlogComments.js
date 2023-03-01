@@ -1,17 +1,21 @@
 import { useState } from 'react'
-// import { useDispatch } from 'react-redux'
-// import { addComment } from '../reducers/blogsSlice'
+import { useDispatch } from 'react-redux'
+import { addComment } from '../reducers/blogsSlice'
 
-const AddBlogComments = () => {
+const AddBlogComments = ({ id }) => {
   const [comment, setComment] = useState('')
 
-  // const dispatch = useDispatch()
-  // const handleCommentSave = dispatch(addComment)
+  const dispatch = useDispatch()
 
-  // const addComment = () => {
-  //   dispatch(commentBlog(blog.id, comment))
-  //   notifyWith('Comment added!')
-  //   setComment('')
+  const handleAddComment = () => {
+    return new Promise((resolve, reject) => {
+      dispatch(addComment({ comment }, id, resolve, reject))
+    })
+      .then(() => {
+        setComment('')
+      })
+      .catch(() => {})
+  }
 
   return (
     <div>
@@ -22,7 +26,7 @@ const AddBlogComments = () => {
         name="comment"
         placeholder="Enter your comment"
       />
-      <button>Add comment</button>
+      <button onClick={handleAddComment}>Add comment</button>
     </div>
   )
 }
