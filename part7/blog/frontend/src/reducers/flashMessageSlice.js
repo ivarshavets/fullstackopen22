@@ -6,6 +6,9 @@ const FlashMessageSlice = createSlice({
   reducers: {
     setFlashMessage(_state, { payload }) {
       return payload
+    },
+    clearFlashMessage() {
+      return null
     }
   }
 })
@@ -13,11 +16,12 @@ const FlashMessageSlice = createSlice({
 export const showFlashMessage = (text, type = 'success') => {
   return async (dispatch) => {
     dispatch(setFlashMessage({ text, type }))
-    setTimeout(() => {
-      dispatch(setFlashMessage(null))
+    const timer = setTimeout(() => {
+      dispatch(clearFlashMessage())
+      clearTimeout(timer)
     }, 5000)
   }
 }
 
-export const { setFlashMessage } = FlashMessageSlice.actions
+export const { setFlashMessage, clearFlashMessage } = FlashMessageSlice.actions
 export default FlashMessageSlice.reducer
