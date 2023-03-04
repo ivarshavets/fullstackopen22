@@ -1,6 +1,11 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import Box from '@mui/material/Box'
+
 import { addBlog } from '../reducers/blogsSlice'
 
 const AddBlogForm = ({ onCancel }) => {
@@ -26,44 +31,44 @@ const AddBlogForm = ({ onCancel }) => {
 
   return (
     <form onSubmit={submitForm}>
-      <div>
-        <label>Title:</label>
-        <input
-          className="blog_title_input"
-          type="text"
-          placeholder="Enter a title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </div>
-      <div>
-        <label>Url:</label>
-        <input
-          className="blog_url_input"
-          type="url"
-          placeholder="Enter a url"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
-      </div>
-      <div>
-        <label>Author:</label>
-        <input
-          className="blog_author_input"
-          type="text"
-          placeholder="Enter an author"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-        />
-      </div>
-      <div>
-        <button className="add_blog_btn" type="submit">
+      <TextField
+        className="blog_title_input"
+        type="text"
+        placeholder="Enter a title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        label="Title"
+        required
+        sx={{ mr: 1 }}
+      />
+      <TextField
+        className="blog_url_input"
+        type="url"
+        placeholder="Enter a url"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        label="Url"
+        required
+        sx={{ ml: 1, mr: 1 }}
+      />
+      <TextField
+        className="blog_author_input"
+        type="text"
+        placeholder="Enter an author"
+        value={author}
+        onChange={(e) => setAuthor(e.target.value)}
+        label="Author"
+        required
+        sx={{ ml: 1 }}
+      />
+      <Box mt={1}>
+        <Button className="add_blog_btn" type="submit" sx={{ mr: 0.5 }}>
           Add
-        </button>
-        <button type="button" onClick={onCancel}>
+        </Button>
+        <Button type="button" onClick={onCancel} variant="outlined" sx={{ ml: 0.5 }}>
           Cancel
-        </button>
-      </div>
+        </Button>
+      </Box>
     </form>
   )
 }

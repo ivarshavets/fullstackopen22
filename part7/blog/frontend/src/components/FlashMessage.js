@@ -1,16 +1,22 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import Alert from '@mui/material/Alert'
+import { clearFlashMessage } from '../reducers/flashMessageSlice'
 
 const FlashMessage = () => {
   const message = useSelector(({ flashMessage }) => flashMessage)
+
+  const dispatch = useDispatch()
+
+  const closeMessage = () => dispatch(clearFlashMessage())
 
   if (!message) {
     return null
   }
 
   return (
-    <div className={`flash_message flash-message flash-message--${message.type}`}>
+    <Alert className="flash_message" severity={message.type} onClose={closeMessage}>
       {message.text}
-    </div>
+    </Alert>
   )
 }
 

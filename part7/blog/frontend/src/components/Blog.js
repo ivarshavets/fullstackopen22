@@ -2,6 +2,13 @@ import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import ThumbUp from '@mui/icons-material/ThumbUp'
+
 import { updateBlog, deleteBlog, selectBlogById } from '../reducers/blogsSlice'
 import AddBlogComments from '../components/AddBlogComments'
 
@@ -27,22 +34,30 @@ const Blog = () => {
 
   return (
     <div className="blog_item">
-      <h2 className="blog_title">{title}</h2>
-      <div className="blog_author">
-        Author: <strong>{author}</strong>
-      </div>
-      <div>url: {url}</div>
+      <Box mb={4}>
+        <Typography className="blog_title" variant="h1">
+          {title}
+        </Typography>
+        <Typography className="blog_author" mb={1}>
+          Author: <strong>{author}</strong>
+        </Typography>
+        <Typography mb={1}>URL: {url}</Typography>
+        <Typography mb={1}>
+          Likes: {likes}
+          <IconButton onClick={handleUpdateLikes} color="primary" sx={{ ml: 1, mr: 1, mb: 1 }}>
+            <ThumbUp className="like_btn" />
+          </IconButton>
+        </Typography>
+        <div>
+          <Button onClick={handleDelete} color="error">
+            Remove
+          </Button>
+        </div>
+      </Box>
       <div>
-        Likes: {likes}{' '}
-        <button className="like_btn" onClick={handleUpdateLikes}>
-          Like
-        </button>
-      </div>
-      <div>
-        <button onClick={handleDelete}>Remove</button>
-      </div>
-      <div>
-        <h4>Comments</h4>
+        <Typography variant="h3" mb={1}>
+          Comments
+        </Typography>
         <AddBlogComments id={id} />
         {comments && (
           <ul>

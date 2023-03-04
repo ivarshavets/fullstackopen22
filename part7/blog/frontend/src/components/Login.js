@@ -1,12 +1,14 @@
+import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography'
 import LoginForm from '../components/LoginForm'
 import FlashMessage from '../components/FlashMessage'
 
 const Login = () => (
-  <div className="container">
+  <Container maxWidth="xs" sx={{ textAlign: 'center' }}>
     <FlashMessage />
-    <h2>Login to application</h2>
+    <Typography variant="h1">Login to application</Typography>
     <LoginForm />
-  </div>
+  </Container>
 )
 
 export default Login

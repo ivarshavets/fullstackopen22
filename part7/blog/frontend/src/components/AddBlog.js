@@ -1,3 +1,6 @@
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+
 import AddBlogForm from './AddBlogForm'
 import { useToggle } from '../hooks/useToggle'
 
@@ -6,17 +9,19 @@ const AddBlog = () => {
 
   if (!isFormVisible) {
     return (
-      <div>
-        <button className="add_blog_form_btn" onClick={() => setIsFormVisible(true)}>
-          Add new blog
-        </button>
-      </div>
+      <Button
+        className="add_blog_form_btn"
+        onClick={() => setIsFormVisible(true)}
+        variant="outlined"
+      >
+        Add new blog
+      </Button>
     )
   }
 
   return (
     <div>
-      <h2>Add a new blog</h2>
+      <Typography variant="h2">Add a new blog</Typography>
       <AddBlogForm onCancel={() => setIsFormVisible(false)} />
     </div>
   )

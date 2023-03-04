@@ -1,34 +1,46 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
+import CircularProgress from '@mui/material/CircularProgress'
+import Typography from '@mui/material/Typography'
+import Table from '@mui/material/Table'
+import TableHead from '@mui/material/TableHead'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableRow from '@mui/material/TableRow'
+import StyledLink from '@mui/material/Link'
+
 const UsersList = () => {
   const { status, list } = useSelector(({ users }) => users)
 
   if (status === 'loading') {
-    return 'Loading'
+    return <CircularProgress />
   }
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>User</th>
-          <th>Blogs created</th>
-        </tr>
-      </thead>
-      <tbody>
-        {list.map(({ id, username, name, blogs }) => (
-          <tr key={id}>
-            <td>
-              <Link to={`/users/${id}`}>
-                {name} ({username})
-              </Link>
-            </td>
-            <td>{blogs.length}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div>
+      <Typography variant="h1">Users</Typography>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>User</TableCell>
+            <TableCell>Blogs created</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {list.map(({ id, username, name, blogs }) => (
+            <TableRow key={id}>
+              <TableCell>
+                <StyledLink component={Link} to={`/users/${id}`}>
+                  {name} ({username})
+                </StyledLink>
+              </TableCell>
+              <TableCell>{blogs.length}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   )
 }
 

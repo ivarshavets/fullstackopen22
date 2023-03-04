@@ -1,6 +1,10 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+
+import Typography from '@mui/material/Typography'
+import CircularProgress from '@mui/material/CircularProgress'
+
 import { selectUserById } from '../reducers/usersSlice'
 
 const User = () => {
@@ -15,7 +19,7 @@ const User = () => {
   const { status } = useSelector(({ users }) => users)
 
   if (status === 'loading') {
-    return 'Loading'
+    return <CircularProgress />
   }
 
   if (!user) return null
@@ -24,10 +28,10 @@ const User = () => {
 
   return (
     <div>
-      <h2>
+      <Typography variant="h1">
         {name} ({username})
-      </h2>
-      <h4>Blogs by the author:</h4>
+      </Typography>
+      <Typography variant="h2">Blogs by the author:</Typography>
       <ul>
         {blogs.map(({ id, title }) => (
           <li key={id}>

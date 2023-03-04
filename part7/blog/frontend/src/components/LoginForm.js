@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-// import userService from '../services/user'
-// import authService from '../services/auth'
-// import { setUser } from '../reducers/userSlice'
-// import { showFlashMessage } from '../reducers/flashMessageSlice'
+
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
 
 import { login } from '../reducers/authSlice'
 
@@ -25,26 +24,31 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={submitForm}>
-      <input
+    <form onSubmit={submitForm} autoComplete={'off'}>
+      <TextField
         className="username"
         type="text"
         name="username"
         value={username}
         onChange={({ target: { value } }) => setUsername(value)}
-        placeholder="Username"
+        label="Username"
+        fullWidth
+        margin="normal"
       />
-      <input
+      <TextField
         className="password"
         type="password"
         name="password"
         value={password}
         onChange={({ target: { value } }) => setPassword(value)}
-        placeholder="Password"
+        label="Password"
+        fullWidth
+        margin="normal"
+        sx={{ marginBottom: '2rem' }}
       />
-      <button className="login_btn" type="submit">
+      <Button className="login_btn" type="submit" size="large">
         Login
-      </button>
+      </Button>
     </form>
   )
 }

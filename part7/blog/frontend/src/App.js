@@ -1,12 +1,18 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Routes, Route } from 'react-router-dom'
+
+import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+
 import userService from './services/userSorage'
 import { fetchBlogsThunkAction } from './reducers/blogsSlice'
 import { fetchAllUsersThunk } from './reducers/usersSlice'
 import { setUser } from './reducers/authSlice'
 import { showFlashMessage } from './reducers/flashMessageSlice'
-import Menu from './components/Menu'
+import Navigation from './components/Navigation'
 import Login from './components/Login'
 import FlashMessage from './components/FlashMessage'
 import BlogsList from './components/BlogsList'
@@ -54,16 +60,22 @@ const App = () => {
   return (
     <div>
       <FlashMessage />
-      <Menu />
-      <div className="container">
-        <AddBlog />
-        <Routes>
-          <Route index element={<BlogsList />} />
-          <Route path="/blogs/:id" element={<Blog />} />
-          <Route path="/users" element={<UsersList />} />
-          <Route path="/users/:id" element={<User />} />
-        </Routes>
-      </div>
+      <Navigation />
+      <Container sx={{ mt: 2, mb: 2 }}>
+        <Box sx={{ mb: 2 }}>
+          <AddBlog />
+        </Box>
+        <Card>
+          <CardContent>
+            <Routes>
+              <Route index element={<BlogsList />} />
+              <Route path="/blogs/:id" element={<Blog />} />
+              <Route path="/users" element={<UsersList />} />
+              <Route path="/users/:id" element={<User />} />
+            </Routes>
+          </CardContent>
+        </Card>
+      </Container>
     </div>
   )
 }
