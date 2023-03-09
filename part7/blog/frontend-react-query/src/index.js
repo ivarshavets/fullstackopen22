@@ -8,6 +8,7 @@ import store from './store'
 import App from './App'
 import theme from './theme'
 import { FleshMessageContextProvider } from './contexts/flashMessage'
+import { AuthUserContextProvider } from './contexts/authUser'
 // import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -17,9 +18,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         {/* CssBaseline kickstart an elegant, consistent,
         and simple baseline to build upon. */}
         <CssBaseline />
-        <FleshMessageContextProvider>
-          <App />
-        </FleshMessageContextProvider>
+        <AuthUserContextProvider>
+          <FleshMessageContextProvider>
+            <App />
+          </FleshMessageContextProvider>
+        </AuthUserContextProvider>
       </Provider>
     </BrowserRouter>
   </ThemeProvider>

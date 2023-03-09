@@ -4,12 +4,12 @@ const SET = 'SET'
 const CLEAR = 'CLEAR'
 
 const setFlashMessage = (payload) => ({
-  type: 'SET',
+  type: SET,
   payload
 })
 
 const clearFlashMessage = () => ({
-  type: 'CLEAR',
+  type: CLEAR,
   payload: null
 })
 

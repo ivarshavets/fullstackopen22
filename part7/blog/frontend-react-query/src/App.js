@@ -7,11 +7,10 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 
-import userService from './services/userSorage'
 import { fetchBlogsThunkAction } from './reducers/blogsSlice'
 import { fetchAllUsersThunk } from './reducers/usersSlice'
-import { setUser } from './reducers/authSlice'
-import { showFlashMessage } from './reducers/flashMessageSlice'
+import { useAddFlashMessage } from './contexts/flashMessage'
+import { useAuthUser, useInitUser, useLogout } from './contexts/authUser'
 import Navigation from './components/Navigation'
 import Login from './components/Login'
 import FlashMessage from './components/FlashMessage'
@@ -24,20 +23,20 @@ import AddBlog from './components/AddBlog'
 const App = () => {
   const dispatch = useDispatch()
 
-  const user = useSelector(({ authUser }) => authUser)
+  const user = useAuthUser()
+  const initUser = useInitUser()
+  const logout = useLogout()
+  const addFlashMessage = useAddFlashMessage()
+
   const { list, error } = useSelector(({ blogs }) => blogs)
 
   const handleLogout = () => {
-    userService.deleteUserFromLocalStorage()
-    dispatch(dispatch(setUser(null)))
-    dispatch(showFlashMessage('Succeessfully logged out!'))
+    logout()
+    addFlashMessage('Succeessfully logged out!')
   }
 
   useEffect(() => {
-    const authenticatedUser = userService.getUserFromLocalStorage()
-    if (authenticatedUser) {
-      dispatch(setUser(authenticatedUser))
-    }
+    initUser()
   }, [])
 
   useEffect(() => {

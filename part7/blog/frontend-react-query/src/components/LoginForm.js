@@ -1,28 +1,26 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
-import { login } from '../reducers/authSlice'
 import { useAddFlashMessage } from '../contexts/flashMessage'
+import { useLogin } from '../contexts/authUser'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const dispatch = useDispatch()
-
   const addFlashMessage = useAddFlashMessage()
+  const login = useLogin()
 
-  const handleLogin = (credentials) => {
-    dispatch(login(credentials))
-  }
-
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault()
-    handleLogin({ username, password })
-    addFlashMessage('Succeessfully logged in!')
+    try {
+      await login({ username, password })
+      addFlashMessage('Succeessfully logged in!')
+    } catch (e) {
+      addFlashMessage(e.response.data.error, 'error')
+    }
     setUsername('')
     setPassword('')
   }

@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom'
 import { useRef } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
@@ -12,9 +11,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle'
 import MenuItem from '@mui/material/MenuItem'
 import Menu from '@mui/material/Menu'
 
-import userService from '../services/userSorage'
-import { setUser } from '../reducers/authSlice'
-import { showFlashMessage } from '../reducers/flashMessageSlice'
+import { useAddFlashMessage } from '../contexts/flashMessage'
+import { useAuthUser, useLogout } from '../contexts/authUser'
 import { useToggle } from '../hooks/useToggle'
 import Logo from './Logo'
 
@@ -30,18 +28,17 @@ const NAV_LINKS = [
 ]
 
 const Navigation = () => {
-  const dispatch = useDispatch()
-
-  const user = useSelector(({ authUser }) => authUser)
+  const user = useAuthUser()
+  const logout = useLogout()
+  const addFlashMessage = useAddFlashMessage()
 
   const [isMenuOpen, toggleMenu, hideMenu] = useToggle()
   const anchorRef = useRef(null)
 
   const handleLogout = () => {
     hideMenu()
-    userService.deleteUserFromLocalStorage()
-    dispatch(dispatch(setUser(null)))
-    dispatch(showFlashMessage('Succeessfully logged out!'))
+    logout()
+    addFlashMessage('Succeessfully logged out!')
   }
 
   return (
