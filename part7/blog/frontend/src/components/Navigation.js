@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton'
 import Box from '@mui/material/Box'
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import MenuItem from '@mui/material/MenuItem'
-import Menu from '@mui/material/Menu'
+import MenuList from '@mui/material/MenuList'
 
 import userService from '../services/userSorage'
 import { setUser } from '../reducers/authSlice'
@@ -67,9 +67,14 @@ const Navigation = () => {
               <AccountCircle />
             </IconButton>
             {user.name}
-            <Menu anchorEl={anchorRef.current} open={isMenuOpen} onClose={hideMenu} dense>
+            <MenuList
+              anchorEl={anchorRef.current}
+              open={isMenuOpen}
+              onClose={hideMenu}
+              dense={true}
+            >
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            </Menu>
+            </MenuList>
           </div>
         </Toolbar>
       </Container>

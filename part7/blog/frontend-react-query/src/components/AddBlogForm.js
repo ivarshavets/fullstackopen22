@@ -7,6 +7,7 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 
 import { addBlog } from '../reducers/blogsSlice'
+import { dispatchInPromise } from '../utils/dispatchInPromise'
 import { useAddFlashMessage } from '../contexts/flashMessage'
 
 const AddBlogForm = ({ onCancel }) => {
@@ -19,17 +20,17 @@ const AddBlogForm = ({ onCancel }) => {
 
   const submitForm = (e) => {
     e.preventDefault()
-    return new Promise((resolve, reject) => {
-      dispatch(addBlog({ title, url, author }, resolve, reject))
-    })
+    dispatchInPromise(dispatch, addBlog, { title, url, author })
       .then(() => {
-        dispatchAddFlashMessage('Success')
+        dispatchAddFlashMessage('Blog is added successfully')
         onCancel()
         setTitle('')
         setUrl('')
         setAuthor('')
       })
-      .catch(() => {})
+      .catch((e) => {
+        dispatchAddFlashMessage(e.response.data.error, 'error')
+      })
   }
 
   return (
