@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useQueryClient, useMutation } from 'react-query'
 
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 
-import { addBlog } from '../reducers/blogsSlice'
-import { dispatchInPromise } from '../utils/dispatchInPromise'
+import blogService from '../services/blogs'
 import { useAddFlashMessage } from '../contexts/flashMessage'
 
 const AddBlogForm = ({ onCancel }) => {
@@ -15,22 +14,36 @@ const AddBlogForm = ({ onCancel }) => {
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
 
-  const dispatch = useDispatch()
-  const dispatchAddFlashMessage = useAddFlashMessage()
+  const addFlashMessage = useAddFlashMessage()
+  const queryClient = useQueryClient()
 
-  const submitForm = (e) => {
+  const newBlogMutation = useMutation(blogService.postBlog, {
+    onSuccess: (newBlog) => {
+      // queryClient.invalidateQueries('blogs') // leads to 2 requests
+      // setQueryData offers optimisation to get rid of 2 request for posting a new blog and refetching a query for it
+      // newBlog value of the parameter is the value returned by the postBlog request
+      const blogs = queryClient.getQueryData('blogs')
+      queryClient.setQueryData('blogs', blogs.concat(newBlog))
+    }
+  })
+
+  const submitForm = async (e) => {
     e.preventDefault()
-    dispatchInPromise(dispatch, addBlog, { title, url, author })
-      .then(() => {
-        dispatchAddFlashMessage('Blog is added successfully')
-        onCancel()
-        setTitle('')
-        setUrl('')
-        setAuthor('')
-      })
-      .catch((e) => {
-        dispatchAddFlashMessage(e.response.data.error, 'error')
-      })
+    newBlogMutation.mutate(
+      { title, url, author },
+      {
+        onSuccess: (data) => {
+          addFlashMessage(`Blog ${data.title} is added successfully`)
+          onCancel()
+          setTitle('')
+          setUrl('')
+          setAuthor('')
+        },
+        onError: (error) => {
+          addFlashMessage(error.response.data.error, 'error')
+        }
+      }
+    )
   }
 
   return (
@@ -66,7 +79,11 @@ const AddBlogForm = ({ onCancel }) => {
         sx={{ ml: 1 }}
       />
       <Box mt={1}>
-        <Button className="add_blog_btn" type="submit" sx={{ mr: 0.5 }}>
+        <Button
+          className={`add_blog_btn ${newBlogMutation.isLoading ? 'disabled' : ''}`}
+          type="submit"
+          sx={{ mr: 0.5 }}
+        >
           Add
         </Button>
         <Button type="button" onClick={onCancel} variant="outlined" sx={{ ml: 0.5 }}>
