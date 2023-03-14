@@ -22,8 +22,9 @@ const AddBlogForm = ({ onCancel }) => {
       // queryClient.invalidateQueries('blogs') // leads to 2 requests
       // setQueryData offers optimisation to get rid of 2 request for posting a new blog and refetching a query for it
       // newBlog value of the parameter is the value returned by the postBlog request
-      const blogs = queryClient.getQueryData('blogs')
-      queryClient.setQueryData('blogs', blogs.concat(newBlog))
+      // const blogs = queryClient.getQueryData('blogs')
+      // queryClient.setQueryData('blogs', blogs.concat(newBlog))
+      queryClient.setQueryData('blogs', (blogs) => blogs.concat(newBlog))
     }
   })
 
