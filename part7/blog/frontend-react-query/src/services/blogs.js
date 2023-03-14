@@ -15,11 +15,17 @@ const fetchBlogs = () => {
   return request.then((response) => response.data)
 }
 
+const fetchBlogById = (id) => {
+  const request = axios.get(`${BASE_URL}/blogs/${id}`)
+  return request.then((response) => response.data)
+}
+
 const postBlog = (data) => {
   return axios.post(`${BASE_URL}/blogs`, data).then((response) => response.data)
 }
 
-const patchBlog = (data, id) => {
+const patchBlog = (id, data) => {
+  console.log('data', data, 'id', id)
   return axios.patch(`${BASE_URL}/blogs/${id}`, data).then((response) => response.data)
 }
 
@@ -36,6 +42,7 @@ const addBlogComments = (data, id) => {
 
 const blogService = {
   fetchBlogs,
+  fetchBlogById,
   postBlog,
   patchBlog,
   deleteBlog,

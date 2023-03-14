@@ -1,33 +1,64 @@
-import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 
+import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import ThumbUp from '@mui/icons-material/ThumbUp'
 
-import { updateBlog, deleteBlog, selectBlogById } from '../reducers/blogsSlice'
+import blogService from '../services/blogs'
+import { useAuthUser, useLogout } from '../contexts/authUser'
+import { deleteBlog } from '../reducers/blogsSlice'
 import AddBlogComments from '../components/AddBlogComments'
 
 const Blog = () => {
-  const dispatch = useDispatch()
-
   const { id } = useParams()
 
-  const selectBlogByIdMemoized = useMemo(() => selectBlogById, [id])
+  const user = useAuthUser()
+  const logout = useLogout()
 
-  const blog = useSelector((state) => selectBlogByIdMemoized(state, id))
-  const user = useSelector(({ authUser }) => authUser)
+  const queryClient = useQueryClient()
 
-  const handleUpdateLikes = () => dispatch(updateBlog({ likes: likes + 1 }, id))
+  const {
+    data: blog,
+    isLoading,
+    isError,
+    error
+  } = useQuery(['blog', id], () => blogService.fetchBlogById(id), {
+    refetchOnWindowFocus: false,
+    retry: false
+  })
 
-  const handleDelete = () => dispatch(deleteBlog(id))
+  const { mutate } = useMutation((data) => blogService.patchBlog(data.id, data), {
+    onSuccess: (newData) => {
+      // update a query's cached data
+      queryClient.setQueryData(['blog', id], (oldData) => ({ ...oldData, ...newData }))
+    }
+  })
 
-  if (!blog || !user) {
+  const handleUpdateLikes = () => mutate({ id, likes: likes + 1 })
+
+  const handleDelete = () => deleteBlog(id)
+
+  useEffect(() => {
+    if (isError && error.response.statusText === 'Unauthorized') {
+      logout()
+    }
+  }, [error])
+
+  if (!user) {
     return null
+  }
+
+  if (isLoading) {
+    return <CircularProgress />
+  }
+
+  if (isError) {
+    return <Typography>Oops, something is wrong</Typography>
   }
 
   const { title, url, author, likes, comments } = blog

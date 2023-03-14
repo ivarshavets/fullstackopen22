@@ -29,7 +29,7 @@ export const addBlog = (payload, resolve, reject) => {
       resolve(response)
     } catch (error) {
       dispatch(addBlogFailed(error.response.data.error))
-      dispatch(showFlashMessage(error.response.data.error, 'error'))
+      // dispatch(showFlashMessage(error.response.data.error, 'error'))
       reject(error.response.data.error)
     }
   }

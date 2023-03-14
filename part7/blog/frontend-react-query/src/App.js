@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Routes, Route } from 'react-router-dom'
 
 import Container from '@mui/material/Container'
@@ -7,10 +7,8 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 
-import { fetchBlogsThunkAction } from './reducers/blogsSlice'
 import { fetchAllUsersThunk } from './reducers/usersSlice'
-import { useAddFlashMessage } from './contexts/flashMessage'
-import { useAuthUser, useInitUser, useLogout } from './contexts/authUser'
+import { useAuthUser, useInitUser } from './contexts/authUser'
 import Navigation from './components/Navigation'
 import Login from './components/Login'
 import FlashMessage from './components/FlashMessage'
@@ -25,32 +23,16 @@ const App = () => {
 
   const user = useAuthUser()
   const initUser = useInitUser()
-  const logout = useLogout()
-  const addFlashMessage = useAddFlashMessage()
-
-  const { list, error } = useSelector(({ blogs }) => blogs)
-
-  const handleLogout = () => {
-    logout()
-    addFlashMessage('Succeessfully logged out!')
-  }
 
   useEffect(() => {
     initUser()
   }, [])
 
   useEffect(() => {
-    if (user && !list.length) {
-      dispatch(fetchBlogsThunkAction())
+    if (user) {
       dispatch(fetchAllUsersThunk())
     }
   }, [user])
-
-  useEffect(() => {
-    if (!!error && error === 'Request failed with status code 401') {
-      handleLogout()
-    }
-  }, [error])
 
   if (!user) {
     return <Login />
