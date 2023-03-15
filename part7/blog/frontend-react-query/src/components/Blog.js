@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 
@@ -11,14 +11,16 @@ import ThumbUp from '@mui/icons-material/ThumbUp'
 
 import blogService from '../services/blogs'
 import { useAuthUser, useLogout } from '../contexts/authUser'
-import { deleteBlog } from '../reducers/blogsSlice'
+import { useAddFlashMessage } from '../contexts/flashMessage'
 import AddBlogComments from '../components/AddBlogComments'
 
 const Blog = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
 
   const user = useAuthUser()
   const logout = useLogout()
+  const addFlashMessage = useAddFlashMessage()
 
   const queryClient = useQueryClient()
 
@@ -36,12 +38,33 @@ const Blog = () => {
     onSuccess: (newData) => {
       // update a query's cached data
       queryClient.setQueryData(['blog', id], (oldData) => ({ ...oldData, ...newData }))
+      addFlashMessage('You liked the blog successfully')
+    },
+    onError: (error) => {
+      addFlashMessage(error.response.data.error, 'error')
     }
   })
 
   const handleUpdateLikes = () => mutate({ id, likes: likes + 1 })
 
-  const handleDelete = () => deleteBlog(id)
+  const { mutate: deleteBlog } = useMutation(() => blogService.deleteBlog(id), {
+    onSuccess: (newData) => {
+      queryClient.setQueryData(['blog', id], newData)
+      addFlashMessage('The blog is deleted successfully')
+    },
+    onError: (error, variables, previousValue) => {
+      queryClient.setQueryData('blogs', previousValue)
+      addFlashMessage(error.response.data.error, 'error')
+    }
+  })
+
+  const handleDelete = () => {
+    const ok = window.confirm(`Are you sure you want to remove '${blog.title}`)
+    if (ok) {
+      deleteBlog(id)
+      navigate('/')
+    }
+  }
 
   useEffect(() => {
     if (isError && error.response.statusText === 'Unauthorized') {
