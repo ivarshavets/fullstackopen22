@@ -35,8 +35,9 @@ const Blog = () => {
   })
 
   const { mutate } = useMutation((data) => blogService.patchBlog(data.id, data), {
+    // response of the mutation is passed to onSuccess
     onSuccess: (newData) => {
-      // update a query's cached data
+      // update detail view directly, update a query's cached data
       queryClient.setQueryData(['blog', id], (oldData) => ({ ...oldData, ...newData }))
       addFlashMessage('You liked the blog successfully')
     },

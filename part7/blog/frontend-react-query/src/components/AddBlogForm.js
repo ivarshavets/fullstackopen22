@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types'
-import { useState } from 'react'
 import { useQueryClient, useMutation } from 'react-query'
 
 import TextField from '@mui/material/TextField'
@@ -8,22 +7,21 @@ import Box from '@mui/material/Box'
 
 import blogService from '../services/blogs'
 import { useAddFlashMessage } from '../contexts/flashMessage'
+import { useFormField } from '../hooks/useFormField'
 
 const AddBlogForm = ({ onCancel }) => {
-  const [title, setTitle] = useState('')
-  const [url, setUrl] = useState('')
-  const [author, setAuthor] = useState('')
+  const { fields: titleFields, resetTitle } = useFormField()
+  const { fields: urlFields, resetUrl } = useFormField()
+  const { fields: authorFields, resetAuthor } = useFormField()
 
   const addFlashMessage = useAddFlashMessage()
   const queryClient = useQueryClient()
 
   const newBlogMutation = useMutation(blogService.postBlog, {
     onSuccess: (newBlog) => {
-      // queryClient.invalidateQueries('blogs') // leads to 2 requests
-      // setQueryData offers optimisation to get rid of 2 request for posting a new blog and refetching a query for it
+      // queryClient.invalidateQueries('blogs') // this leads to 2 requests
+      // setQueryData offers optimisation to update the blogs list directly
       // newBlog value of the parameter is the value returned by the postBlog request
-      // const blogs = queryClient.getQueryData('blogs')
-      // queryClient.setQueryData('blogs', blogs.concat(newBlog))
       queryClient.setQueryData('blogs', (blogs) => blogs.concat(newBlog))
     }
   })
@@ -31,17 +29,20 @@ const AddBlogForm = ({ onCancel }) => {
   const submitForm = async (e) => {
     e.preventDefault()
     newBlogMutation.mutate(
-      { title, url, author },
+      { title: titleFields.value, url: urlFields.value, author: authorFields.value },
       {
         onSuccess: (data) => {
           addFlashMessage(`Blog ${data.title} is added successfully`)
           onCancel()
-          setTitle('')
-          setUrl('')
-          setAuthor('')
+          resetTitle()
+          resetUrl()
+          resetAuthor()
         },
         onError: (error) => {
           addFlashMessage(error.response.data.error, 'error')
+          resetTitle()
+          resetUrl()
+          resetAuthor()
         }
       }
     )
@@ -51,30 +52,27 @@ const AddBlogForm = ({ onCancel }) => {
     <form onSubmit={submitForm}>
       <TextField
         className="blog_title_input"
+        {...titleFields}
         type="text"
         placeholder="Enter a title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
         label="Title"
         required
         sx={{ mr: 1 }}
       />
       <TextField
         className="blog_url_input"
+        {...urlFields}
         type="url"
         placeholder="Enter a url"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
         label="Url"
         required
         sx={{ ml: 1, mr: 1 }}
       />
       <TextField
         className="blog_author_input"
+        {...authorFields}
         type="text"
         placeholder="Enter an author"
-        value={author}
-        onChange={(e) => setAuthor(e.target.value)}
         label="Author"
         required
         sx={{ ml: 1 }}
