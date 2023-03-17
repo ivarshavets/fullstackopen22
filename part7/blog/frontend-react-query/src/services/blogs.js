@@ -25,7 +25,6 @@ const postBlog = (data) => {
 }
 
 const patchBlog = (id, data) => {
-  console.log('data', data, 'id', id)
   return axios.patch(`${BASE_URL}/blogs/${id}`, data).then((response) => response.data)
 }
 

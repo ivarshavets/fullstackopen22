@@ -10,9 +10,9 @@ import { useAddFlashMessage } from '../contexts/flashMessage'
 import { useFormField } from '../hooks/useFormField'
 
 const AddBlogForm = ({ onCancel }) => {
-  const { fields: titleFields, resetTitle } = useFormField()
-  const { fields: urlFields, resetUrl } = useFormField()
-  const { fields: authorFields, resetAuthor } = useFormField()
+  const { fields: titleFields, reset: resetTitle } = useFormField()
+  const { fields: urlFields, reset: resetUrl } = useFormField()
+  const { fields: authorFields, reset: resetAuthor } = useFormField()
 
   const addFlashMessage = useAddFlashMessage()
   const queryClient = useQueryClient()

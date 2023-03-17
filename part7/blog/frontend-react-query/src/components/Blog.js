@@ -18,11 +18,11 @@ const Blog = () => {
   const { id } = useParams()
   const navigate = useNavigate()
 
+  const queryClient = useQueryClient()
+
   const user = useAuthUser()
   const logout = useLogout()
   const addFlashMessage = useAddFlashMessage()
-
-  const queryClient = useQueryClient()
 
   const {
     data: blog,
@@ -34,27 +34,37 @@ const Blog = () => {
     retry: false
   })
 
-  const { mutate } = useMutation((data) => blogService.patchBlog(data.id, data), {
+  const { mutate: updateBlog } = useMutation((data) => blogService.patchBlog(data.id, data), {
     // response of the mutation is passed to onSuccess
-    onSuccess: (newData) => {
+    onSuccess: (newBlog) => {
       // update detail view directly, update a query's cached data
-      queryClient.setQueryData(['blog', id], (oldData) => ({ ...oldData, ...newData }))
-      addFlashMessage('You liked the blog successfully')
-    },
-    onError: (error) => {
-      addFlashMessage(error.response.data.error, 'error')
+      queryClient.setQueryData(['blog', newBlog.id], (oldData) => ({
+        ...oldData,
+        ...newBlog
+      }))
     }
   })
 
-  const handleUpdateLikes = () => mutate({ id, likes: likes + 1 })
+  const handleUpdateLikes = () => {
+    updateBlog(
+      { id, likes: likes + 1 },
+      {
+        onSuccess: () => {
+          addFlashMessage('You liked the blog successfully')
+        },
+        onError: (error) => {
+          addFlashMessage(error.response.data.error, 'error')
+        }
+      }
+    )
+  }
 
   const { mutate: deleteBlog } = useMutation(() => blogService.deleteBlog(id), {
-    onSuccess: (newData) => {
-      queryClient.setQueryData(['blog', id], newData)
+    onSuccess: () => {
+      queryClient.invalidateQueries('blogs')
       addFlashMessage('The blog is deleted successfully')
     },
-    onError: (error, variables, previousValue) => {
-      queryClient.setQueryData('blogs', previousValue)
+    onError: (error) => {
       addFlashMessage(error.response.data.error, 'error')
     }
   })
@@ -62,8 +72,16 @@ const Blog = () => {
   const handleDelete = () => {
     const ok = window.confirm(`Are you sure you want to remove '${blog.title}`)
     if (ok) {
-      deleteBlog(id)
-      navigate('/')
+      deleteBlog(id, {
+        onSuccess: () => {
+          // show message even after component is unmounted
+          addFlashMessage('The blog is deleted successfully')
+          navigate('/')
+        },
+        onError: (error) => {
+          addFlashMessage(error.response.data.error, 'error')
+        }
+      })
     }
   }
 
@@ -73,7 +91,7 @@ const Blog = () => {
     }
   }, [error])
 
-  if (!user) {
+  if (!blog || !user) {
     return null
   }
 
@@ -86,6 +104,8 @@ const Blog = () => {
   }
 
   const { title, url, author, likes, comments } = blog
+
+  const canDelete = blog.user.username === user.username
 
   return (
     <div className="blog_item">
@@ -103,11 +123,13 @@ const Blog = () => {
             <ThumbUp className="like_btn" />
           </IconButton>
         </Typography>
-        <div>
-          <Button onClick={handleDelete} color="error">
-            Remove
-          </Button>
-        </div>
+        {canDelete && (
+          <div>
+            <Button onClick={handleDelete} color="error">
+              Remove
+            </Button>
+          </div>
+        )}
       </Box>
       <div>
         <Typography variant="h3" mb={1}>
