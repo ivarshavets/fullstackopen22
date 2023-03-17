@@ -1,25 +1,46 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useQueryClient, useMutation } from 'react-query'
 
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 
-import { addComment } from '../reducers/blogsSlice'
+import blogService from '../services/blogs'
+import { useAddFlashMessage } from '../contexts/flashMessage'
 
 const AddBlogComments = ({ id }) => {
   const [comment, setComment] = useState('')
 
-  const dispatch = useDispatch()
+  const addFlashMessage = useAddFlashMessage()
+
+  const queryClient = useQueryClient()
+
+  const { mutate } = useMutation(
+    ({ id, comment }) => blogService.addBlogComments(id, { comment }),
+    {
+      onSuccess: (newData) => {
+        queryClient.setQueryData(['blog', id], (oldData) => ({
+          ...oldData,
+          comments: [...oldData.comments, { id: newData.id, comment: newData.comment }]
+        }))
+        // queryClient.invalidateQueries(['blog', id])
+      }
+    }
+  )
 
   const handleAddComment = () => {
-    return new Promise((resolve, reject) => {
-      dispatch(addComment({ comment }, id, resolve, reject))
-    })
-      .then(() => {
-        setComment('')
-      })
-      .catch(() => {})
+    mutate(
+      { id, comment },
+      {
+        onSuccess: () => {
+          setComment('')
+          addFlashMessage('The comment is successfully added')
+        },
+        onError: (error) => {
+          addFlashMessage(error.response.data.error, 'error')
+        }
+      }
+    )
   }
 
   return (

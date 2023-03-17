@@ -1,28 +1,42 @@
-import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useQuery } from 'react-query'
+import { useEffect } from 'react'
 
 import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { selectUserById } from '../reducers/usersSlice'
+import userService from '../services/users'
+import { useAuthUser } from '../contexts/authUser'
 
 const User = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
 
-  // Memoisation to ensure that each component instance gets its own selector instance
-  // due to its dependance on the user id.
-  // Atalternative memoization - using createCachedSelector of the re-reselect lib
-  const selectUserByIdMemoized = useMemo(() => selectUserById, [id])
-  const user = useSelector((state) => selectUserByIdMemoized(state, id))
+  const authUser = useAuthUser()
 
-  const { status } = useSelector(({ users }) => users)
+  const {
+    data: user,
+    isLoading,
+    isError,
+    error
+  } = useQuery(['user', id], () => userService.fetchUser(id), {
+    refetchOnWindowFocus: false,
+    retry: false
+  })
 
-  if (status === 'loading') {
+  useEffect(() => {
+    if (!authUser && isError && error.response.statusText === 'Unauthorized') {
+      navigate('/')
+    }
+  }, [error])
+
+  if (isLoading && !user) {
     return <CircularProgress />
   }
 
-  if (!user) return null
+  if (isError) {
+    return <Typography>Oops, something is wrong</Typography>
+  }
 
   const { name, username, blogs } = user
 

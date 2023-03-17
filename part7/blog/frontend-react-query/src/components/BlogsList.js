@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from 'react-query'
 
 import Typography from '@mui/material/Typography'
@@ -9,25 +9,27 @@ import ListItemButton from '@mui/material/ListItemButton'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import blogService from '../services/blogs'
-import { useLogout } from '../contexts/authUser'
+import { useAuthUser } from '../contexts/authUser'
 
 const BlogsList = () => {
+  const navigate = useNavigate()
+
+  const user = useAuthUser()
+
   const { data, isLoading, isError, error } = useQuery('blogs', blogService.fetchBlogs, {
     refetchOnWindowFocus: false,
     retry: false
     // onSuccess: (data) => (data || []).sort((a, b) => b.likes - a.likes)
   })
 
-  const logout = useLogout()
-
   const sortedBlogs = useMemo(() => (data || []).sort((a, b) => b.likes - a.likes), [data])
 
-  if (isLoading) {
+  if ((!user || !data) && isLoading) {
     return <CircularProgress />
   }
 
-  if (isError && error.response.statusText === 'Unauthorized') {
-    logout()
+  if (!user && isError && error.response.statusText === 'Unauthorized') {
+    navigate('/')
   }
 
   if (isError) {

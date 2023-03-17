@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton'
 import ThumbUp from '@mui/icons-material/ThumbUp'
 
 import blogService from '../services/blogs'
-import { useAuthUser, useLogout } from '../contexts/authUser'
+import { useAuthUser } from '../contexts/authUser'
 import { useAddFlashMessage } from '../contexts/flashMessage'
 import AddBlogComments from '../components/AddBlogComments'
 
@@ -21,7 +21,6 @@ const Blog = () => {
   const queryClient = useQueryClient()
 
   const user = useAuthUser()
-  const logout = useLogout()
   const addFlashMessage = useAddFlashMessage()
 
   const {
@@ -86,16 +85,12 @@ const Blog = () => {
   }
 
   useEffect(() => {
-    if (isError && error.response.statusText === 'Unauthorized') {
-      logout()
+    if (!user && isError && error.response.statusText === 'Unauthorized') {
+      navigate('/')
     }
   }, [error])
 
-  if (!blog || !user) {
-    return null
-  }
-
-  if (isLoading) {
+  if (isLoading && !blog) {
     return <CircularProgress />
   }
 

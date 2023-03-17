@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from 'react-query'
 
 import CircularProgress from '@mui/material/CircularProgress'
@@ -11,22 +11,24 @@ import TableRow from '@mui/material/TableRow'
 import StyledLink from '@mui/material/Link'
 
 import userService from '../services/users'
-import { useLogout } from '../contexts/authUser'
+import { useAuthUser } from '../contexts/authUser'
 
 const UsersList = () => {
-  const logout = useLogout()
+  const navigate = useNavigate()
+
+  const user = useAuthUser()
 
   const { data, isLoading, isError, error } = useQuery('users', userService.fetchAllUsers, {
     refetchOnWindowFocus: false,
     retry: false
   })
 
-  if (isLoading) {
+  if ((!user || !data) && isLoading) {
     return <CircularProgress />
   }
 
-  if (isError && error.response.statusText === 'Unauthorized') {
-    logout()
+  if (!user && isError && error.response.statusText === 'Unauthorized') {
+    navigate('/')
   }
 
   if (isError) {

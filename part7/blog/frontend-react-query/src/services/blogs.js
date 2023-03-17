@@ -35,7 +35,7 @@ const deleteBlog = (id) => {
   })
 }
 
-const addBlogComments = (data, id) => {
+const addBlogComments = (id, data) => {
   return axios.post(`${BASE_URL}/blogs/${id}/comments`, data).then((response) => response.data)
 }
 
