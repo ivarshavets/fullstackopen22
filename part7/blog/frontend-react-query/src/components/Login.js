@@ -4,7 +4,7 @@ import LoginForm from '../components/LoginForm'
 import FlashMessage from '../components/FlashMessage'
 
 const Login = () => (
-  <Container maxWidth="xs" sx={{ textAlign: 'center' }}>
+  <Container maxWidth="xs" sx={{ mt: 2, mb: 2, textAlign: 'center' }}>
     <FlashMessage />
     <Typography variant="h1">Login to application</Typography>
     <LoginForm />
