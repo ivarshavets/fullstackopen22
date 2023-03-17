@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { Routes, Route } from 'react-router-dom'
 
 import Container from '@mui/material/Container'
@@ -7,7 +6,6 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 
-import { fetchAllUsersThunk } from './reducers/usersSlice'
 import { useAuthUser, useInitUser } from './contexts/authUser'
 import Navigation from './components/Navigation'
 import Login from './components/Login'
@@ -19,20 +17,12 @@ import User from './components/User'
 import AddBlog from './components/AddBlog'
 
 const App = () => {
-  const dispatch = useDispatch()
-
   const user = useAuthUser()
   const initUser = useInitUser()
 
   useEffect(() => {
     initUser()
   }, [])
-
-  useEffect(() => {
-    if (user) {
-      dispatch(fetchAllUsersThunk())
-    }
-  }, [user])
 
   if (!user) {
     return <Login />

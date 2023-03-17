@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { useQuery } from 'react-query'
 
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
@@ -10,11 +10,27 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import StyledLink from '@mui/material/Link'
 
-const UsersList = () => {
-  const { status, list } = useSelector(({ users }) => users)
+import userService from '../services/users'
+import { useLogout } from '../contexts/authUser'
 
-  if (status === 'loading') {
+const UsersList = () => {
+  const logout = useLogout()
+
+  const { data, isLoading, isError, error } = useQuery('users', userService.fetchAllUsers, {
+    refetchOnWindowFocus: false,
+    retry: false
+  })
+
+  if (isLoading) {
     return <CircularProgress />
+  }
+
+  if (isError && error.response.statusText === 'Unauthorized') {
+    logout()
+  }
+
+  if (isError) {
+    return <Typography>Oops, something is wrong</Typography>
   }
 
   return (
@@ -28,7 +44,7 @@ const UsersList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {list.map(({ id, username, name, blogs }) => (
+          {data.map(({ id, username, name, blogs }) => (
             <TableRow key={id}>
               <TableCell>
                 <StyledLink component={Link} to={`/users/${id}`}>
