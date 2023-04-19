@@ -11,4 +11,4 @@ npm install @apollo/server graphql
 ```
 npm install mongoose dotenv
 ```
-- Define Schema
+- Define Mangoose schema
