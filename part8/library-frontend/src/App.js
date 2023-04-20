@@ -6,18 +6,18 @@ import NewBook from './components/NewBook'
 
 const App = () => {
   const [page, setPage] = useState('authors')
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [flashMessage, setFlashMessage] = useState(null)
 
-  const notify = useCallback((message) => {
-    setErrorMessage(message)
+  const notify = useCallback((text, type = 'success') => {
+    setFlashMessage({text, type})
     setTimeout(() => {
-      setErrorMessage(null)
+      setFlashMessage(null)
     }, 10000)
   }, [])
 
   return (
     <div>
-      <Notification errorMessage={errorMessage} />
+      <Notification message={flashMessage} />
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>

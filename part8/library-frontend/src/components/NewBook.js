@@ -12,10 +12,14 @@ const NewBook = ({show, setError}) => {
   const [ createBook ] = useMutation(CREATE_BOOK, {
     // re-fetching queries whenever a new book is created
     refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ],
+    onCompleted: () => {
+      setError('Successfully added')
+    },
     onError: (error) => {
+      // const errors = error.graphQLErrors
       const errors = error.graphQLErrors[0].extensions.error.errors
       const messages = Object.values(errors).map(e => e.message).join('\n')
-      setError(messages)
+      setError(messages, 'error')
     }
   })
 
@@ -27,7 +31,7 @@ const NewBook = ({show, setError}) => {
     event.preventDefault()
 
     // The query variables receive values when the query is made
-    createBook({ variables: {title, author, published: Number(published)} })
+    createBook({ variables: {title, author, published: Number(published), genres} })
 
     setTitle('')
     setPublished('')

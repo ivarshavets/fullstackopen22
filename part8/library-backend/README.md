@@ -12,3 +12,5 @@ npm install @apollo/server graphql
 npm install mongoose dotenv
 ```
 - Define Mangoose schema
+- Define GQL schema with queries and mutations
+- Define GQL resolvers which use Mangoose queries

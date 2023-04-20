@@ -27,7 +27,7 @@ const typeDefs = `
       title: String!
       author: String!
       published: Int
-      genres: [String!]
+      genres: [String]!
     ): Book
 
     editAuthor(
