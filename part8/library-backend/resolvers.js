@@ -1,4 +1,6 @@
 const { GraphQLError } = require('graphql')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
 const Author = require('./models/author')
 const Book = require('./models/book')
@@ -32,10 +34,22 @@ const resolvers = {
 
       const filteredAuthors = await Authors.find({ born: {$exists: born === 'YES' }})
       return filteredAuthors
+    },
+    me: (_root, _args, context) => {
+      return context.currentUser
     }
   },
   Mutation: {
-    addBook: async (_root, { title, author, published, genres }) => {
+    addBook: async (_root, { title, author, published, genres }, {currentUser}) => {
+      const currentUser = currentUser
+      if (!currentUser) {
+        throw new GraphQLError('not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          }
+        })
+      }
+
       let book = new Book({ title, published, genres })
       let authorInDb = await Author.findOne({ name: author })
 
@@ -85,6 +99,49 @@ const resolvers = {
   Author: {
     // Root is the object that contains the result returned from the resolver on the parent field
     bookCount: (root) => Book.collection.countDocuments({ author: root.id })
+  },
+
+  createUser: async (_root, args) => {
+    const user = new User({ username: args.username })
+    return user.save()
+      .catch(error => {
+        throw new GraphQLError('Creating the user failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        })
+      })
+  },
+
+  login: async (_root, {username, password}) => {
+    const user = await User.findOne({ username })
+    // passwords themselves are not saved to the database, but hashes calculated from the passwords
+    //the bcrypt.compare method is used to check if the password is correct
+    const isPwdCorrect = user && await bcrypt.compare(password, user.passwordHash)
+
+    if (!isPwdCorrect) {
+      throw new GraphQLError('wrong credentials', {
+        extensions: {
+          code: 'BAD_USER_INPUT'
+        }
+      })
+    }
+
+    const userForToken = {
+      username: user.username,
+      id: user._id,
+    }
+
+    // The token is digitally signed using a secret key from the env variable SECRET
+    const token = jwt.sign(
+      userForToken,
+      process.env.SECRET,
+      { expiresIn: 60*60 } // token expires in 60*60 seconds = one hour
+    )
+
+    return { value: token }
   }
 }
 

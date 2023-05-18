@@ -1,5 +1,8 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
+const jwt = require('jsonwebtoken')
+
+const User = require('./models/user')
 
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
@@ -18,6 +21,7 @@ mongoose.connect(MONGODB_URI)
 
 const typeDefs = require('./schema')
 const resolvers = require('./resolvers')
+const context = require('./context')
 
 const server = new ApolloServer({
   typeDefs,
@@ -26,6 +30,7 @@ const server = new ApolloServer({
 
 startStandaloneServer(server, {
   listen: { port: 4000 },
+  context,
 }).then(({ url }) => {
   console.log(`Server ready at ${url}`)
 })
