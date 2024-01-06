@@ -1,7 +1,8 @@
 const typeDefs = `
   type User {
     username: String!
-    favoriteGenre: String!
+    passwordHash: String!
+    favouriteGenre: String!
     id: ID!
   }
 
@@ -36,9 +37,10 @@ const typeDefs = `
   type Mutation {
     createUser(
       username: String!
-      favoriteGenre: String!
+      password: String!
+      favouriteGenre: String!
     ): User
-    
+
     login(
       username: String!
       password: String!

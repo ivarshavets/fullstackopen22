@@ -1,8 +1,5 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
-const jwt = require('jsonwebtoken')
-
-const User = require('./models/user')
 
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
@@ -24,7 +21,7 @@ const resolvers = require('./resolvers')
 const context = require('./context')
 
 const server = new ApolloServer({
-  typeDefs,
+  typeDefs, //  contains the GraphQL schema
   resolvers,
 })
 

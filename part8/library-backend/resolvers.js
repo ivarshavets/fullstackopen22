@@ -1,9 +1,11 @@
 const { GraphQLError } = require('graphql')
+const {AuthenticationError, UserInputError} = require("apollo-server");
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 const Author = require('./models/author')
 const Book = require('./models/book')
+const User = require('./models/user')
 
 // resolver functions return a promise. When a resolver returns a promise, Apollo server sends back the value which the promise resolves to.
 const resolvers = {
@@ -87,6 +89,7 @@ const resolvers = {
 
       return book
     },
+
     editAuthor: async (_root, { name, born }) => {
       let author = await Author.findOne({ name })
       if (author) {
@@ -94,54 +97,68 @@ const resolvers = {
         await author.save()
       }
       return author
+    },
+
+    createUser: async (_root, {username, password, favouriteGenre}) => {
+      // password must be at least 3 chars
+      if (!password || password.length < 3) {
+        throw new UserInputError('password is required and must be at least 3 chars long')
+      }
+
+      // Mongoose does not have a built-in validator for checking the uniqueness of a field. mongoose-unique-validator npm package is a ready-made solution for this.
+      const existingUser = await User.findOne({ username })
+
+      if (existingUser) {
+        throw new UserInputError('username must be unique')
+      }
+
+      // encrypting the password
+      const saltRound = 10
+      const passwordHash = await bcrypt.hash(password, saltRound)
+
+      const user = new User({
+        username,
+        passwordHash,
+        favouriteGenre
+      })
+
+      return user.save()
+        .catch(error => {
+          throw new UserInputError(error.message, {
+            // invalidArgs: args,
+          })
+        })
+    },
+
+    login: async (_root, {username, password}) => {
+      const user = await User.findOne({ username })
+
+      // passwords themselves are not saved to the database, but hashes calculated from the passwords
+      //the bcrypt.compare method is used to check if the password is correct
+      const isPwdCorrect = user && await bcrypt.compare(password, user.passwordHash)
+
+      if (!isPwdCorrect) {
+        throw new UserInputError('wrong credentials')
+      }
+
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+
+      // The token is digitally signed using a secret key from the env variable SECRET
+      const token = jwt.sign(
+        userForToken,
+        process.env.JWT_SECRET,
+        //{ expiresIn: 60*60 } // token expires in 60*60 seconds = one hour
+      )
+
+      return { value: token }
     }
   },
   Author: {
     // Root is the object that contains the result returned from the resolver on the parent field
     bookCount: (root) => Book.collection.countDocuments({ author: root.id })
-  },
-
-  createUser: async (_root, args) => {
-    const user = new User({ username: args.username })
-    return user.save()
-      .catch(error => {
-        throw new GraphQLError('Creating the user failed', {
-          extensions: {
-            code: 'BAD_USER_INPUT',
-            invalidArgs: args.name,
-            error
-          }
-        })
-      })
-  },
-
-  login: async (_root, {username, password}) => {
-    const user = await User.findOne({ username })
-    // passwords themselves are not saved to the database, but hashes calculated from the passwords
-    //the bcrypt.compare method is used to check if the password is correct
-    const isPwdCorrect = user && await bcrypt.compare(password, user.passwordHash)
-
-    if (!isPwdCorrect) {
-      throw new GraphQLError('wrong credentials', {
-        extensions: {
-          code: 'BAD_USER_INPUT'
-        }
-      })
-    }
-
-    const userForToken = {
-      username: user.username,
-      id: user._id,
-    }
-
-    // The token is digitally signed using a secret key from the env variable SECRET
-    const token = jwt.sign(
-      userForToken,
-      process.env.SECRET,
-      { expiresIn: 60*60 } // token expires in 60*60 seconds = one hour
-    )
-
-    return { value: token }
   }
 }
 

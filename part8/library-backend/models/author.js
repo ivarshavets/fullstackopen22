@@ -16,7 +16,8 @@ const schema = new mongoose.Schema({
 
 schema.plugin(uniqueValidator)
 
-// // In Mongo the identifying field of an object is called _id but there is no need to parse the name of the field to id since GraphQL can do this automatically.
+// In Mongo the identifying field of an object is called _id but there is no need to parse the name of the field to id since GraphQL can do this automatically.
+
 // schema.set('toJSON', {
 //   transform: (_document, returnedObject) => {
 //     returnedObject.id = returnedObject._id.toString()
