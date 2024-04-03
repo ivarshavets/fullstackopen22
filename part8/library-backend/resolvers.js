@@ -43,7 +43,6 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (_root, { title, author, published, genres }, {currentUser}) => {
-      const currentUser = currentUser
       if (!currentUser) {
         throw new GraphQLError('not authenticated', {
           extensions: {

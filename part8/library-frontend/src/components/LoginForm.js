@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client'
 import { LOGIN } from '../queries'
 import { STORAGE_KEY } from '../utils'
 
-const LoginForm = ({setToken, setError, setPage}) => {
+const LoginForm = ({setToken, setError, navigateTo}) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -17,7 +17,7 @@ const LoginForm = ({setToken, setError, setPage}) => {
     if ( result.data ) {
       const token = result.data.login.value
       setToken(token)
-      setPage('books')
+      navigateTo('books')
       localStorage.setItem(STORAGE_KEY, token)
     }
   }, [result.data]) // eslint-disable-line

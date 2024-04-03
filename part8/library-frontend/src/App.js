@@ -26,6 +26,9 @@ const App = () => {
     client.resetStore()
   }
 
+  const navigateTo = (page) =>
+    () => setPage(page)
+
   useEffect(() => {
     const token = localStorage.getItem(STORAGE_KEY)
     if (token) {
@@ -41,7 +44,7 @@ const App = () => {
         <LoginForm
           setToken={setToken}
           setError={notify}
-          setPage={setPage}
+          navigateTo={navigateTo}
         />
       </div>
     )
@@ -52,13 +55,13 @@ const App = () => {
       <Notification message={flashMessage} />
       {token &&(
         <div>
-          <button onClick={() => setPage('authors')}>authors</button>
-          <button onClick={() => setPage('books')}>books</button>
-          <button onClick={() => setPage('add')}>add book</button>
+          <button onClick={navigateTo('authors')}>authors</button>
+          <button onClick={navigateTo('books')}>books</button>
+          <button onClick={navigateTo('add')}>add book</button>
           <button onClick={logout}>logout</button>
         </div>
       )}
-        {/* <button onClick={() => setPage('login')}>login</button> */}
+        {/* <button onClick={navigateTo('login')}>login</button> */}
 
 
       <Authors show={page === 'authors'} setError={notify} />
