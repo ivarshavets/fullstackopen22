@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { CREATE_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries'
+import { updateCacheWith } from '../utils'
 
-const NewBook = ({show, setError}) => {
+const NewBook = ({show, setError, navigateTo}) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -10,17 +11,32 @@ const NewBook = ({show, setError}) => {
   const [genres, setGenres] = useState([])
 
   const [ createBook ] = useMutation(CREATE_BOOK, {
-    // re-fetching queries whenever a new book is created
-    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ],
+    // // re-fetching queries every time whenever a new book is created
+    // // the drawback: the query is always rerun with any updates
+    // refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ],
     onCompleted: () => {
       setError('Successfully added')
+      navigateTo('books')
     },
     onError: (error) => {
-      // const errors = error.graphQLErrors
-      const errors = error.graphQLErrors[0].extensions.error.errors
+      console.log(error)
+      const errors = error.graphQLErrors
+      //const errors = error.graphQLErrors[0].extensions.error.errors
       const messages = Object.values(errors).map(e => e.message).join('\n')
       setError(messages, 'error')
-    }
+    },
+    // update: (cache, response) => {
+    //   cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+    //     const addedBook = response.data.addBook
+    //     return {
+    //       allBooks: allBooks.concat(addedBook),
+    //     }
+    //   })
+    // },
+    update: (cache, response) => {
+      const addedBook = response.data.addBook
+      updateCacheWith(addedBook, cache)
+    },
   })
 
   if (!show) {

@@ -1,11 +1,13 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useSubscription } from '@apollo/client'
 import Notification from './components/Notification'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
-import { STORAGE_KEY } from './utils'
+import { STORAGE_KEY, updateCacheWith } from './utils'
+import { ALL_BOOKS, BOOK_ADDED } from './queries.js'
+
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -36,6 +38,22 @@ const App = () => {
     }
   }, [])
 
+  useSubscription(BOOK_ADDED, {
+    // When a new book is added, the server sends a notification to the client and onData cb is called
+    onData: ({ data }) => {
+      console.log(data, data.data.bookAdded)
+      const addedBook = data.data.bookAdded
+      notify(`a book ${addedBook.title} by ${addedBook.author.name} was added`)
+      // // the issues of double records
+      // client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+      //   return {
+      //     allBooks: allBooks.concat(addedBook),
+      //   }
+      // })
+      updateCacheWith(addedBook,  client.cache)
+    }
+  })
+
   if (!token) {
     return (
       <div>
@@ -58,7 +76,10 @@ const App = () => {
           <button onClick={navigateTo('authors')}>authors</button>
           <button onClick={navigateTo('books')}>books</button>
           <button onClick={navigateTo('add')}>add book</button>
-          <button onClick={logout}>logout</button>
+          <div>
+            <span>Loged in as <strong></strong></span>
+            <button onClick={logout}>logout</button>
+            </div>
         </div>
       )}
         {/* <button onClick={navigateTo('login')}>login</button> */}
@@ -68,7 +89,7 @@ const App = () => {
 
       <Books show={page === 'books'} />
 
-      <NewBook show={page === 'add'} setError={notify} />
+      <NewBook show={page === 'add'} setError={notify} navigateTo={navigateTo} />
     </div>
   )
 }
