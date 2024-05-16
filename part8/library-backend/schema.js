@@ -59,6 +59,10 @@ const typeDefs = `
     ): Author
   }
 
+  type Subscription {
+    bookAdded: Book!
+  }
+  
   enum YesNo {
     YES
     NO

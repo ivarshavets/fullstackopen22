@@ -3,6 +3,9 @@ const {AuthenticationError, UserInputError} = require("apollo-server");
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
+
 const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
@@ -38,6 +41,7 @@ const resolvers = {
       return filteredAuthors
     },
     me: (_root, _args, context) => {
+      console.log('context', context)
       return context.currentUser
     }
   },
@@ -84,12 +88,18 @@ const resolvers = {
 
       book = await Book.findById(book.id).populate('author')
 
-      // pubsub.publish('BOOK_ADDED', { bookAdded: book })
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
 
       return book
     },
 
-    editAuthor: async (_root, { name, born }) => {
+    editAuthor: async (_root, { name, born }, { currentUser }) => {
+      if (!currentUser) {
+        throw new GraphQLError('not authenticated', {
+          extensions: { code: 'BAD_USER_INPUT' }
+        })
+      }
+
       let author = await Author.findOne({ name })
       if (author) {
         author.born = born
@@ -124,7 +134,7 @@ const resolvers = {
       return user.save()
         .catch(error => {
           throw new UserInputError(error.message, {
-            // invalidArgs: args,
+            invalidArgs: args,
           })
         })
     },
@@ -158,6 +168,11 @@ const resolvers = {
   Author: {
     // Root is the object that contains the result returned from the resolver on the parent field
     bookCount: (root) => Book.collection.countDocuments({ author: root.id })
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator('BOOK_ADDED')
+    }
   }
 }
 
