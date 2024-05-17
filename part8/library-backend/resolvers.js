@@ -30,7 +30,13 @@ const resolvers = {
 
       return Book.find(query).populate('author')
     },
-    allAuthors: async () => Author.find({}),
+    allAuthors: async (root, args, context, query) => {
+      const fieldsNames = query.fieldNodes[0].selectionSet.selections.map(f => f.name.value)
+      if (fieldsNames.includes('bookCount') ) {
+        bookCache = await Book.find({})
+      }
+      return Author.find({})
+    },
     allAuthorsFiltered: async (_root, {born}) => {
       if(!born) {
         const authors = await Author.find({})
@@ -41,7 +47,6 @@ const resolvers = {
       return filteredAuthors
     },
     me: (_root, _args, context) => {
-      console.log('context', context)
       return context.currentUser
     }
   },
