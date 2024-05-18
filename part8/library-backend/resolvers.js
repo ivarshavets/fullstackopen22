@@ -30,7 +30,7 @@ const resolvers = {
 
       return Book.find(query).populate('author')
     },
-    allAuthors: async (root, args, context, query) => {
+    allAuthors: async (_root, _args, _context, query) => {
       const fieldsNames = query.fieldNodes[0].selectionSet.selections.map(f => f.name.value)
       if (fieldsNames.includes('bookCount') ) {
         bookCache = await Book.find({})
