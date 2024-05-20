@@ -3,10 +3,12 @@ import { useApolloClient, useSubscription } from '@apollo/client'
 import Notification from './components/Notification'
 import Authors from './components/Authors'
 import Books from './components/Books'
+import Recommendations from './components/Recommendations'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import { STORAGE_KEY, updateCacheWith } from './utils'
-import { ALL_BOOKS, BOOK_ADDED } from './queries.js'
+// import { ALL_BOOKS, BOOK_ADDED } from './queries.js'
+import { BOOK_ADDED } from './queries.js'
 
 
 const App = () => {
@@ -75,6 +77,7 @@ const App = () => {
         <div>
           <button onClick={navigateTo('authors')}>authors</button>
           <button onClick={navigateTo('books')}>books</button>
+          <button onClick={navigateTo('recommendations')}>recommendations</button>
           <button onClick={navigateTo('add')}>add book</button>
           <div>
             <span>Loged in as <strong></strong></span>
@@ -88,6 +91,8 @@ const App = () => {
       <Authors show={page === 'authors'} setError={notify} />
 
       <Books show={page === 'books'} />
+
+      <Recommendations show={page === 'recommendations'} />
 
       <NewBook show={page === 'add'} setError={notify} navigateTo={navigateTo} />
     </div>
