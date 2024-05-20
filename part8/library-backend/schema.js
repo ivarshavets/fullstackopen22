@@ -2,7 +2,7 @@ const typeDefs = `
   type User {
     username: String!
     passwordHash: String!
-    favouriteGenre: String!
+    favoriteGenre: String!
     id: ID!
   }
 
@@ -38,7 +38,7 @@ const typeDefs = `
     createUser(
       username: String!
       password: String!
-      favouriteGenre: String!
+      favoriteGenre: String!
     ): User
 
     login(
@@ -62,7 +62,7 @@ const typeDefs = `
   type Subscription {
     bookAdded: Book!
   }
-  
+
   enum YesNo {
     YES
     NO

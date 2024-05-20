@@ -8,7 +8,7 @@ const schema = new mongoose.Schema({
     },
     passwordHash: String,
 
-    favouriteGenre: {
+    favoriteGenre: {
       type: String,
       required: true
     }

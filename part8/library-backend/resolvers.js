@@ -113,7 +113,7 @@ const resolvers = {
       return author
     },
 
-    createUser: async (_root, {username, password, favouriteGenre}) => {
+    createUser: async (_root, {username, password, favoriteGenre}) => {
       // password must be at least 3 chars
       if (!password || password.length < 3) {
         throw new UserInputError('password is required and must be at least 3 chars long')
@@ -133,7 +133,7 @@ const resolvers = {
       const user = new User({
         username,
         passwordHash,
-        favouriteGenre
+        favoriteGenre
       })
 
       return user.save()
