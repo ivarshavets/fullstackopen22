@@ -3,7 +3,7 @@ import { ALL_BOOKS, ME } from '../queries'
 
 const Recommendations = ({show}) => {
   const user = useQuery(ME)
-  console.log('user', user)
+
   //const favoriteGenre = user.data ? user.data.me.favoriteGenre : null
   const favoriteGenre = user.data?.me.favoriteGenre
 
