@@ -35,7 +35,7 @@ const Recommendations = ({show}) => {
     <div>
         <h2>recommendations</h2>
         <div>
-            books in <b>{favoriteGenre} genre</b>
+            books in <strong>{favoriteGenre}</strong> genre
         </div>
         <table>
             <tbody>
