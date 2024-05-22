@@ -2,32 +2,44 @@ import { useQuery } from '@apollo/client'
 import { useState, useMemo } from 'react'
 import { ALL_BOOKS } from '../queries'
 
-const ALL_GENRES_KEY = 'all'
-
 const Books = ({show}) => {
-  const {loading, data} = useQuery(ALL_BOOKS)
-  const [genre, setGenre] = useState(ALL_GENRES_KEY)
+  const [genre, setGenre] = useState(null)
 
-  const uniqueGenres = useMemo(() => {
-   return [...new Set((data?.allBooks || []).flatMap((book) => book.genres))]
-  }, [data])
+  const {loading, data} = useQuery(ALL_BOOKS, {
+    variables: { genre: null }
+  })
 
-  const filteredBooks = useMemo(() =>
-    genre !== ALL_GENRES_KEY?
-      (data?.allBooks || []).filter(({genres}) => genres.includes(genre))
-      :
-      data?.allBooks
-    , [genre, data])
+  const filteredBooks = useQuery(ALL_BOOKS, {
+    variables: { genre },
+    skip: !genre,
+    //pollInterval: 2000
+  })
+
+  // Filtering with React
+  // const uniqueGenres = useMemo(() => {
+  //  return [...new Set((data?.allBooks || []).flatMap((book) => book.genres))]
+  // }, [data])
+
+  // const filteredBooks = useMemo(() =>
+  //   genre !== ALL_GENRES_KEY || !genre ?
+  //     (data?.allBooks || []).filter(({genres}) => genres.includes(genre))
+  //     :
+  //     data?.allBooks
+  //   , [genre, data])
+
+  const uniqueGenres = useMemo(
+    () => [...new Set((data?.allBooks||[]).reduce((s, b) => s.concat(b.genres), []))]
+    , [data])
 
   if (!show) {
     return null
   }
 
-  if (loading) {
+  if (loading || filteredBooks.loading) {
     return <div>Loading...</div>
   }
 
-  if (!loading && !data.allBooks.length) {
+  if ((!loading && !data?.allBooks.length)) {
     return (
       <div>
         <h2>Books</h2>
@@ -36,14 +48,19 @@ const Books = ({show}) => {
     )
   }
 
+  const allBooks = data.allBooks
+  const books = genre ? filteredBooks.data.allBooks : allBooks
+
   return (
     <div>
       <h2>Books</h2>
 
       <p>
-        <button key={ALL_GENRES_KEY} onClick={() => {setGenre(ALL_GENRES_KEY)}}>{ALL_GENRES_KEY}</button>
-        {uniqueGenres.map((item) => (
-          <button key={item} onClick={() => {setGenre(item)}}>{item}</button>
+        <button onClick={() => setGenre(null)}>{!genre ? <strong>all</strong> : 'all'}</button>
+        {uniqueGenres.map((el) => (
+          <button key={el} onClick={() => {setGenre(el)}}>
+            {el === genre ? <strong>{el}</strong> : el}
+          </button>
         ))}
       </p>
 
@@ -54,7 +71,7 @@ const Books = ({show}) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {filteredBooks.map((a) => (
+          {books.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
