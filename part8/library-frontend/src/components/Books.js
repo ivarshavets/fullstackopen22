@@ -39,7 +39,7 @@ const Books = ({show}) => {
     return <div>Loading...</div>
   }
 
-  if ((!loading && !data?.allBooks.length)) {
+  if (!loading && !data?.allBooks.length) {
     return (
       <div>
         <h2>Books</h2>
