@@ -63,3 +63,23 @@ Run file.ts with `ts-node`:
 ```
 npm run ts-node -- file.ts
 ```
+
+[Exercises 9.4-9.5 of fullstackopen](https://fullstackopen.com/en/part9/first_steps_with_type_script#exercises-9-4-9-5)
+1. Add Express
+- add Expess to the dependencies, add types and add `ts-node-dev` to run the app
+```
+npm install express
+npm install --save-dev @types/express
+npm install --save-dev ts-node-dev
+```
+- add the scripts `npm start` in production mode and `npm run dev` in development mode.
+```
+"scripts": {
+  "start": "ts-node index.ts",
+  "dev": "ts-node-dev index.ts"
+}
+```
+- create an HTTP GET endpoint hello that answers 'Hello Full Stack!'
+```
+```
+2. Add an endpoint for the BMI calculator that can be used by doing an HTTP GET request to the endpoint `bmi` and specifying the input with [query string parameters](https://en.wikipedia.org/wiki/Query_string).
