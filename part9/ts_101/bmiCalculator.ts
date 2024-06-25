@@ -21,7 +21,6 @@ export const calculateBmi = (height: number, weight: number): string => {
     result = "Obese (Class III)";
   }
 
-  console.log(result);
   return result;
 };
 
@@ -46,7 +45,8 @@ const parseArguments = (args: Array<string>): BmiParams => {
 try {
   // The process.argv() method is used for returning all the command-line arguments that were passed when the Node. js process was being launched.
   const {height, weight} = parseArguments(process.argv)
-  calculateBmi(height, weight)
+  const result = calculateBmi(height, weight)
+  console.log(result)
 } catch (error: unknown) {
   let errorMessage = 'Something happend'
   if (error instanceof Error) {
