@@ -83,3 +83,10 @@ npm install --save-dev ts-node-dev
 ```
 ```
 2. Add an endpoint for the BMI calculator that can be used by doing an HTTP GET request to the endpoint `bmi` and specifying the input with [query string parameters](https://en.wikipedia.org/wiki/Query_string).
+
+[Exercises 9.6-9.7 of fullstackopen](https://fullstackopen.com/en/part9/first_steps_with_type_script#exercises-9-6-9-7)
+1. Configure ESlint rules in the .eslintrc.json
+```
+npm install --save-dev eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser
+```
+

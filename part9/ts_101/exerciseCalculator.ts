@@ -11,13 +11,13 @@ interface Results {
 export const calculateExercises = (days: Array<number>, target: number): Results => {
   const getRating = () => {
     if (average < 1) {
-        return 1
+        return 1;
     }
     if (average < 2) {
-        return 2
+        return 2;
     }
-    return 3
-  }
+    return 3;
+  };
 
   const ratingDescription = {
     1: 'Not enough exercises',
@@ -25,24 +25,24 @@ export const calculateExercises = (days: Array<number>, target: number): Results
     3: 'Good job!'
   };
 
-  const periodLengthInDays = days.length
+  const periodLengthInDays = days.length;
 
   const trainingDays = days.reduce((days, dayHrs) => {
     if (dayHrs !== 0) {
-      days+=1
+      days+=1;
     }
-    return days
-  }, 0)
+    return days;
+  }, 0);
 
   // const trainingDays = days.filter(d => d>0).length
 
-  const trainingHours = days.reduce((total, hr) => total + hr, 0)
+  const trainingHours = days.reduce((total, hr) => total + hr, 0);
 
-  const average = trainingHours / periodLengthInDays
+  const average = trainingHours / periodLengthInDays;
 
-  const isTargetReached = average >= target
+  const isTargetReached = average >= target;
 
-  const rating = getRating()
+  const rating = getRating();
 
   return {
     periodLengthInDays,
@@ -52,8 +52,8 @@ export const calculateExercises = (days: Array<number>, target: number): Results
     isTargetReached,
     rating,
     ratingDescription: ratingDescription[rating]
-  }
-}
+  };
+};
 
 interface Params {
   days: Array<number>;
@@ -65,26 +65,26 @@ const parseArguments = (args: Array<string>): Params => {
   // ts-node + file name + target + 7 daily exercise hours --> 10 arguments
   if (args.length < 10) throw new Error('Not enough arguments');
 
-  const funcArgs = args.slice(2)
-  if (funcArgs.find(v => isNaN(Number(v)))) throw new Error('Values should be numbers')
+  const funcArgs = args.slice(2);
+  if (funcArgs.find(v => isNaN(Number(v)))) throw new Error('Values should be numbers');
 
-  const funcArgsNumbers = funcArgs.map(v => Number(v))
+  const funcArgsNumbers = funcArgs.map(v => Number(v));
 
   return {
     days: funcArgsNumbers.slice(1),
     target: funcArgsNumbers[0],
-  }
-}
+  };
+};
 
 try {
-  const {days, target} = parseArguments(process.argv)
-  console.log('days', days, 'target', target)
-  const result = calculateExercises(days, target)
-  console.log(result)
+  const {days, target} = parseArguments(process.argv);
+  console.log('days', days, 'target', target);
+  const result = calculateExercises(days, target);
+  console.log(result);
 } catch (e: unknown) {
-  let errorMessage = 'Somthing went wrong.'
+  let errorMessage = 'Somthing went wrong.';
   if (e instanceof Error) {
-    errorMessage += `Error: ${e.message}`
+    errorMessage += `Error: ${e.message}`;
   }
-  console.log(errorMessage)
+  console.log(errorMessage);
 }
