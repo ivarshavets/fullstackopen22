@@ -89,4 +89,4 @@ npm install --save-dev ts-node-dev
 ```
 npm install --save-dev eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser
 ```
-
+2. Add an endpoint `/exercises` to your app for the exercise calculator.
