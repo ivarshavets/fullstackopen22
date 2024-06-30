@@ -4,11 +4,23 @@
   "description": "medical record application for doctors who handle diagnoses and basic health information of their patients",
   "main": "index.js",
   "scripts": {
+    "tsc": "tsc",
+    "start": "ts-node index.ts",
+    "dev": "ts-node-dev index.ts",
+    "lint": "eslint --ext .ts .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.14.1",
+    "eslint": "^8.57.0",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.2"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
   }
 }
