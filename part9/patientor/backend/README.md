@@ -42,4 +42,7 @@ const cors = require('cors')
 app.use(cors())
 ```
 
-2. Setup the project ([Exercises 9.8-9.9 of fullstackopen](https://fullstackopen.com/en/part9/first_steps_with_type_script#exercises-9-8-9-9))
+2. Implementing diagnoses and patients fetching  ([Exercises 9.10-9.11 of fullstackopen](https://fullstackopen.com/en/part9/first_steps_with_type_script#exercises-9-10-9-11))
+- Add routes with diagnoses endpoint for fetching all diagnoses and patients for fertching all patients, excluding the field ssn.
+- Serving the seed data from data json. Create a service that takes care of the data manipulation for fetching and saving diagnoses entries
+-- Create a type Diagnosis and use it to create endpoint /api/diagnoses and type Patients.
