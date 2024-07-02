@@ -1,7 +1,6 @@
 # Patientor app
-[Exercises 9.8-9.9 of fullstackopen](https://fullstackopen.com/en/part9/first_steps_with_type_script#exercises-9-8-9-9)
 Developing a backend for an existing project called Patientor
-1. Setup the project
+1. Setup the project ([Exercises 9.8-9.9 of fullstackopen](https://fullstackopen.com/en/part9/first_steps_with_type_script#exercises-9-8-9-9))
 - Init the project and install the typescript package
 ```
 npm init
@@ -33,3 +32,14 @@ npm install --save-dev ts-node-dev
   "lint": "eslint --ext .ts ."
 }
 ```
+- Create data type Patient and set up the `GET` endpoint `/api/patients` which returns all the patients to the frontend, excluding field `ssn`. Used a [utility type ](https://www.typescriptlang.org/docs/handbook/utility-types.html)to make sure you are selecting and returning only the wanted fields.
+In this exercise, it's assumed that field `gender` has type `string`.
+-   - Allow requests from other origins to backend by using Node's cors middleware.
+```
+npm install cors
+
+const cors = require('cors')
+app.use(cors())
+```
+
+2. Setup the project ([Exercises 9.8-9.9 of fullstackopen](https://fullstackopen.com/en/part9/first_steps_with_type_script#exercises-9-8-9-9))
