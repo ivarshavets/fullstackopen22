@@ -1,5 +1,6 @@
+import { v1 as uuid } from 'uuid';
 import patientsData from '../../data/patients';
-import { Patient, NonSensitivePatient } from '../types';
+import { Patient, NonSensitivePatient, NewPatient } from '../types';
 
 // // type assertion because we specified that the field gender has type Gender but TS inferred its type to be string
 // const patients: Patient[] = patientsData as Patient[];
@@ -26,9 +27,24 @@ const getNonSensitiveEntries = (): NonSensitivePatient[] => {
   }))
 }
 
+const findById = (id: string):Patient | undefined => {
+  return patients.find((patient) => id === patient.id)
+}
+
+const addEntry = (entry:NewPatient): Patient => {
+  const newEntry = {
+    id: uuid(),
+    ...entry
+  }
+  patients.push(newEntry)
+  return newEntry
+}
+
 const patientsService = {
   getEntries,
-  getNonSensitiveEntries
+  getNonSensitiveEntries,
+  findById,
+  addEntry
   };
 
   export default patientsService;

@@ -7,6 +7,7 @@ import patientsRouter from './routes/patients';
 
 const app = express();
 app.use(cors())
+// To parse the incoming data we must have the json middleware configured
 app.use(express.json());
 
 app.get('/ping', (_req, res) => {
