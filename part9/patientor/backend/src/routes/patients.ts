@@ -17,9 +17,21 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  const {body} = req
-  const newEntry = patientsService.addEntry(body)
-  res.json(newEntry)
+  try {
+    // assuring that the object in a POST request has the correct type
+    const entry = toNewPatientEntry(req.body)
+
+    const newEntry = patientsService.addEntry(entry)
+    res.json(newEntry)
+  } catch(error: unknown) {
+    let errorMessage = 'Something went wrong: '
+
+    // since error object is of type unknown, we narrow the type to access the field with instanceof
+    if (error instanceof Error) {
+      errorMessage += error.message;
+      res.status(400).send(errorMessage)
+    }
+  }
 })
 
 export default router;
