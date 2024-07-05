@@ -1,7 +1,8 @@
 import { Patient } from "../src/types";
+import { toNewPatientEntry } from "../src/utils";
 
 // Typing data
-const data:Patient[] = [
+const data = [
   {
       "id": "d2773336-f723-11e9-8f0b-362b9e155667",
       "name": "John McClane",
@@ -44,4 +45,9 @@ const data:Patient[] = [
   }
 ];
 
-export default data;
+const patients: Patient[] = data.map(obj => {
+    const newObj = toNewPatientEntry(obj) as Patient // type asseting since object of type NewPatient is returned
+    newObj.id = obj.id
+    return newObj
+})
+export default patients;
