@@ -1,5 +1,5 @@
 import { Patient } from "../src/types";
-import { toNewPatientEntry } from "../src/utils";
+import { parsePatientEntry } from "../src/utils";
 
 // Typing data
 const data = [
@@ -47,7 +47,7 @@ const data = [
 
 // mapping the initial data elements to the Patient type with the toNewPatientEntry function
 const patients: Patient[] = data.map(obj => {
-    const newObj = toNewPatientEntry(obj) as Patient // type asseting since object of type NewPatient is returned
+    const newObj = parsePatientEntry(obj) as Patient // type asseting since object of type NewPatient is returned
     newObj.id = obj.id
     return newObj
 })

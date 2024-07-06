@@ -12,18 +12,8 @@ const getEntries = ():Patient[] => {
 }
 
 const getNonSensitiveEntries = (): NonSensitivePatient[] => {
-  return patients.map(({
-    id,
-    name,
-    dateOfBirth,
-    gender,
-    occupation
-  }) => ({
-    id,
-    name,
-    dateOfBirth,
-    gender,
-    occupation
+  return patients.map((patient) => ({
+    ...patient, ssn: undefined
   }))
 }
 
@@ -31,13 +21,13 @@ const findById = (id: string):Patient | undefined => {
   return patients.find((patient) => id === patient.id)
 }
 
-const addEntry = (entry:NewPatient): Patient => {
-  const newEntry = {
-    id: uuid(),
-    ...entry
+const addEntry = (patient:NewPatient): Patient => {
+  const newPatient = {
+    ...patient,
+    id: uuid()
   }
-  patients.push(newEntry)
-  return newEntry
+  patients.push(newPatient)
+  return newPatient
 }
 
 const patientsService = {
