@@ -1,15 +1,43 @@
-export const APP_CONTENT = {
-  courseName: "Half Stack application development",
-  parts: [
-    {
-      title: "Fundamentals of React",
-      exercises: 10
-    }, {
-      title: "Using props to pass data",
-      exercises: 7
-    }, {
-      title: "State of a component",
-      exercises: 14
-    }
-  ]
-}
+import { Part } from "./types";
+export const courseName:string = "Half Stack application development"
+
+export const courseParts: Part[] = [
+  {
+    name: "Fundamentals",
+    exerciseCount: 10,
+    description: "This is an awesome course part",
+    kind: "basic"
+  },
+  {
+    name: "Using props to pass data",
+    exerciseCount: 7,
+    groupProjectCount: 3,
+    kind: "group"
+  },
+  {
+    name: "Basics of type Narrowing",
+    exerciseCount: 7,
+    description: "How to go from unknown to string",
+    kind: "basic"
+  },
+  {
+    name: "Deeper type usage",
+    exerciseCount: 14,
+    description: "Confusing description",
+    backgroundMaterial: "https://type-level-typescript.com/template-literal-types",
+    kind: "background"
+  },
+  {
+    name: "TypeScript in frontend",
+    exerciseCount: 10,
+    description: "a hard part",
+    kind: "basic",
+  },
+  {
+    name: "Backend development",
+    exerciseCount: 21,
+    description: "Typing the backend",
+    requirements: ["nodejs", "jest"],
+    kind: "special"
+  },
+];
