@@ -29,8 +29,9 @@ export default {
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
 
-# Steps
-To create a new Vite app with TypeScript:
+# Setup
+- Create a new Vite app with TypeScript:
 ```
 npm create vite@latest my-app-name -- --template react-ts
 ```
+- Set needed `tsconfig.json`
