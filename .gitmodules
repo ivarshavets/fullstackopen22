@@ -1,0 +1,3 @@
+[submodule "part9/flight-diaries/part9/flight-diaries/backend"]
+	path = part9/flight-diaries/part9/flight-diaries/backend
+	url = git@github.com:fullstack-hy2020/flight-diary.git
