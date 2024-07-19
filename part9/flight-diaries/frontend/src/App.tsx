@@ -13,42 +13,77 @@ interface Flight {
 }
 
 //api
-const getFlights = async () => await axios.get(`${URL}/diaries`)
-// const getFlights = () => axios.get(`${URL}/diaries`)
+//const getFlights = async () => await axios.get(`${URL}/diaries`)
 
-const fetchFlights = async () => {
-  try {
-    return getFlights().then((result) => {
-      return result.data
-    })
-  } catch(error:unknown) {
-    if(error instanceof Error) {
-      console.log(error)
-    }
-  }
-}
+const getFlights = () => axios.get(`${URL}/diaries`)
+
+// // promise approach
+// const fetchFlights = () => {
+//   return getFlights()
+//     .then((result) => {
+//       return result.data
+//     })
+//     .catch((error:unknown) => {
+//       if(error instanceof Error) {
+//         console.log(error)
+//       }
+//     })
+// }
+
+// // async/await approach
+// const fetchFlights = async () => {
+//   try {
+//     const result = await getFlights()
+//     return result
+//   } catch (error:unknown) {
+//       if(error instanceof Error) {
+//         console.log(error)
+//       }
+//   }
+// }
 
 const App = () => {
   const [data, setData] = useState<Flight[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
+  // // promise style
+  // useEffect(() => {
+  //   setIsLoading(true)
+  //   fetchFlights()
+  //       .then((data) => {
+  //         setData(data)})
+  //       .catch((error: unknown) => {
+  //         if(error instanceof Error) {
+  //           // show error notification
+  //           setIsError(true)
+  //         }
+  //       })
+  //       .finally(() => {
+  //         setIsLoading(false)
+  //         setIsError(false)
+  //       }
+  //     )
+  // }, [])
+
   useEffect(() => {
-    setIsLoading(true)
-    fetchFlights()
-        .then((data) => {
-          setData(data)})
-        .catch((error: unknown) => {
+    // async/await style
+    const fetchFlights = async () => {
+      setIsError(false)
+      setIsLoading(true)
+      try {
+        const result = await getFlights()
+        setData(result)
+        setIsLoading(false)
+      } catch (error:unknown) {
           if(error instanceof Error) {
-            // show error notification
             setIsError(true)
           }
-        })
-        .finally(() => {
-          setIsLoading(false)
-          setIsError(false)
-        }
-      )
+      }
+      setIsLoading(false)
+    }
+
+    fetchFlights()
   }, [])
 
   if (!data) {
