@@ -1,53 +1,14 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import './App.css'
-
-const URL = 'http://localhost:3000/api'
-
-// types
-interface Flight {
-  id: string,
-  date: string,
-  weather: string,
-  visibility: string
-}
-
-//api
-//const getFlights = async () => await axios.get(`${URL}/diaries`)
-
-const getFlights = () => axios.get(`${URL}/diaries`)
-
-// // promise approach
-// const fetchFlights = () => {
-//   return getFlights()
-//     .then((result) => {
-//       return result.data
-//     })
-//     .catch((error:unknown) => {
-//       if(error instanceof Error) {
-//         console.log(error)
-//       }
-//     })
-// }
-
-// // async/await approach
-// const fetchFlights = async () => {
-//   try {
-//     const result = await getFlights()
-//     return result
-//   } catch (error:unknown) {
-//       if(error instanceof Error) {
-//         console.log(error)
-//       }
-//   }
-// }
+import { getFlights } from './api/flightDiaries'
+import { Flight } from './types'
 
 const App = () => {
   const [data, setData] = useState<Flight[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  // // promise style
+  // // promise approach
   // useEffect(() => {
   //   setIsLoading(true)
   //   fetchFlights()
@@ -66,14 +27,15 @@ const App = () => {
   //     )
   // }, [])
 
+  // async/await approach
   useEffect(() => {
-    // async/await style
     const fetchFlights = async () => {
       setIsError(false)
       setIsLoading(true)
+
       try {
         const result = await getFlights()
-        setData(result)
+        setData(result.data)
         setIsLoading(false)
       } catch (error:unknown) {
           if(error instanceof Error) {
