@@ -34,8 +34,8 @@ const App = () => {
       setIsLoading(true)
 
       try {
-        const result = await getFlights()
-        setData(result.data)
+        const data = await getFlights<Flight[]>()
+        setData(data)
         setIsLoading(false)
       } catch (error:unknown) {
           if(error instanceof Error) {

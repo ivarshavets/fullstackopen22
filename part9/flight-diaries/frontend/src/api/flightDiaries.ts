@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { URL } from '../config'
 
-export const getFlights = () => axios.get(`${URL}/diaries`)
+export const getFlights = <T>() => axios.get<T>(`${URL}/diaries`)
+  .then(response => response.data)
 
 // // promise approach
 // const fetchFlights = () => {

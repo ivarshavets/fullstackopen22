@@ -4,3 +4,4 @@ export interface Flight {
   weather: string,
   visibility: string
 }
+
