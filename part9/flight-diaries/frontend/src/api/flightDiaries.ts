@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { URL } from '../config'
 
+// axios.get is a generic function. Unlike some generic functions, the type parameter of axios.get has a default value of any so, if the function is used without defining the type parameter, the type of the response data will be any.
 export const getFlights = <T>() => axios.get<T>(`${URL}/diaries`)
-  .then(response => response.data)
-
+  .then(({data}) => data)
 // // promise approach
 // const fetchFlights = () => {
 //   return getFlights()

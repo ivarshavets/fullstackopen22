@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import { getFlights } from './api/flightDiaries'
 import { Flight } from './types'
+import { parseFlightsEntry } from './utils'
+
 
 const App = () => {
   const [data, setData] = useState<Flight[]>([])
@@ -35,7 +37,8 @@ const App = () => {
 
       try {
         const data = await getFlights<Flight[]>()
-        setData(data)
+        const parsedData = data.map(obj => parseFlightsEntry(obj))
+        setData(parsedData)
         setIsLoading(false)
       } catch (error:unknown) {
           if(error instanceof Error) {
