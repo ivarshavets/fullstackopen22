@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { useEffect, useState, SyntheticEvent } from 'react'
 import './App.css'
 import { getFlights, postFlight } from './api/flightDiaries'
@@ -9,15 +10,24 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
+  const [error, setError] = useState<string | null>(null)
+
   const [date, setDate] = useState('')
   const [weather, setWeather] = useState<Weather|''>('')
   const [visibility, setVisibility] = useState<Visibility|''>('')
   const [comment, setComment] = useState('')
 
+  const notify = (message: string) => {
+    setError(message)
+    setTimeout(() => {
+      setError(null)
+    }, 5000)
+  }
+
   const submitForm = async (e: SyntheticEvent) => {
     e.preventDefault()
     if (!weather || !visibility || !isWeather(weather)) {
-      window.alert('Weather or visibility is missing or not correct')
+      notify('Weather or visibility is missing or not correct')
       return
     }
 
@@ -32,8 +42,13 @@ const App = () => {
       const newFlight = await postFlight(newData)
       setData(data.concat(newFlight))
     } catch(error: unknown) {
-      if (error instanceof Error) {
-        console.log(error)
+      if (axios.isAxiosError(error)) {
+        const message = error.response && error.response.data
+          ? error.response.data.replace('Something went wrong. ','')
+          : 'Addition failed, reason unknown...'
+        notify(message)
+      } else {
+        console.error(error)
       }
     }
 
@@ -73,9 +88,11 @@ const App = () => {
         setData(parsedData)
         setIsLoading(false)
       } catch (error:unknown) {
-          if(error instanceof Error) {
-            setIsError(true)
-          }
+        if (axios.isAxiosError(error)) {
+          setIsError(true)
+        } else {
+          console.error(error)
+        }
       }
       setIsLoading(false)
     }
@@ -97,6 +114,7 @@ const App = () => {
 
   return (
     <div>
+      {error && <div style={{ color: 'red', marginBottom: 10} }>{error}</div>}
       <h2>Add a flight entry</h2>
       <form onSubmit={submitForm}>
         <input
