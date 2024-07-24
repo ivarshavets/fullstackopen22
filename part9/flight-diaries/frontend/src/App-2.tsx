@@ -1,47 +1,27 @@
-import { useEffect, useState, SyntheticEvent } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import { getFlights, postFlight } from './api/flightDiaries'
-import { Flight, NewFlightEntry, Visibility, Weather } from './types'
-import { isWeather, parseFlightsEntry } from './utils'
+import { Flight, NewFlightEntry } from './types'
+import { parseFlightsEntry } from './utils'
+import AddFlightForm from './components/AddFlightForm'
+
 
 const App = () => {
   const [data, setData] = useState<Flight[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  const [date, setDate] = useState('')
-  const [weather, setWeather] = useState<Weather|''>('')
-  const [visibility, setVisibility] = useState<Visibility|''>('')
-  const [comment, setComment] = useState('')
-
-  const submitForm = async (e: SyntheticEvent) => {
-    e.preventDefault()
-    if (!weather || !visibility || !isWeather(weather)) {
-      window.alert('Weather or visibility is missing or not correct')
-      return
-    }
-
-    const newData: NewFlightEntry = {
-      date,
-      comment,
-      weather,
-      visibility
-    }
-
+  const addFlight = async (values: NewFlightEntry) => {
     try {
-      const newFlight = await postFlight(newData)
+      const newFlight = await postFlight(values)
       setData(data.concat(newFlight))
     } catch(error: unknown) {
       if (error instanceof Error) {
         console.log(error)
       }
     }
-
-    setDate('')
-    setWeather('')
-    setVisibility('')
-    setComment('')
   }
+
   // // promise approach
   // useEffect(() => {
   //   setIsLoading(true)
@@ -98,34 +78,8 @@ const App = () => {
   return (
     <div>
       <h2>Add a flight entry</h2>
-      <form onSubmit={submitForm}>
-        <input
-          type="date"
-          name="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-        <input
-          type="text"
-          name="weather"
-          value={weather}
-          onChange={(e) => setWeather(e.target.value as Weather)}
-        />
-        <input
-          type="text"
-          name="visibility"
-          value={visibility}
-          onChange={({target}) => setVisibility(target.value as Visibility)}
-        />
-        <input
-          type="text"
-          name="comment"
-          value={comment}
-          onChange={({target}) => setComment(target.value)}
-        />
-        <button type='submit'>Add</button>
-      </form>
       <h2>Flight diary entries</h2>
+      <AddFlightForm onSubmit={addFlight} />
       <ul>
         {data.map(({id, date, weather, visibility}) => {
           return (

@@ -30,5 +30,5 @@ export const getFlights = <T>() => axios.get<T>(`${URL}/diaries`)
 //   }
 // }
 
-export const postFlight = (data: NewFlightEntry) => axios.post<Flight>(`${URL}/diaries`, data)
+export const postFlight = (data: NewFlightEntry) => axios.post<Flight[]>(`${URL}/diaries`, data)
   .then(response => response.data)
