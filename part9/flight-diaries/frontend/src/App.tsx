@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, SyntheticEvent } from 'react'
 import './App.css'
-import { getFlights } from './api/flightDiaries'
-import { Flight } from './types'
+import { getFlights, postFlight } from './api/flightDiaries'
+import { Flight, NewFlightEntry, Visibility, Weather } from './types'
 import { parseFlightsEntry } from './utils'
 
 
@@ -9,6 +9,36 @@ const App = () => {
   const [data, setData] = useState<Flight[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+
+  const [date, setDate] = useState('')
+  const [weather, setWeather] = useState<Weather|''>('')
+  const [visibility, setVisibility] = useState<Visibility|''>('')
+
+  const submitForm = async (e: SyntheticEvent) => {
+    e.preventDefault()
+    // if (!weather || !visibility) {
+    //   window.alert('Weather or visibility is missing')
+    //   return
+    // }
+
+    const newData: NewFlightEntry = {
+      date,
+      weather: weather as Weather,
+      visibility: visibility as Visibility
+    }
+
+    try {
+      const newFlight = await postFlight(newData)
+      setData(data.concat(newFlight))
+    } catch(error: unknown) {
+      if (error instanceof Error) {
+        console.log(error)
+      }
+    }
+    setDate('')
+    setWeather('')
+    setVisibility('')
+  }
 
   // // promise approach
   // useEffect(() => {
@@ -65,6 +95,28 @@ const App = () => {
 
   return (
     <div>
+      <h2>Add a flight entry</h2>
+      <form onSubmit={submitForm}>
+        <input
+          type="date"
+          name="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
+        {/* <input
+          type="text"
+          name="weather"
+          value={weather}
+          onChange={(e) => setWeather(e.target.value)}
+        /> */}
+        {/* <input
+          type="text"
+          name="visibility"
+          value={visibility}
+          onChange={({target}) => setVisibility(target.value)}
+        /> */}
+        <button type='submit'>Add</button>
+      </form>
       <h2>Flight diary entries</h2>
       <ul>
         {data.map(({id, date, weather, visibility}) => {

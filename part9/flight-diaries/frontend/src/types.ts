@@ -18,7 +18,7 @@ export interface FlightFullInfo {
   date: string;
   weather: Weather;
   visibility: Visibility;
-  comment: string;
+  comment?: string;
 }
 
 export type NewFlightEntry = Omit<FlightFullInfo, 'id'>;

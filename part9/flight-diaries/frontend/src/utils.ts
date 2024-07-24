@@ -9,7 +9,7 @@ const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
 };
 
-const isWeather = (value: string): value is Weather => {
+export const isWeather = (value: string): value is Weather => {
   return Object.values(Weather).map(v => v.toString()).includes(value);
 };
 
