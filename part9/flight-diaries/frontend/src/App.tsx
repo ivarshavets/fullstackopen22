@@ -3,7 +3,7 @@ import { useEffect, useState, SyntheticEvent } from 'react'
 import './App.css'
 import { getFlights, postFlight } from './api/flightDiaries'
 import { Flight, NewFlightEntry, Visibility, Weather } from './types'
-import { isWeather, parseFlightsEntry } from './utils'
+import { parseFlightsEntry } from './utils'
 
 const App = () => {
   const [data, setData] = useState<Flight[]>([])
@@ -17,6 +17,9 @@ const App = () => {
   const [visibility, setVisibility] = useState<Visibility|''>('')
   const [comment, setComment] = useState('')
 
+  const weatherOptions = Object.values(Weather);
+  const visibilityOptions = Object.values(Visibility);
+
   const notify = (message: string) => {
     setError(message)
     setTimeout(() => {
@@ -26,8 +29,8 @@ const App = () => {
 
   const submitForm = async (e: SyntheticEvent) => {
     e.preventDefault()
-    if (!weather || !visibility || !isWeather(weather)) {
-      notify('Weather or visibility is missing or not correct')
+    if (!weather || !visibility) {
+      notify('Weather or visibility is missing')
       return
     }
 
@@ -117,30 +120,56 @@ const App = () => {
       {error && <div style={{ color: 'red', marginBottom: 10} }>{error}</div>}
       <h2>Add a flight entry</h2>
       <form onSubmit={submitForm}>
-        <input
-          type="date"
-          name="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-        <input
-          type="text"
-          name="weather"
-          value={weather}
-          onChange={(e) => setWeather(e.target.value as Weather)}
-        />
-        <input
-          type="text"
-          name="visibility"
-          value={visibility}
-          onChange={({target}) => setVisibility(target.value as Visibility)}
-        />
-        <input
-          type="text"
-          name="comment"
-          value={comment}
-          onChange={({target}) => setComment(target.value)}
-        />
+        <div>
+          <label>Date:</label>
+          <input
+            type="date"
+            name="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+        </div>
+        <div>
+          <span>Weather:</span>
+          {weatherOptions.map((value) => (
+            <span key={value}>
+              <label>{value}</label>
+              <input
+                type="radio"
+                name="weather"
+                value={value}
+                checked={value === weather}
+                onChange={() => setWeather(value)}
+                style={{marginRight: 10}}
+              />
+            </span>
+          ))}
+        </div>
+        <div>
+          <span>Visibility:</span>
+          {visibilityOptions.map((value) => (
+            <span key={value}>
+              <label>{value}</label>
+              <input
+                type="radio"
+                name="visibility"
+                value={value}
+                checked={value === visibility}
+                onChange={() => setVisibility(value)}
+                style={{marginRight: 10}}
+              />
+            </span>
+          ))}
+        </div>
+        <div>
+          <label>Comment:</label>
+          <input
+            type="text"
+            name="comment"
+            value={comment}
+            onChange={({target}) => setComment(target.value)}
+          />
+         </div>
         <button type='submit'>Add</button>
       </form>
       <h2>Flight diary entries</h2>
