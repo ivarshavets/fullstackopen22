@@ -46,3 +46,10 @@ app.use(cors())
 - Add routes with diagnoses endpoint for fetching all diagnoses and patients for fertching all patients, excluding the field ssn.
 - Serving the seed data from data json. Create a service that takes care of the data manipulation for fetching and saving diagnoses entries
 -- Create a type Diagnosis and use it to create endpoint /api/diagnoses and type Patients.
+
+3. Implement adding a new patient.
+-- Create a POST endpoint /api/patients for adding patients.
+-- Unique ids of type string is created using the `uuid` library
+-- Set up safe parsing, validation and type predicate to the `POST` `/api/patients` request.
+-- Refactor the gender field to use an enum type
+
